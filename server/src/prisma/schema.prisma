@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String        @id @default(cuid())
+  name String
+  surname String
+  password String
+  email String @unique
+  age Int
+  verified Boolean 
+  description String @db.VarChar(500)
+  photos String[]
+  gender String
+  sexualOrientation SexualOrientation
+  showMeGender ShowMeGender
+  birthday DateTime
+  lastLatitude Float
+  lastLongitude Float
+  createdAt DateTime @default(now())
+}
+
+enum ShowMeGender{
+  Male
+  Female
+  All
+}
+
+enum SexualOrientation{
+  Heterosexual
+  Gay
+  Lesbian
+  Bisexual
+  Pansexual
+  Demisexual
+  Asexual
+  Queer
+  Undefined
+}
