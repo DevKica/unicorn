@@ -8,31 +8,45 @@ datasource db {
 }
 
 model User {
-  id String        @id @default(cuid())
-  name String
-  surname String
-  password String
-  email String @unique
-  age Int
-  verified Boolean 
-  description String @db.VarChar(500)
-  photos String[]
-  gender String
-  sexualOrientation SexualOrientation
-  showMeGender ShowMeGender
-  birthday DateTime
-  lastLatitude Float
-  lastLongitude Float
-  createdAt DateTime @default(now())
+  id                  String            @id @default(cuid())
+  name                String
+  surname             String
+  password            String
+  email               String            @unique
+  birthday            DateTime
+  emailVerified       Boolean           @default(false)
+  description         String            @db.VarChar(500)
+  photos              String[]
+  gender              String
+  sexualOrientation   SexualOrientation
+  showMeAgeLowerLimit Int
+  showMeAgeUpperLimit Int
+  showMeGender        ShowMeGender
+  latitude            Float
+  longitude           Float
+  createdAt           DateTime          @default(now())
+
+  sessions             Session[]
 }
 
-enum ShowMeGender{
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  Country   String
+  City      String
+  UserAgent String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  @@map("sessions")
+}
+
+enum ShowMeGender {
   Male
   Female
   All
 }
 
-enum SexualOrientation{
+enum SexualOrientation {
   Heterosexual
   Gay
   Lesbian

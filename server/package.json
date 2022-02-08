@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@prisma/client": "^3.9.1",
+    "@supercharge/request-ip": "^1.1.2",
     "dayjs": "^1.10.7",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
+    "geoip-lite": "^1.4.3",
+    "ipware": "^2.0.0",
+    "node-device-detector": "^1.4.3",
     "nodemon": "^2.0.15",
     "pino": "^7.6.5",
     "pino-pretty": "^7.5.1",
@@ -23,6 +27,7 @@
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
+    "@types/geoip-lite": "^1.4.1",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.15",
     "@types/supertest": "^2.0.11",

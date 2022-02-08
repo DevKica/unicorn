@@ -1,8 +1,17 @@
 import express, { Request, Response } from "express";
+import { getClientIp } from "@supercharge/request-ip/dist";
+import { lookup } from "geoip-lite";
 
 const server = express();
 
-server.get("/", (_: Request, res: Response) => res.json("hello"));
+server.get("/", (req: Request, res: Response) => {
+  console.log(getClientIp(req));
+  //   req.get("user-agent")
+  //   console.log(result);
+  //   console.log(lookup(getClientIp(req)));
+  console.log(lookup("91.124.176.49"));
+  res.send("heloo");
+});
 
 // server.get("/create", async (_: Request, res: Response) => {
 //   try {
