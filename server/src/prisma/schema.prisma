@@ -7,26 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Test {
+  id   String @id @default(cuid())
+  name String
+}
+
 model User {
-  id                  String            @id @default(cuid())
+  // basic
+  id                  String              @id @default(cuid())
   name                String
   surname             String
   password            String
-  email               String            @unique
+  email               String              @unique
+  emailVerified       Boolean             @default(false)
+  accountType         AccountType
+  // profile
   birthday            DateTime
-  emailVerified       Boolean           @default(false)
-  description         String            @db.VarChar(500)
+  description         String              @db.VarChar(500)
   photos              String[]
   gender              String
-  sexualOrientation   SexualOrientation
+  sexualOrientation   SexualOrientation[]
+  showMeGender        ShowMeGender
+  // matching
   showMeAgeLowerLimit Int
   showMeAgeUpperLimit Int
-  showMeGender        ShowMeGender
   latitude            Float
   longitude           Float
-  createdAt           DateTime          @default(now())
+  //others
+  createdAt           DateTime            @default(now())
 
-  sessions             Session[]
+
+  session              Session[]
+  userIdRelation       Likes[]   @relation(name: "userIdRelation")
+  judgedUserIdRelation Likes[]   @relation(name: "judgedUserIdRelation")
 }
 
 model Session {
@@ -36,8 +49,27 @@ model Session {
   City      String
   UserAgent String
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
-  @@map("sessions")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Likes {
+  id                   String   @id @default(cuid())
+  userId               String
+  jugdedUserId         String
+  createdAt            DateTime @default(now())
+  userIdRelation       User     @relation("userIdRelation", fields: [userId], references: [id], onDelete: Cascade)
+  judgedUserIdRelation User     @relation("judgedUserIdRelation", fields: [jugdedUserId], references: [id], onDelete: Cascade)
+}
+
+model Relations {
+  id           String       @id @default(cuid())
+  relationType RelationType
+  createdAt    DateTime     @default(now())
+}
+
+enum RelationType {
+  rejected
+  accepted
 }
 
 enum ShowMeGender {
@@ -56,4 +88,11 @@ enum SexualOrientation {
   Asexual
   Queer
   Undefined
+}
+
+enum AccountType {
+  default
+  silver
+  gold
+  black
 }

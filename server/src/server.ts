@@ -1,13 +1,16 @@
 import express, { Request, Response } from "express";
 import { getClientIp } from "@supercharge/request-ip/dist";
 import { lookup } from "geoip-lite";
+import { Test } from "./prisma/models";
 
 const server = express();
 
-server.get("/", (req: Request, res: Response) => {
+server.get("/", async (req: Request, res: Response) => {
   console.log(getClientIp(req));
   //   req.get("user-agent")
   //   console.log(result);
+  const tests = await Test.create({ data: { name: "dasj" } });
+  console.log("co", tests);
   //   console.log(lookup(getClientIp(req)));
   console.log(lookup("91.124.176.49"));
   res.send("heloo");
