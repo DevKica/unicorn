@@ -38,11 +38,11 @@ model User {
   // relations
   session             Session[]
 
-  userId       Likes[] @relation("userId")
-  judgedUserId Likes[] @relation("judgedUserId")
+  user       Like[] @relation("user")
+  judgedUser Like[] @relation("judgedUser")
 
-  firstUserId UsersRelations[] @relation("firstUserId")
-  secondUserId UsersRelations[] @relation("secondUserId")
+  firstUser  UsersRelation[] @relation("firstUser")
+  secondUser UsersRelation[] @relation("secondUser")
 
   conversation Conversation[] @relation("members")
   message      Message[]
@@ -84,15 +84,15 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Likes {
-  id                   String     @id @default(cuid())
-  userId               String
-  jugdedUserId         String
-  typeOfLike           TypeOfLike
-  createdAt            DateTime   @default(now())
+model Like {
+  id           String     @id @default(cuid())
+  userId       String
+  jugdedUserId String
+  typeOfLike   TypeOfLike
+  createdAt    DateTime   @default(now())
   // relations
-  user       User       @relation("userId", fields: [userId], references: [id], onDelete: Cascade)
-  judgedUser User       @relation("judgedUserId", fields: [jugdedUserId], references: [id], onDelete: Cascade)
+  user         User       @relation("user", fields: [userId], references: [id], onDelete: Cascade)
+  judgedUser   User       @relation("judgedUser", fields: [jugdedUserId], references: [id], onDelete: Cascade)
 }
 
 enum TypeOfLike {
@@ -100,15 +100,15 @@ enum TypeOfLike {
   Super
 }
 
-model UsersRelations {
-  id                   String       @id @default(cuid())
-  firstUserId          String
-  secondUserId         String
-  relationType         Type
-  createdAt            DateTime     @default(now())
+model UsersRelation {
+  id           String   @id @default(cuid())
+  firstUserId  String
+  secondUserId String
+  relationType Type
+  createdAt    DateTime @default(now())
   // relations
-  firstUser  User         @relation("firstUserId", fields: [firstUserId], references: [id], onDelete: Cascade)
-  secondUser User         @relation("secondUserId", fields: [secondUserId], references: [id], onDelete: Cascade)
+  firstUser    User     @relation("firstUser", fields: [firstUserId], references: [id], onDelete: Cascade)
+  secondUser   User     @relation("secondUser", fields: [secondUserId], references: [id], onDelete: Cascade)
 }
 
 enum Type {
@@ -127,14 +127,13 @@ model Conversation {
 }
 
 model Message {
-  id                   String       @id @default(cuid())
-  content              String
-  userId               String
-  conversationId       String
-  isDeleted            Boolean
-  createdAt            DateTime     @default(now())
+  id             String       @id @default(cuid())
+  content        String
+  userId         String
+  conversationId String
+  isDeleted      Boolean
+  createdAt      DateTime     @default(now())
   // relations
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
