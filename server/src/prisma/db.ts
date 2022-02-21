@@ -11,6 +11,7 @@ export const prisma =
   });
 
 prisma.$use(async (params, next) => {
+  console.log(params);
   return next(params);
 });
 
