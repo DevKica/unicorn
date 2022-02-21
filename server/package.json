@@ -8,6 +8,8 @@
     "gen": "prisma generate",
     "push": "prisma db push",
     "studio": "prisma studio",
+    "migrate": "prisma migrate dev",
+    "format": "prisma format",
     "test": "jest --detectOpenHandles"
   },
   "dependencies": {
