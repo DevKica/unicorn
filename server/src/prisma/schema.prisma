@@ -27,49 +27,25 @@ model User {
   photos              String[]
   gender              String
   sexualOrientation   SexualOrientation[]
-  showMeGender        ShowMeGender
   // matching
+  showMeGender        ShowMeGender
   showMeAgeLowerLimit Int
   showMeAgeUpperLimit Int
   latitude            Float
   longitude           Float
-  //others
+  // others
   createdAt           DateTime            @default(now())
+  // relations
+  session             Session[]
 
+  userId       Likes[] @relation("userId")
+  judgedUserId Likes[] @relation("judgedUserId")
 
-  session              Session[]
-  userIdRelation       Likes[]   @relation(name: "userIdRelation")
-  judgedUserIdRelation Likes[]   @relation(name: "judgedUserIdRelation")
-}
+  firstUserId UsersRelations[] @relation("firstUserId")
+  secondUserId UsersRelations[] @relation("secondUserId")
 
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  Country   String
-  City      String
-  UserAgent String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Likes {
-  id                   String   @id @default(cuid())
-  userId               String
-  jugdedUserId         String
-  createdAt            DateTime @default(now())
-  userIdRelation       User     @relation("userIdRelation", fields: [userId], references: [id], onDelete: Cascade)
-  judgedUserIdRelation User     @relation("judgedUserIdRelation", fields: [jugdedUserId], references: [id], onDelete: Cascade)
-}
-
-model Relations {
-  id           String       @id @default(cuid())
-  relationType RelationType
-  createdAt    DateTime     @default(now())
-}
-
-enum RelationType {
-  rejected
-  accepted
+  conversation Conversation[] @relation("members")
+  message      Message[]
 }
 
 enum ShowMeGender {
@@ -91,8 +67,74 @@ enum SexualOrientation {
 }
 
 enum AccountType {
-  default
-  silver
-  gold
-  black
+  Default
+  Silver
+  Gold
+  Black
 }
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  country   String
+  city      String
+  userAgent String
+  createdAt DateTime @default(now())
+  // relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Likes {
+  id                   String     @id @default(cuid())
+  userId               String
+  jugdedUserId         String
+  typeOfLike           TypeOfLike
+  createdAt            DateTime   @default(now())
+  // relations
+  user       User       @relation("userId", fields: [userId], references: [id], onDelete: Cascade)
+  judgedUser User       @relation("judgedUserId", fields: [jugdedUserId], references: [id], onDelete: Cascade)
+}
+
+enum TypeOfLike {
+  Default
+  Super
+}
+
+model UsersRelations {
+  id                   String       @id @default(cuid())
+  firstUserId          String
+  secondUserId         String
+  relationType         Type
+  createdAt            DateTime     @default(now())
+  // relations
+  firstUser  User         @relation("firstUserId", fields: [firstUserId], references: [id], onDelete: Cascade)
+  secondUser User         @relation("secondUserId", fields: [secondUserId], references: [id], onDelete: Cascade)
+}
+
+enum Type {
+  rejected
+  accepted
+}
+
+model Conversation {
+  id              String    @id @default(cuid())
+  name            String
+  members         String[]
+  createdAt       DateTime  @default(now())
+  // relations
+  membersRelation User      @relation("members", fields: [members], references: [id])
+  message         Message[]
+}
+
+model Message {
+  id                   String       @id @default(cuid())
+  content              String
+  userId               String
+  conversationId       String
+  isDeleted            Boolean
+  createdAt            DateTime     @default(now())
+  // relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
