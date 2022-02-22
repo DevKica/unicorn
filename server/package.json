@@ -2,6 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=dev ts-node-dev --respawn --transpile-only src/index.ts",
@@ -13,8 +14,6 @@
     "test": "jest --detectOpenHandles"
   },
   "dependencies": {
-    "@hapi/joi": "^17.1.1",
-    "@hapi/joi-date": "^2.0.1",
     "@joi/date": "^2.1.0",
     "@prisma/client": "^3.9.2",
     "@supercharge/request-ip": "^1.1.2",
@@ -23,6 +22,7 @@
     "express": "^4.17.2",
     "geoip-lite": "^1.4.3",
     "joi": "^17.6.0",
+    "module-alias": "^2.2.2",
     "node-device-detector": "^1.4.3",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0"

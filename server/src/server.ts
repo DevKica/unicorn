@@ -3,7 +3,9 @@ import { getClientIp } from "@supercharge/request-ip/dist";
 import { lookup } from "geoip-lite";
 import { Test } from "./prisma/models";
 import appMainRoutes from "./routes/app.main.routes";
-import { testSchemaMethod } from "./validation/userSchema";
+import { createUserSchema } from "./validation/user.schemas";
+import { emailToLowerCase } from "./middleware/emailToLowerCase";
+import { schemaValidation } from "./middleware/schemaValidation";
 
 const server = express();
 
@@ -20,15 +22,22 @@ server.get("/", async (req: Request, res: Response) => {
   // console.log(checkIfAlphabetical("沙沙 dsa dsa22 1 1313 "));
   // console.log(checkIfAlphabetical("321321111dsadsa"));
   // console.log(checkIfAlphabetical("dsadsadsadsadsa "));
-
-  console.log(
-    testSchemaMethod.validate(
-      { name: "Paweł", sexualOrientation: ["heelo", "okkkeeey", "Heterosexual", "jndsijnanjikdsa"] },
-      { abortEarly: false }
-    )
+  res.json(
+    schemaValidation(createUserSchema, {
+      name: "sp",
+      surname: "ex",
+      email: "devKica777@gmail.com",
+      password: "sS!pace1111111x",
+      passwordRepetition: "sS!pace1111111x",
+      birthday: "2002-02-02",
+      gender: "male",
+      sexualOrientation: ["Lesbian"],
+    })
   );
-  res.send("ddsa");
+  // res.json("12");
 });
+
+server.use(emailToLowerCase);
 
 server.use("/api/v1", appMainRoutes);
 

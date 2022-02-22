@@ -10,12 +10,12 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@upload/*": ["./upload/*"]
-    }
+    "esModuleInterop": true
+    // "baseUrl": "./src",
+    // "paths": {
+    // "@/*": ["src/*"],
+    // "@upload/*": ["upload/*"]
+    // }
   },
 
   "ts-node": {
@@ -23,7 +23,7 @@
       "module": "CommonJS",
       "isolatedModules": false
     },
-    "include": ["src/**/*", "config"],
+    "include": ["src/**/*", "public/**/*"],
     "exclude": ["node_modules"]
   }
 }

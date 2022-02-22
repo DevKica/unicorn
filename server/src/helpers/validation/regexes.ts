@@ -1,11 +1,13 @@
 // regexes
-export const regexAlphabet = new RegExp("^[a-zA-Z]$");
 
-export const passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,128}$/g);
+// the most basic just for development purposes
+export const regexBasicAlphabet = new RegExp(/^[a-zA-Z]{2,128}$/);
+
+// minimum eight characters, maximum 128, at least one uppercase letter, one lowercase letter, one number and one special character
+export const regexPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,128}$/);
 
 // regex for alphabet in all languages and
 // accepting for instance 你好我是帕維爾, Man könnte sagen
-
 export const regexAlphabetAllLanguages = new RegExp(/[^\p{L}]+/gu);
 
 // const regexExcludeLetters = new RegExp(/[\p{L}]+/gu);

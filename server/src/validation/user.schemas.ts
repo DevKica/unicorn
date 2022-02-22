@@ -1,10 +1,10 @@
 import Joi from "Joi";
 import JoiDate from "@joi/date";
 import { SexualOrientation, ShowMeGender } from "@prisma/client";
-import { matchError } from "@/helpers/validation/betterSingleJoiMessage";
-import { dateRestriction } from "@/helpers/validation/constants";
-import { joiValidateAlphabeticality, joiValidateEnums } from "@/helpers/validation/functions";
-import { regexAlphabet, passwordRegex } from "@/helpers/validation/regexes";
+import { matchError } from "../helpers/validation/betterSingleJoiMessage";
+import { dateRestriction } from "../helpers/validation/constants";
+import { joiValidateAlphabeticality, joiValidateEnums } from "../helpers/validation/functions";
+import { regexBasicAlphabet, regexPassword } from "../helpers/validation/regexes";
 
 const JoiExtend = Joi.extend(JoiDate); // extend Joi with Joi Date
 
@@ -16,46 +16,47 @@ export const testSchemaMethod = Joi.object({
     .items(Joi.string().custom(joiValidateEnums(Object.keys(SexualOrientation)))),
 });
 
-// Birthday is immutable after user creation
-export const joiBirthday = {
+// Birthday is immutable after user is created
+const joiBirthday = {
   birthday: JoiExtend.date().required().format("YYYY-MM-DD").min("1900-01-01").max(dateRestriction),
 };
-export const joiGeneralInfo = Joi.object({
-  name: Joi.string().trim().min(2).max(128).pattern(regexAlphabet),
-  surname: Joi.string().trim().min(2).max(128).pattern(regexAlphabet),
+
+const joiGeneralInfo = {
+  name: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
+  surname: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
   gender: Joi.string().trim().min(2).max(128),
   sexualOrientation: Joi.array()
     .max(3)
     .items(Joi.string().custom(joiValidateEnums(Object.keys(SexualOrientation)))),
+};
+
+const joiAdditionalInfo = Joi.object({
+  city: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
 });
 
-export const joiMatchingInfo = Joi.object({
+const joiMatchingInfo = Joi.object({
   showMeGender: Joi.string()
     .trim()
     .custom(joiValidateEnums(Object.keys(ShowMeGender))),
 });
 
-export const joiSinglePassword = {
-  password: Joi.string().trim().required().min(2).max(128).pattern(passwordRegex),
+const joiSinglePassword = {
+  password: Joi.string().trim().required().min(2).max(128).pattern(regexPassword),
 };
 
-export const passwordCheckSchema = Joi.object({
+const joiPasswordWithRepetition = {
   ...joiSinglePassword,
-});
-
-export const joiPasswordWithRepetition = {
-  ...joiSinglePassword,
-  repeatPassword: Joi.any()
+  passwordRepetition: Joi.any()
     .valid(Joi.ref("password"))
     .required()
-    .label(`"repeat password"`)
+    .label("password repetition")
     .messages({
       "any.only": matchError(`"passwords"`),
     }),
 };
 
-export const joiEmail = {
-  email: Joi.string().email({ minDomainSegments: 2 }).required().label("Email"),
+const joiEmail = {
+  email: Joi.string().trim().email().required(),
 };
 
 export const passwordWithRepetitionSchema = Joi.object({
@@ -66,12 +67,13 @@ export const emailSchema = Joi.object({
   ...joiEmail,
 });
 
+const requiredJoiGeneralInfo = Joi.object(joiGeneralInfo).options({ presence: "required" });
+
 export const createUserSchema = Joi.object({
   ...joiEmail,
   ...joiPasswordWithRepetition,
   ...joiBirthday,
-  ...joiGeneralInfo.options({ presence: "required" }),
-});
+}).concat(requiredJoiGeneralInfo);
 
 export const generalInfoSchema = Joi.object({
   ...joiGeneralInfo,
