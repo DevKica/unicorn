@@ -2,9 +2,8 @@ import express, { Request, Response } from "express";
 import { getClientIp } from "@supercharge/request-ip/dist";
 import { lookup } from "geoip-lite";
 import { Test } from "./prisma/models";
-import appMainRouter from "./routes/appMainRouter";
+import appMainRoutes from "./routes/app.main.routes";
 import { testSchemaMethod } from "./validation/userSchema";
-import { checkIfAlphabetical } from "./validation/helpers";
 
 const server = express();
 
@@ -24,14 +23,14 @@ server.get("/", async (req: Request, res: Response) => {
 
   console.log(
     testSchemaMethod.validate(
-      { name: "Paweł", sexualOrientation: ["heelo", "okkkeeey", "Heterosexual"] },
+      { name: "Paweł", sexualOrientation: ["heelo", "okkkeeey", "Heterosexual", "jndsijnanjikdsa"] },
       { abortEarly: false }
     )
   );
   res.send("ddsa");
 });
 
-server.use("/api/v1", appMainRouter);
+server.use("/api/v1", appMainRoutes);
 
 // server.get("/create", async (_: Request, res: Response) => {
 //   try {

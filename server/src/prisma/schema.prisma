@@ -26,7 +26,7 @@ model User {
   description         String              @db.VarChar(500) @default("")
   photos              String[]
   gender              String
-  city String
+  city                String             @default("")
   sexualOrientation   SexualOrientation[]
   // matching
   showMeGender        ShowMeGender
