@@ -14,5 +14,5 @@ export const logInfo = (mess: string) => {
 };
 
 export const logError = (mess: unknown) => {
-  console.log(`[${chalk.red("ERROR")}] ${color(dayjs().format("HH:mm:ss"), deepGrey)}: ${chalk.green(mess)}`);
+  console.log(`[${chalk.red("ERROR")}] ${color(dayjs().format("HH:mm:ss"), deepGrey)}: ${chalk.red(mess)}`);
 };
