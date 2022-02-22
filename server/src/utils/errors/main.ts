@@ -1,12 +1,29 @@
 import { BetterJoiError } from "../../helpers/validation/betterJoiError";
 
 export class InvalidRequestedBody extends Error {
-    constructor(public schemaFeedback?: BetterJoiError[]) {
+    public readonly code: number = 400;
+    constructor(public msg?: BetterJoiError[]) {
         super();
-
+        // Without it instanceof doesnt work properly
         Object.setPrototypeOf(this, InvalidRequestedBody.prototype);
     }
 }
 
-export class Forbidden extends Error {}
-export class EmailAlreadyExists extends Error {}
+export class Forbidden extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "Forbidden";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, Forbidden.prototype);
+    }
+}
+export class EmailAlreadyExists extends Error {
+    public readonly code: number = 409;
+    public readonly msg: string = "Email already exists";
+    constructor(message: string) {
+        super(message);
+
+        Object.setPrototypeOf(this, EmailAlreadyExists.prototype);
+    }
+}
