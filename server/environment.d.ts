@@ -1,9 +1,17 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      // app
       PORT: number;
       ORIGIN: string;
       DATABASE_URL: string;
+      // cookies
+      MAIN_SECRET_TOKEN: string;
+      ACCESS_TOKEN_TTL: string;
+      REFRESH_TOKEN_TTL: string;
+      MAX_AGE_TOKEN_COOKIE: string;
+      // emails
+      EMAIL_SECRET_TOKEN: string;
     }
   }
 }
