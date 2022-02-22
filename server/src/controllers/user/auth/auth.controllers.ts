@@ -1,3 +1,4 @@
 export async function createUserHandler() {
-  return 2;
+    try {
+    } catch (e: unknown) {}
 }

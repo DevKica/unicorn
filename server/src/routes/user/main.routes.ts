@@ -13,6 +13,8 @@ userMainRoutes.post("/login");
 userMainRoutes.patch("/general");
 
 // Route for testing purpose
-userMainRoutes.get("/", (req, res) => {});
+userMainRoutes.get("/", (req, res) => {
+  res.json("12");
+});
 
 export default userMainRoutes;

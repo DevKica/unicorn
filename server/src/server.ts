@@ -1,30 +1,31 @@
 import express, { Request, Response } from "express";
+// import { getClientIp } from "@supercharge/request-ip/dist";
 import appMainRoutes from "./routes/app.main.routes";
-import { createUserSchema } from "./validation/user.schemas";
+import { createUserSchema } from "./validation/user.schema";
 import { emailToLowerCase } from "./middleware/emailToLowerCase";
-import { schemaValidation } from "./middleware/schemaValidation";
+import { schemaValidation, validate } from "./middleware/schemaValidation";
 
 const server = express();
 
-server.get("/", async (req: Request, res: Response) => {
-  // console.log(getClientIp(req));
-  // const result = req.get("user-agent");
-  // console.log(lookup(getClientIp(req) || ""));
-  // console.log(lookup("91.124.176.49"));
+server.get("/", schemaValidation(createUserSchema), async (req: Request, res: Response) => {
+    // console.log(getClientIp(req));
+    // const result = req.get("user-agent");
+    // console.log(lookup(getClientIp(req) || ""));
+    // console.log(lookup("91.124.176.49"));
 
-  res.json(
-    schemaValidation(createUserSchema, {
-      name: "sp",
-      surname: "ex",
-      email: "devKica777@gmail.com",
-      password: "sS!pace11/11111x",
-      passwordRepetition: "sS!pace1111111x",
-      birthday: "2002-02-02",
-      gender: "male",
-      sexualOrientation: ["Lesbian"],
-    })
-  );
-  // res.json("12");
+    res.json(
+        validate(createUserSchema, {
+            name: "sp",
+            surname: "ex",
+            email: "devKica777@gmail.com",
+            password: "sS!pace11/111111x",
+            passwordRepetition: "sS!pace1111111x",
+            birthday: "2002-02-02",
+            gender: "male",
+            sexualOrientation: ["Lesbian", "Gay", "Gay"],
+        })
+    );
+    // res.json("12");
 });
 
 server.use(emailToLowerCase);
