@@ -1,32 +1,27 @@
 import Joi from "Joi";
-import { joiCheckIfAlphabetical, matchError } from "./helpers";
+import JoiDate from "@joi/date";
+import { dateRestriction, joiCheckEnums, joiCheckIfAlphabetical, matchError, regexAlphabet } from "./helpers";
+import { SexualOrientation } from "@prisma/client";
+
+const JoiExtend = Joi.extend(JoiDate); // extend Joi with Joi Date
 
 export const testSchemaMethod = Joi.object({
-  name: Joi.string().trim().custom(joiCheckIfAlphabetical, "custom validation").alphanum(),
+  name: Joi.string().trim().custom(joiCheckIfAlphabetical, "custom validation"),
+  sexualOrientation: Joi.array()
+    .required()
+    .items(Joi.string().custom(joiCheckEnums(Object.keys(SexualOrientation)))),
 });
 
 const generalInfoSchema = {
-  name: Joi.string()
-    .pattern(new RegExp(`^[AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]{2,30}$`))
-    .required()
-    .label("Name")
-    .messages({
-      "string.pattern.base": "{#label} should contain only letters and be at least 2 characters long and maximum 30",
-    }),
-  surname: Joi.string()
-    .pattern(new RegExp("^[AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]{2,50}$"))
-    .required()
-    .label("Surname")
-    .messages({
-      "string.pattern.base": "{#label} should contain only letters and be at least 2 characters long and maximum 50",
-    }),
+  name: Joi.string().trim().required().min(2).max(128).pattern(regexAlphabet),
+  surname: Joi.string().trim().required().min(2).max(128).pattern(regexAlphabet),
+  gender: Joi.string().trim().required().min(2).max(128),
+  birthday: JoiExtend.date().required().format("YYYY-MM-DD").min("1900-01-01").max(dateRestriction),
+  // sexualOrientation: Joi.array().required().items(Joi.string().custom("joiC")),
 };
 
 export const passwordCheck = {
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{8,48}$")).required().label("Password").messages({
-    "string.pattern.base":
-      "{#label} should contain only letters and numbers and be at least 8 characters long and maximum 48",
-  }),
+  password: Joi.string().trim().required().alphanum(),
 };
 
 export const passwordCheckSchema = Joi.object({

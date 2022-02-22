@@ -3,6 +3,6 @@ import userMainRouter from "./user/userMainRouter";
 
 const appMainRouter = Router();
 
-appMainRouter.use("/user", userMainRouter);
+appMainRouter.use("/users", userMainRouter);
 
 export default appMainRouter;

@@ -23,9 +23,10 @@ model User {
   accountType         AccountType
   // profile
   birthday            DateTime
-  description         String              @db.VarChar(500)
+  description         String              @db.VarChar(500) @default("")
   photos              String[]
   gender              String
+  city String
   sexualOrientation   SexualOrientation[]
   // matching
   showMeGender        ShowMeGender
@@ -105,14 +106,14 @@ model UsersRelation {
   id           String   @id @default(cuid())
   firstUserId  String
   secondUserId String
-  relationType Type
+  relationType UsersRelationStatus
   createdAt    DateTime @default(now())
   // relations
   firstUser    User     @relation("firstUser", fields: [firstUserId], references: [id], onDelete: Cascade)
   secondUser   User     @relation("secondUser", fields: [secondUserId], references: [id], onDelete: Cascade)
 }
 
-enum Type {
+enum UsersRelationStatus {
   rejected
   accepted
 }
