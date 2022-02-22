@@ -1,5 +1,4 @@
 import { BetterJoiError } from "../../helpers/validation/betterJoiError";
-
 export class InvalidRequestedBody extends Error {
     public readonly code: number = 400;
     constructor(public msg?: BetterJoiError[]) {
@@ -21,9 +20,19 @@ export class Forbidden extends Error {
 export class EmailAlreadyExists extends Error {
     public readonly code: number = 409;
     public readonly msg: string = "Email already exists";
-    constructor(message: string) {
-        super(message);
+    constructor() {
+        super();
 
         Object.setPrototypeOf(this, EmailAlreadyExists.prototype);
+    }
+}
+
+export class ServerError extends Error {
+    public readonly code: number = 500;
+    public readonly msg: string = "ServerErrror";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, ServerError.prototype);
     }
 }
