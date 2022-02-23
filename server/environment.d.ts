@@ -12,8 +12,10 @@ declare global {
             MAX_AGE_TOKEN_COOKIE: string;
             // emails
             EMAIL_SECRET_TOKEN: string;
+            EMAIL_TOKEN_TTL: string;
             SUPPORT_EMAIL_USER: string;
             SUPPORT_EMAIL_PASSWORD: string;
+            EMAIL_SMTP_HOST: string;
 
             TEST_USER_EMAIL: string;
             TEST_USER_PASSWORD: string;

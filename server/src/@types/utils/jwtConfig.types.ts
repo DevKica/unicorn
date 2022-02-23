@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserType, SessionType } from "../prisma/static.types";
+import { UserType, SessionType, EmailVerificationType, PasswordResetType } from "../prisma/static.types";
 
 export interface userTokenFormat extends jwt.JwtPayload {
     userId: UserType["id"];
@@ -8,9 +8,9 @@ export interface userTokenFormat extends jwt.JwtPayload {
     canRefresh: boolean;
 }
 
-export interface confirmEmailTokenFormat extends jwt.JwtPayload {
-    userId: UserType["id"];
-    newEmail: string;
+export interface emailTokenFormat extends jwt.JwtPayload {
+    emailVerificationId: EmailVerificationType["id"] | PasswordResetType["id"];
+    newEmail?: string;
 }
 
-export type jwtEnumFormat = confirmEmailTokenFormat | userTokenFormat;
+export type jwtEnumFormat = emailTokenFormat | userTokenFormat;
