@@ -20,7 +20,7 @@ model User {
   password            String
   email               String              @unique
   emailVerified       Boolean             @default(false)
-  accountType         AccountType
+  accountType         AccountType         @default(Default)
   // profile
   birthday            DateTime
   description         String              @default("") @db.VarChar(500)
@@ -32,8 +32,8 @@ model User {
   showMeGender        ShowMeGender
   showMeAgeLowerLimit Int
   showMeAgeUpperLimit Int
-  latitude            Float
-  longitude           Float
+  latitude            String
+  longitude           String
   // others
   createdAt           DateTime            @default(now())
   // relations

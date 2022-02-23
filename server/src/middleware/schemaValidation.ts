@@ -1,12 +1,12 @@
 import type { Schema } from "joi";
 import { Request, Response, NextFunction } from "express";
 import createBetterJoiErrors from "../helpers/validation/betterJoiError";
-import { InvalidRequestedBody, ServerError } from "../utils/errors/main";
+import { InvalidRequestedBody } from "../utils/errors/main";
 import { betterValidationResult } from "../@types/middleware/schemaValidation.types";
-import { applyToResponseError } from "../utils/errors/applyToResponseError";
+import { applyToResponseError } from "../utils/errors/applyToResponse";
 
 export const validate = (schema: Schema, dataToValidate: Object): betterValidationResult => {
-    const { error } = schema.validate(dataToValidate, { abortEarly: false })
+    const { error } = schema.validate(dataToValidate, { abortEarly: false });
 
     if (error) return { error: createBetterJoiErrors(error) };
     return true;

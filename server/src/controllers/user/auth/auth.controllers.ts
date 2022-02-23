@@ -1,18 +1,25 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import { CreateUserRequest } from "../../../@types/routes/requests.types.";
 import { checkEmailAvailability } from "../../../helpers/user/checkEmailAvalibility";
 import { createUser } from "../../../services/user/auth.services";
-import { applyToResponseError } from "../../../utils/errors/applyToResponseError";
+import { createEmailVerification } from "../../../services/user/email.services";
+import { applyToResponse, applyToResponseError } from "../../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "./prepareUserCreateInput";
 
-export async function createUserHandler(req: Request, res: Response) {
+export async function createUserHandler(req: CreateUserRequest, res: Response) {
     try {
+        console.log(req.body);
         await checkEmailAvailability(req.body.email);
 
-        const input = prepareCreateUserInput(req.body);
+        const preparedUser = prepareCreateUserInput(req.body);
 
-        const user = await createUser(req.body);
-        console.log(user.email);
+        const createdUser = await createUser(preparedUser);
+
+        const emailVerification = await createEmailVerification({ email: createdUser.email, user: { connect: { id: createdUser.id } } });
+
+        applyToResponse(res, 201, createdUser);
     } catch (e: unknown) {
-        return applyToResponseError(res, e);
+        console.log(e);
+        applyToResponseError(res, e);
     }
 }

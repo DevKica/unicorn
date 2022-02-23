@@ -4,10 +4,15 @@ import { SexualOrientation, ShowMeGender } from "@prisma/client";
 import { matchError } from "../helpers/validation/betterSingleJoiMessage";
 import { dateRestriction } from "../helpers/validation/constants";
 import { joiValidateEnums } from "../helpers/validation/functions";
-import { regexBasicAlphabet, regexPassword } from "../helpers/validation/regexes";
+import { regexBasicAlphabet, regexLatitude, regexLongitude, regexPassword } from "../helpers/validation/regexes";
 
 // extend Joi with Joi Date
 const JoiExtend = Joi.extend(JoiDate);
+
+const joiLocation = {
+    longitude: Joi.string().trim().required().pattern(regexLongitude),
+    latitude: Joi.string().trim().required().pattern(regexLatitude),
+};
 
 // Birthday is immutable after user is created
 const joiBirthday = {
@@ -28,11 +33,11 @@ const joiAdditionalInfo = Joi.object({
     city: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
 });
 
-const joiMatchingInfo = Joi.object({
+const joiBasicMatchingInfo = {
     showMeGender: Joi.string()
         .trim()
         .custom(joiValidateEnums(Object.keys(ShowMeGender))),
-});
+};
 
 const joiSinglePassword = {
     password: Joi.string().trim().required().min(2).max(128).pattern(regexPassword),
@@ -67,6 +72,8 @@ export const createUserSchema = Joi.object({
     ...joiEmail,
     ...joiPasswordWithRepetition,
     ...joiBirthday,
+    ...joiLocation,
+    ...joiBasicMatchingInfo,
 }).concat(requiredJoiGeneralInfo);
 
 export const generalInfoSchema = Joi.object({

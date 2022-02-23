@@ -9,3 +9,7 @@ export function applyToResponseError(res: Response, e: any): void {
         res.status(serverError.code).json({ msg: serverError.msg });
     }
 }
+
+export function applyToResponse(res: Response, code: number, data: Object): void {
+    res.status(code).json(data);
+}

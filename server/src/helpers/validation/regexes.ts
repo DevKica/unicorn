@@ -11,3 +11,9 @@ export const regexPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$
 export const regexAlphabetAllLanguages = new RegExp(/[^\p{L}]+/gu);
 
 // const regexExcludeLetters = new RegExp(/[\p{L}]+/gu);
+
+// regex for matching latitude values
+export const regexLatitude = new RegExp(/^(-?[1-8]?\d(?:\.\d{1,8})?|90(?:\.0{1,8})?)$/);
+
+// regex for matching longitude values
+export const regexLongitude = new RegExp(/^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,8})?|180(?:\.0{1,8})?)$/);

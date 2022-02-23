@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { ACCESS_TOKEN_TTL, MAIN_SECRET_TOKEN } from "../../config/env";
-import { signJWT, verifyJWT } from "../../utils/jwtConfig";
+import { createUserHandler } from "../../controllers/user/auth/auth.controllers";
+import { schemaValidation } from "../../middleware/schemaValidation";
+import { createUserSchema } from "../../validation/user.schema";
+
 const userMainRoutes = Router();
 
 // Create user
-userMainRoutes.post("/");
+userMainRoutes.post("/", schemaValidation(createUserSchema), createUserHandler);
 
 // Login user
 userMainRoutes.post("/login");
@@ -14,7 +16,7 @@ userMainRoutes.patch("/general");
 
 // Route for testing purpose
 userMainRoutes.get("/", (req, res) => {
-  res.json("12");
+    res.json("12");
 });
 
 export default userMainRoutes;
