@@ -6,7 +6,7 @@ import { betterValidationResult } from "../@types/middleware/schemaValidation.ty
 import { applyToResponseError } from "../utils/errors/applyToResponseError";
 
 export const validate = (schema: Schema, dataToValidate: Object): betterValidationResult => {
-    const { error } = schema.validate(dataToValidate, { abortEarly: false });
+    const { error } = schema.validate(dataToValidate, { abortEarly: false })
 
     if (error) return { error: createBetterJoiErrors(error) };
     return true;

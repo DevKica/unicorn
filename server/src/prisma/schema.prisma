@@ -23,10 +23,10 @@ model User {
   accountType         AccountType
   // profile
   birthday            DateTime
-  description         String              @db.VarChar(500) @default("")
+  description         String              @default("") @db.VarChar(500)
   photos              String[]
   gender              String
-  city                String             @default("")
+  city                String              @default("")
   sexualOrientation   SexualOrientation[]
   // matching
   showMeGender        ShowMeGender
@@ -47,7 +47,9 @@ model User {
   message    Message[]
   // what
 
-  userMember UserMember[]
+  userMember          UserMember[]
+  EmailVerificationId EmailVerificationId[]
+  PasswordResetId     PasswordResetId[]
 }
 
 enum ShowMeGender {
@@ -103,14 +105,14 @@ enum TypeOfLike {
 }
 
 model UsersRelation {
-  id           String   @id @default(cuid())
+  id           String              @id @default(cuid())
   firstUserId  String
   secondUserId String
   relationType UsersRelationStatus
-  createdAt    DateTime @default(now())
+  createdAt    DateTime            @default(now())
   // relations
-  firstUser    User     @relation("firstUser", fields: [firstUserId], references: [id], onDelete: Cascade)
-  secondUser   User     @relation("secondUser", fields: [secondUserId], references: [id], onDelete: Cascade)
+  firstUser    User                @relation("firstUser", fields: [firstUserId], references: [id], onDelete: Cascade)
+  secondUser   User                @relation("secondUser", fields: [secondUserId], references: [id], onDelete: Cascade)
 }
 
 enum UsersRelationStatus {
@@ -148,4 +150,22 @@ model Message {
   // relations
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmailVerificationId {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  createdAt DateTime @default(now())
+  // relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+model PasswordResetId {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  // relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
