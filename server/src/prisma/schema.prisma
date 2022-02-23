@@ -47,9 +47,9 @@ model User {
   message    Message[]
   // what
 
-  userMember          UserMember[]
-  EmailVerificationId EmailVerificationId[]
-  PasswordResetId     PasswordResetId[]
+  userMember        UserMember[]
+  EmailVerification EmailVerification[]
+  PasswordReset     PasswordReset[]
 }
 
 enum ShowMeGender {
@@ -152,7 +152,7 @@ model Message {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model EmailVerificationId {
+model EmailVerification {
   id        String   @id @default(cuid())
   userId    String
   email     String
@@ -162,7 +162,7 @@ model EmailVerificationId {
 
 }
 
-model PasswordResetId {
+model PasswordReset {
   id        String   @id @default(cuid())
   userId    String
   createdAt DateTime @default(now())

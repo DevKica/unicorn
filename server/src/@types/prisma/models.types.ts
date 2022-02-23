@@ -7,3 +7,5 @@ export type LikeModelType = typeof prisma.like;
 export type UsersRelationModelType = typeof prisma.usersRelation;
 export type ConversationModelType = typeof prisma.conversation;
 export type MessageModelType = typeof prisma.message;
+export type EmailVerificationModelType = typeof prisma.emailVerification;
+export type PasswordResetModelType = typeof prisma.passwordReset;

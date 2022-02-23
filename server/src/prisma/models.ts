@@ -1,11 +1,13 @@
 import {
-  ConversationModelType,
-  LikeModelType,
-  MessageModelType,
-  SessionModelType,
-  TestModelType,
-  UserModelType,
-  UsersRelationModelType,
+    ConversationModelType,
+    EmailVerificationModelType,
+    LikeModelType,
+    MessageModelType,
+    PasswordResetModelType,
+    SessionModelType,
+    TestModelType,
+    UserModelType,
+    UsersRelationModelType,
 } from "../@types/prisma/models.types";
 import { prisma } from "./db";
 
@@ -16,3 +18,5 @@ export const LikeModel: LikeModelType = prisma.like;
 export const UsersRelationModel: UsersRelationModelType = prisma.usersRelation;
 export const ConversationModel: ConversationModelType = prisma.conversation;
 export const MessageModel: MessageModelType = prisma.message;
+export const EmailVerificationModel: EmailVerificationModelType = prisma.emailVerification;
+export const PasswordResetModel: PasswordResetModelType = prisma.passwordReset;
