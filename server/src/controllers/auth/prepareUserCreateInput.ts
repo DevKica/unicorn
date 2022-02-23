@@ -1,6 +1,6 @@
-import { UserCreateInput } from "../../../@types/prisma/static.types";
-import { CreateUserBody } from "../../../@types/routes/requests.types.";
-import { calculateAge } from "../../../utils/user/calculateAge";
+import { UserCreateInput } from "../../@types/prisma/static.types";
+import { CreateUserBody } from "../../@types/routes/requests.types.";
+import { calculateAge } from "../../utils/user/calculateAge";
 import { omit } from "lodash";
 
 export function prepareCreateUserInput(body: CreateUserBody): UserCreateInput {

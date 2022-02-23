@@ -1,14 +1,13 @@
 import { Response } from "express";
-import { CreateUserRequest } from "../../../@types/routes/requests.types.";
-import { checkEmailAvailability } from "../../../helpers/user/checkEmailAvalibility";
-import { createUser } from "../../../services/user/auth.services";
-import { createEmailVerification } from "../../../services/user/email.services";
-import { applyToResponse, applyToResponseError } from "../../../utils/errors/applyToResponse";
+import { CreateUserRequest } from "../../@types/routes/requests.types.";
+import { checkEmailAvailability } from "../../helpers/user/checkEmailAvalibility";
+import { createUser } from "../../services/user/auth.services";
+import { createEmailVerification } from "../../services/user/email.services";
+import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "./prepareUserCreateInput";
 
 export async function createUserHandler(req: CreateUserRequest, res: Response) {
     try {
-        console.log(req.body);
         await checkEmailAvailability(req.body.email);
 
         const preparedUser = prepareCreateUserInput(req.body);
