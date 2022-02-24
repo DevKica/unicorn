@@ -24,7 +24,8 @@ server.use(deserializeUser);
 server.use(emailToLowerCase);
 
 server.get("/", async (req: Request, res: Response) => {
-    res.json("2115");
+    // res.json("2115");
+    res.status(400).end();
 });
 server.use("/api/v1", appMainRoutes);
 
