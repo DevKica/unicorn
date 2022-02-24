@@ -9,7 +9,8 @@ declare global {
             MAIN_SECRET_TOKEN: string;
             ACCESS_TOKEN_TTL: string;
             REFRESH_TOKEN_TTL: string;
-            MAX_AGE_TOKEN_COOKIE: string;
+            MAX_AGE_TOKEN_COOKIE: number;
+
             // emails
             EMAIL_SECRET_TOKEN: string;
             EMAIL_TOKEN_TTL: string;

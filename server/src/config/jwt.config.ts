@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { jwtEnumFormat } from "../@types/utils/jwtConfig.types";
+import { jwtEnumFormat } from "../@types/utils/jwt.config.types";
 
 export function signJWT(data: jwtEnumFormat, secret: string, expiredTime: string) {
     return jwt.sign(data, secret, { expiresIn: expiredTime });

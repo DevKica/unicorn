@@ -1,10 +1,13 @@
 import jwt from "jsonwebtoken";
 import { UserType, SessionType, EmailVerificationType, PasswordResetType } from "../prisma/static.types";
 
-export interface userTokenFormat extends jwt.JwtPayload {
+export interface userTokenFormatInput {
     userId: UserType["id"];
     active: UserType["active"];
     sessionId: SessionType["id"];
+}
+
+export interface userTokenFormat extends userTokenFormatInput, jwt.JwtPayload {
     canRefresh: boolean;
 }
 

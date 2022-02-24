@@ -22,7 +22,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
             emailVerificationId: emailVerification.id,
         });
 
-        await signNewSession({ req, id: createdUser.id });
+        await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });
 
         applyToResponse(res, 201, createdUser);
     } catch (e: unknown) {

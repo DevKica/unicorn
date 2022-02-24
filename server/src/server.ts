@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Request, Response } from "express";
 import { createUserSchema } from "./validation/user.schema";
 import { emailToLowerCase } from "./middleware/emailToLowerCase";
@@ -6,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { getClientIp } from "@supercharge/request-ip/dist";
 import { lookup } from "geoip-lite";
 import appMainRoutes from "./routes/app.main.routes";
+import { ORIGIN } from "./config/env.config";
 
 const server = express();
 server.get("/", async (req: Request, res: Response) => {
@@ -16,6 +18,13 @@ server.get("/", async (req: Request, res: Response) => {
     console.log("tu");
     res.json("2115");
 });
+
+server.use(
+    cors({
+        origin: ORIGIN,
+        credentials: true,
+    })
+);
 
 server.use(express.json());
 

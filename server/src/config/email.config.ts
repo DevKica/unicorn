@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/json-transport";
-import { jwtEnumFormat } from "../@types/utils/jwtConfig.types";
+import { jwtEnumFormat } from "../@types/utils/jwt.config.types";
 import { SUPPORT_EMAIL_PASSWORD, ORIGIN, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN, SUPPORT_EMAIL_USERNAME } from "./env.config";
 import { signJWT } from "./jwt.config";
 import { logError, logInfo } from "../utils/logger";
