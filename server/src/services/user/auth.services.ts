@@ -1,11 +1,15 @@
-import { UserCreateInput } from "../../@types/prisma/static.types";
+import { User } from "@prisma/client";
+import { UserCreateInput, UserFindUniqueInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";
 
 export async function createUser(input: UserCreateInput) {
-    const user = UserModel.create({
+    return UserModel.create({
         data: input,
         select: userProfileProperties,
     });
-    return user;
+}
+
+export async function findUniqueUser(input: UserFindUniqueInput): Promise<User | null> {
+    return UserModel.findUnique({ where: input });
 }

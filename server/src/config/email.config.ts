@@ -35,11 +35,9 @@ const resetPasswordEmailContent = (token: string) => {
 };
 
 const sendEmailHandler = (clientEmail: string, emailContent: MailOptions) => {
-    transporter.sendMail({ ...emailContent, to: clientEmail }, function (error, info) {
+    transporter.sendMail({ ...emailContent, to: clientEmail }, function (error) {
         if (error) {
             logError("Nodemailer error: " + error);
-        } else {
-            logInfo("Nodemailer success: " + info.response);
         }
     });
 };

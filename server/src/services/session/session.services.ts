@@ -1,21 +1,22 @@
 import { lookup } from "geoip-lite";
-import { Response } from "express";
 import { getClientIp } from "@supercharge/request-ip/dist";
-import { SessionCreateInput, SessionType } from "../../@types/prisma/static.types";
+import { SessionCreateInput, SessionFindUniqueInput, SessionType } from "../../@types/prisma/static.types";
 import { SignNewSessionInput } from "../../@types/services/session.types";
 import { SessionModel } from "../../prisma/models";
-import createAuthCookies from "../../utils/user/auth/cookieCreator";
+import { createAuthCookies } from "../../utils/user/auth/cookiesHelper";
 
 export async function signNewSession(input: SignNewSessionInput): Promise<void> {
     const userData = lookup(getClientIp(input.req) || "");
 
-    const session = await createSession({ city: userData?.city || "", country: userData?.country || "", userAgent: input.req.get("user-agent") || "", user: { connect: { id: input.id } } });
+    const { id: sessionId } = await createSession({ city: userData?.city || "", country: userData?.country || "", userAgent: input.req.get("user-agent") || "", user: { connect: { id: input.id } } });
 
-    createAuthCookies(input.res, { userId: input.id, active: input.active, sessionId: session.id });
+    createAuthCookies(input.res, { userId: input.id, active: input.active, sessionId });
 }
 
 export async function createSession(input: SessionCreateInput): Promise<SessionType> {
-    const session = await SessionModel.create({ data: input });
+    return await SessionModel.create({ data: input });
+}
 
-    return session;
+export async function findSingleSession(input: SessionFindUniqueInput): Promise<SessionType | null> {
+    return await SessionModel.findUnique({ where: input });
 }

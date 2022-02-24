@@ -1,8 +1,8 @@
 import { MAX_AGE_TOKEN_COOKIE } from "./env.config";
 
 export const COOKIE_TYPE = {
-    accessToken: "accessToken",
-    refreshToken: "refreshToken",
+    ACCESS_TOKEN: "accessToken",
+    REFRESH_TOKEN: "refreshToken",
 };
 
 export const cookiesConfig = {
