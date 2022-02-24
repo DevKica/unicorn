@@ -1,10 +1,10 @@
 import Joi from "Joi";
 import JoiDate from "@joi/date";
 import { SexualOrientation, ShowMeGender } from "@prisma/client";
-import { matchError } from "../helpers/validation/betterSingleJoiMessage";
-import { dateRestriction } from "../helpers/validation/constants";
-import { joiValidateEnums } from "../helpers/validation/functions";
-import { regexBasicAlphabet, regexLatitude, regexLongitude, regexPassword } from "../helpers/validation/regexes";
+import { matchError } from "../utils/validation/betterSingleJoiMessage";
+import { dateRestriction } from "../utils/validation/constants";
+import { joiValidateEnums } from "../utils/validation/functions";
+import { regexBasicAlphabet, regexLatitude, regexLongitude, regexPassword } from "../utils/validation/regexes";
 
 // extend Joi with Joi Date
 const JoiExtend = Joi.extend(JoiDate);

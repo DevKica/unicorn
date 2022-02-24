@@ -1,13 +1,14 @@
 import { Response } from "express";
 import { CreateUserRequest } from "../../@types/routes/requests.types.";
-import { checkEmailAvailability } from "../../helpers/user/checkEmailAvalibility";
+import { signNewSession } from "../../services/session/session.services";
 import { createUser } from "../../services/user/auth.services";
 import { createEmailVerification } from "../../services/user/email.services";
-import { sendVerificationEmailHandler } from "../../utils/emailConfig";
+import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "./prepareUserCreateInput";
+import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 
-export async function createUserHandler(req: CreateUserRequest, res: Response) {
+export async function createUserHandler(req: CreateUserRequest, res: Response): Promise<void> {
     try {
         await checkEmailAvailability(req.body.email);
 
@@ -21,9 +22,10 @@ export async function createUserHandler(req: CreateUserRequest, res: Response) {
             emailVerificationId: emailVerification.id,
         });
 
+        await signNewSession({ req, id: createdUser.id });
+
         applyToResponse(res, 201, createdUser);
     } catch (e: unknown) {
-        console.log(e);
         applyToResponseError(res, e);
     }
 }

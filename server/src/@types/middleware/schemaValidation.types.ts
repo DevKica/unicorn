@@ -1,3 +1,3 @@
-import { BetterJoiError } from "../../helpers/validation/betterJoiError";
+import { BetterJoiError } from "../../utils/validation/betterJoiError";
 
 export type betterValidationResult = true | { error: BetterJoiError[] };

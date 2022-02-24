@@ -1,4 +1,4 @@
-import { BetterJoiError } from "../../helpers/validation/betterJoiError";
+import { BetterJoiError } from "../validation/betterJoiError";
 export class InvalidRequestedBody extends Error {
     public readonly code: number = 400;
     constructor(public msg?: BetterJoiError[]) {

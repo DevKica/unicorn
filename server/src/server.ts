@@ -1,19 +1,19 @@
 import express, { Request, Response } from "express";
-// import { getClientIp } from "@supercharge/request-ip/dist";
-import appMainRoutes from "./routes/app.main.routes";
 import { createUserSchema } from "./validation/user.schema";
 import { emailToLowerCase } from "./middleware/emailToLowerCase";
 import { schemaValidation, validate } from "./middleware/schemaValidation";
-import { checkEmailAvailability } from "./helpers/user/checkEmailAvalibility";
 import cookieParser from "cookie-parser";
+import { getClientIp } from "@supercharge/request-ip/dist";
+import { lookup } from "geoip-lite";
+import appMainRoutes from "./routes/app.main.routes";
 
 const server = express();
-server.get("/", async (_req: Request, res: Response) => {
-    // console.log(getClientIp(req));
-    // const result = req.get("user-agent");
-    // console.log(lookup(getClientIp(req) || ""));
-    // console.log(lookup("91.124.176.49"));
-    // console.log("tu");
+server.get("/", async (req: Request, res: Response) => {
+    console.log(getClientIp(req));
+    const result = req.get("user-agent");
+    console.log(lookup(getClientIp(req) || ""));
+    console.log(lookup("91.123.176.49"));
+    console.log("tu");
     res.json("2115");
 });
 

@@ -19,7 +19,7 @@ model User {
   surname             String
   password            String
   email               String              @unique
-  emailVerified       Boolean             @default(false)
+  active              Boolean             @default(false)
   accountType         AccountType         @default(Default)
   // profile
   birthday            DateTime
@@ -80,6 +80,7 @@ enum AccountType {
 model Session {
   id        String   @id @default(cuid())
   userId    String
+  valid     Boolean  @default(true)
   country   String
   city      String
   userAgent String

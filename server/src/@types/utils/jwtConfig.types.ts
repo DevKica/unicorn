@@ -3,7 +3,7 @@ import { UserType, SessionType, EmailVerificationType, PasswordResetType } from 
 
 export interface userTokenFormat extends jwt.JwtPayload {
     userId: UserType["id"];
-    emailVerified: UserType["emailVerified"];
+    active: UserType["active"];
     sessionId: SessionType["id"];
     canRefresh: boolean;
 }

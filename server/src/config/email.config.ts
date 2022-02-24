@@ -1,33 +1,36 @@
 import nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/json-transport";
-import { type } from "os";
 import { jwtEnumFormat } from "../@types/utils/jwtConfig.types";
-import { SUPPORT_EMAIL_USER, SUPPORT_EMAIL_PASSWORD, EMAIL_SMTP_USER, ORIGIN, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN } from "../config/env";
-import { signJWT } from "./jwtConfig";
-import { logError, logInfo } from "./logger";
+import { SUPPORT_EMAIL_PASSWORD, ORIGIN, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN, SUPPORT_EMAIL_USERNAME } from "./env.config";
+import { signJWT } from "./jwt.config";
+import { logError, logInfo } from "../utils/logger";
 
 const transporter = nodemailer.createTransport({
-    service: EMAIL_SMTP_USER,
+    service: "gmail",
     port: 465,
     secure: true,
     auth: {
-        user: SUPPORT_EMAIL_USER,
+        user: SUPPORT_EMAIL_USERNAME,
         pass: SUPPORT_EMAIL_PASSWORD,
     },
 });
 
 const verificationEmailContent = (token: string) => {
     return {
-        from: SUPPORT_EMAIL_USER,
+        from: SUPPORT_EMAIL_USERNAME,
         subject: "Email verification",
-        html: `Hello, click here to verify your email <a href="${ORIGIN}/special/emailVerification/${token}"`,
+        html: `Hello, click here to verify your email <a href="${ORIGIN}/special/emailVerification/${token}">
+        <button>click here</button>
+        </a>`,
     };
 };
 const resetPasswordEmailContent = (token: string) => {
     return {
-        from: SUPPORT_EMAIL_USER,
+        from: SUPPORT_EMAIL_USERNAME,
         subject: "Set your new password",
-        html: `Hello, click here to set your new password <a href="${ORIGIN}/special/setNewPassword/${token}"`,
+        html: `Hello, click here to set your new password<a href="${ORIGIN}/special/setNewPassword/${token}">
+        <button>click here</button>
+        </a>`,
     };
 };
 
