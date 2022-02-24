@@ -1,9 +1,9 @@
 import type { Schema } from "joi";
 import { Request, Response, NextFunction } from "express";
-import createBetterJoiErrors from "../utils/validation/betterJoiError";
-import { InvalidRequestedBody } from "../utils/errors/main";
 import { betterValidationResult } from "../@types/middleware/schemaValidation.types";
 import { applyToResponseError } from "../utils/errors/applyToResponse";
+import { InvalidRequestedBody } from "../utils/errors/main";
+import createBetterJoiErrors from "../validation/helpers/betterJoiError";
 
 export const validate = (schema: Schema, dataToValidate: Object): betterValidationResult => {
     const { error } = schema.validate(dataToValidate, { abortEarly: false });

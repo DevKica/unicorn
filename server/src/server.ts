@@ -5,6 +5,8 @@ import { emailToLowerCase } from "./middleware/emailToLowerCase";
 import cookieParser from "cookie-parser";
 import appMainRoutes from "./routes/app.main.routes";
 import deserializeUser from "./middleware/deserializeUser";
+import { applyToResponseError } from "./utils/errors/applyToResponse";
+import { EmailAlreadyExists } from "./utils/errors/main";
 
 const server = express();
 
@@ -24,8 +26,11 @@ server.use(deserializeUser);
 server.use(emailToLowerCase);
 
 server.get("/", async (req: Request, res: Response) => {
-    // res.json("2115");
-    res.status(400).end();
+    try {
+        throw new EmailAlreadyExists();
+    } catch (e: unknown) {
+        applyToResponseError(res, e);
+    }
 });
 server.use("/api/v1", appMainRoutes);
 
