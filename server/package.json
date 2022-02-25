@@ -12,7 +12,7 @@
         "format": "prisma format",
         "test": "jest --detectOpenHandles",
         "inboxtest": "ts-node src/tests/helpers/testInbox.ts",
-        "droptestdb": "NODE_ENV=test ts-node src/prisma/dropTestDb.ts"
+        "cleanup": "NODE_ENV=test ts-node src/prisma/cleanUpAfterTests.ts"
     },
     "dependencies": {
         "@joi/date": "^2.1.0",

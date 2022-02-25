@@ -5,13 +5,11 @@ import {
     MessageModelType,
     PasswordResetModelType,
     SessionModelType,
-    TestModelType,
     UserModelType,
     UsersRelationModelType,
 } from "../@types/prisma/models.types";
 import { prisma } from "./db";
 
-export const TestModel: TestModelType = prisma.test;
 export const UserModel: UserModelType = prisma.user;
 export const SessionModel: SessionModelType = prisma.session;
 export const LikeModel: LikeModelType = prisma.like;
