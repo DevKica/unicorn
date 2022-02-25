@@ -46,3 +46,21 @@ export class ServerError extends Error {
         Object.setPrototypeOf(this, ServerError.prototype);
     }
 }
+export class InvalidCredentials extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Invalid credentials";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, ServerError.prototype);
+    }
+}
+export class NotFound extends Error {
+    public readonly code: number = 404;
+    public readonly msg: string = "Not found";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, ServerError.prototype);
+    }
+}

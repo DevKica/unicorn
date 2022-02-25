@@ -18,3 +18,12 @@ export interface CreateUserBody {
 export interface CreateUserRequest extends Request {
     body: CreateUserBody;
 }
+
+export interface LoginUserBody {
+    email: string;
+    password: string;
+}
+
+export interface LoginUserRequest extends Request {
+    body: LoginUserBody;
+}

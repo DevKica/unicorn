@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUserHandler } from "../../controllers/auth/auth.controllers";
+import { createUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { createUserSchema } from "../../validation/user.schema";
 
@@ -9,7 +9,7 @@ const userMainRoutes = Router();
 userMainRoutes.post("/", schemaValidation(createUserSchema), createUserHandler);
 
 // Login user
-userMainRoutes.post("/login");
+userMainRoutes.post("/login", loginUserHandler);
 
 // Update user general info
 userMainRoutes.patch("/general");

@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { CreateUserRequest } from "../../@types/routes/requests.types.";
+import { CreateUserRequest, LoginUserRequest } from "../../@types/routes/requests.types.";
 import { signNewSession } from "../../services/session/session.services";
-import { createUser } from "../../services/user/auth.services";
+import { createUser, validateUserPassword } from "../../services/user/auth.services";
 import { createEmailVerification } from "../../services/user/email.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
@@ -25,6 +25,16 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });
 
         applyToResponse(res, 201, createdUser);
+    } catch (e: unknown) {
+        applyToResponseError(res, e);
+    }
+}
+
+export async function loginUserHandler(req: LoginUserRequest, res: Response): Promise<void> {
+    try {
+        const user = await validateUserPassword(req.body.password, { email: req.body.email });
+        await signNewSession({ req, res, id: user.id, active: user.active });
+        applyToResponse(res, 200, user);
     } catch (e: unknown) {
         applyToResponseError(res, e);
     }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { applyToResponseError } from "../utils/errors/applyToResponse";
 import { EmailNotVerified, Forbidden } from "../utils/errors/main";
 
-export const requireActiveUser = (_req: Request, res: Response, next: Function) => {
+export function requireActiveUser(_req: Request, res: Response, next: Function): void {
     try {
         const user = res.locals.user;
 
@@ -14,9 +14,9 @@ export const requireActiveUser = (_req: Request, res: Response, next: Function) 
     } catch (e: unknown) {
         applyToResponseError(res, e);
     }
-};
+}
 
-export const requireUser = (_req: Request, res: Response, next: Function) => {
+export function requireUser(_req: Request, res: Response, next: Function): void {
     try {
         const user = res.locals.user;
 
@@ -26,4 +26,4 @@ export const requireUser = (_req: Request, res: Response, next: Function) => {
     } catch (e: unknown) {
         applyToResponseError(res, e);
     }
-};
+}
