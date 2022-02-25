@@ -9,6 +9,15 @@ export class InvalidRequestedBody extends Error {
     }
 }
 
+export class EmailNotVerified extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "Email not verified";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, Forbidden.prototype);
+    }
+}
 export class Forbidden extends Error {
     public readonly code: number = 403;
     public readonly msg: string = "Forbidden";
