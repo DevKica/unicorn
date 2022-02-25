@@ -1,5 +1,5 @@
 import { EmailAlreadyExistsInstance, InvalidRequestedBodyInstance } from "../data/config";
-import { invalidCreateUserBody, validCreateUserBody, validCreateUserResponse } from "../data/users";
+import { invalidCreateUserBody, photoFileName, validCreateUserBody, validCreateUserResponse } from "../data/users";
 import { testPOSTRequest } from "../helpers/testEndpoint";
 
 describe("AUTHENTICATION", () => {
@@ -13,9 +13,9 @@ describe("AUTHENTICATION", () => {
         // await testPOSTRequest("/users", validCreateUserBody, EmailAlreadyExistsInstance);
     });
     test(`Form data test`, async () => {
-        await testPOSTRequest("/", { name: "hehe" }, { msg: "2115" }, 200);
+        await testPOSTRequest("/", { name: "hehe" }, { msg: "2115" }, 200, photoFileName);
     });
     test(`Form data test`, async () => {
-        await testPOSTRequest("/", { name: "hehe" }, { msg: "2115" }, 400);
+        // await testPOSTRequest("/", { name: "hehe" }, { msg: "2115" }, 400);
     });
 });

@@ -64,3 +64,32 @@ export class NotFound extends Error {
         Object.setPrototypeOf(this, ServerError.prototype);
     }
 }
+
+export class InvalidFileFormat extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Invalid file format";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, InvalidFileFormat.prototype);
+    }
+}
+
+export class PhotoRequired extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "At least one photo is required";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, PhotoRequired.prototype);
+    }
+}
+export class BadRequest extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Bad request";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, BadRequest.prototype);
+    }
+}

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 
 import { useState } from "react";
 import { createUser, uploadFile } from "./api/userInstance";
@@ -6,16 +6,16 @@ import { createUser, uploadFile } from "./api/userInstance";
 const App = () => {
   const [file, setFile] = useState<any>(null);
   const handleSendFile = () => {
+    let formData = new FormData();
     if (file) {
-      const formData = new FormData();
       let counter = 1;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [_key, value] of Object.entries(file)) {
         formData.append(`avatar${counter}`, value, value.name);
         counter += 1;
       }
-      uploadFile(formData);
     }
+    uploadFile(formData);
   };
   return (
     <div>

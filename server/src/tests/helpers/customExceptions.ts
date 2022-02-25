@@ -6,6 +6,6 @@ export function expectToEqualError(res: any, error: any) {
 }
 
 export function expectToEqual(res: any, status: number, data: Object) {
-    expect(omit(res.body, "id")).toEqual(data);
+    expect(omit(res.body, "id", "photos")).toEqual(data);
     expect(res.status).toEqual(status);
 }

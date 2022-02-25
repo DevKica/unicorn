@@ -1,19 +1,17 @@
 import { Request, Response, Router } from "express";
 import userMainRoutes from "./user/main.routes";
-import { UploadedFile } from "express-fileupload";
-import { promisify } from "util";
-import path from "path";
-import { applyToResponse } from "../utils/errors/applyToResponse";
+import { applyToResponse, applyToResponseError } from "../utils/errors/applyToResponse";
+import { uploadUserPhotosFromReq } from "../utils/user/upload/uploadToDir";
 
 const appMainRoutes = Router();
 
 appMainRoutes.post("/", async (req: Request, res: Response) => {
-    console.log(req.body);
-    console.log(req.files);
-    if (req.files) {
+    try {
+        const uploadPhotos = await uploadUserPhotosFromReq(req);
+        console.log(uploadPhotos);
         applyToResponse(res, 200, { msg: "2115" });
-    } else {
-        applyToResponse(res, 400, { msg: "2115" });
+    } catch (e: unknown) {
+        applyToResponseError(res, e);
     }
 });
 

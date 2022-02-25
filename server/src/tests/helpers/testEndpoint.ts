@@ -7,13 +7,16 @@ import fs from "fs";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
-export async function testPOSTRequest(endpoint: string, data: any, equalObject: any = false, equalStatus: any = 0) {
-    const buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", "avatar.jpg"));
+export async function testPOSTRequest(endpoint: string, data: any, equalObject: any = false, equalStatus: any = 0, attachFileName: string = "") {
+    let buffer: any = "";
+    if (attachFileName) {
+        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", attachFileName));
+    }
     const res = await global.request
         .post(`/api/${apiVersion}${endpoint}`)
         .set("Cookie", [`${ACCESS_TOKEN}=${global.accessToken}`, `${REFRESH_TOKEN}=${global.refreshToken}`])
         .field(data)
-        .attach("avatar", buffer, "avatar.jpg");
+        .attach("userProfilePhoto", buffer, "profilePhoto.jpg");
 
     try {
         global.accessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];

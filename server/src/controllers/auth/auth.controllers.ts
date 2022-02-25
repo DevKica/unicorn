@@ -7,6 +7,7 @@ import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "./prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
+import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 
 export async function createUserHandler(req: CreateUserRequest, res: Response): Promise<void> {
     try {
@@ -22,9 +23,11 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
             emailVerificationId: emailVerification.id,
         });
 
+        const uploadPhotos = await uploadUserPhotosFromReq(req);
+
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });
 
-        applyToResponse(res, 201, createdUser);
+        applyToResponse(res, 201, { ...createdUser, photos: uploadPhotos });
     } catch (e: unknown) {
         applyToResponseError(res, e);
     }
