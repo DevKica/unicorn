@@ -4,10 +4,16 @@ declare global {
     var prisma: PrismaClient | undefined;
 }
 
+let databaseUrl = process.env.DATABASE_URL;
+if (process.env.NODE_ENV === "test") {
+    databaseUrl = process.env.TEST_DATABASE_URL;
+}
+
 export const prisma =
     global.prisma ||
     new PrismaClient({
         log: ["info", "warn", "error"],
+        datasources: { db: { url: databaseUrl } },
     });
 
 // hash password before saving in database

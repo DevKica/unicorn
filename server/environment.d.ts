@@ -5,6 +5,8 @@ declare global {
             PORT: number;
             ORIGIN: string;
             DATABASE_URL: string;
+            TEST_DATABASE_URL: string;
+
             // cookies
             MAIN_SECRET_TOKEN: string;
             ACCESS_TOKEN_TTL: string;
