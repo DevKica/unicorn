@@ -20,3 +20,5 @@ userAuthInstance.interceptors.response.use(
 );
 
 export const createUser = () => userAuthInstance.post(`/users`, validCreateUserBody);
+
+export const uploadFile = (body: any) => userAuthInstance.post("/", body);

@@ -1,3 +1,4 @@
+import console from "console";
 import { Request, Response, NextFunction } from "express";
 import { MAIN_SECRET_TOKEN } from "../config/env.config";
 import { verifyJWT } from "../config/jwt.config";
@@ -6,6 +7,12 @@ import { createAccessCookie, removeAuthCookies } from "../utils/user/auth/cookie
 
 const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken, refreshToken } = req.cookies;
+
+    console.log(req.files);
+
+    if (req.files) {
+        console.log(req.files["avatar"]);
+    }
 
     const { decoded: decodedAccess, expired: expiredAccess } = verifyJWT(accessToken, MAIN_SECRET_TOKEN);
 

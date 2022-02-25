@@ -1,12 +1,11 @@
 import cors from "cors";
 import { ORIGIN } from "./config/env.config";
-import express, { Request, Response } from "express";
+import express from "express";
 import { emailToLowerCase } from "./middleware/emailToLowerCase";
 import cookieParser from "cookie-parser";
 import appMainRoutes from "./routes/app.main.routes";
 import deserializeUser from "./middleware/deserializeUser";
-import { applyToResponseError } from "./utils/errors/applyToResponse";
-import { EmailAlreadyExists } from "./utils/errors/main";
+import fileUpload from "express-fileupload";
 
 const server = express();
 
@@ -21,17 +20,12 @@ server.use(express.json());
 
 server.use(cookieParser());
 
-server.use(deserializeUser);
+server.use(fileUpload());
 
 server.use(emailToLowerCase);
 
-server.get("/", async (req: Request, res: Response) => {
-    try {
-        throw new EmailAlreadyExists();
-    } catch (e: unknown) {
-        applyToResponseError(res, e);
-    }
-});
+server.use(deserializeUser);
+
 server.use("/api/v1", appMainRoutes);
 
 // server.get("/create", async (_: Request, res: Response) => {

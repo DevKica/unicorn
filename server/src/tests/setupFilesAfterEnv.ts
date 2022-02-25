@@ -4,3 +4,4 @@ import server from "../server";
 global.request = supertest(server);
 global.accessToken = "";
 global.refreshToken = "";
+global.counter = 1;
