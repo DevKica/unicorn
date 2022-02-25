@@ -29,4 +29,5 @@ export async function testPOSTRequest(endpoint: string, data: any, equalObject: 
     } else {
         expectToEqualError(res, equalObject);
     }
+    return res;
 }
