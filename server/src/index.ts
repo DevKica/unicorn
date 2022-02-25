@@ -5,5 +5,5 @@ import { logInfo } from "./utils/logger";
 const PORT = process.env.PORT;
 
 server.listen(PORT, () => {
-  logInfo("Server is running");
+    logInfo("Server is running");
 });

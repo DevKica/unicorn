@@ -1,17 +1,6 @@
-import { omit } from "lodash";
 import { EmailAlreadyExistsInstance, InvalidRequestedBodyInstance } from "../data/config";
 import { unvalidCreateUserBody, validCreateUserBody, validCreateUserResponse } from "../data/users";
 import { testPOSTRequest } from "../helpers/testEndpoint";
-
-export function expectToEqualError(res: any, error: any) {
-    expect(res.body.msg).toEqual(error.msg);
-    expect(res.status).toEqual(error.code);
-}
-
-export function expectToEqual(res: any, status: number, data: Object) {
-    expect(omit(res.body, "id")).toEqual(data);
-    expect(res.status).toEqual(status);
-}
 
 describe("AUTHENTICATION", () => {
     beforeAll(() => {});
