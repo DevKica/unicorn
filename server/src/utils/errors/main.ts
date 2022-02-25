@@ -39,7 +39,7 @@ export class EmailAlreadyExists extends Error {
 
 export class ServerError extends Error {
     public readonly code: number = 500;
-    public readonly msg: string = "ServerErrror";
+    public readonly msg: string = "Server Error";
     constructor() {
         super();
 

@@ -33,8 +33,6 @@ export async function uploadSingleFile(file: any, dirPath: string): Promise<stri
 
 export async function uploadUserPhotosFromReq(req: Request) {
     if (req.files) {
-        if (Object.keys(req.files).length > 9) throw new BadRequest();
-
         const uploadPhotos = [];
 
         for (const [_key, value] of Object.entries(req.files)) {

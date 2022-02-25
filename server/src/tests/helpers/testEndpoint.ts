@@ -16,7 +16,7 @@ export async function testPOSTRequest(endpoint: string, data: any, equalObject: 
         .post(`/api/${apiVersion}${endpoint}`)
         .set("Cookie", [`${ACCESS_TOKEN}=${global.accessToken}`, `${REFRESH_TOKEN}=${global.refreshToken}`])
         .field(data)
-        .attach("userProfilePhoto", buffer, "profilePhoto.jpg");
+        .attach("random", buffer, attachFileName);
 
     try {
         global.accessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];

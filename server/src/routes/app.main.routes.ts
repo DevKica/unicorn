@@ -8,8 +8,7 @@ const appMainRoutes = Router();
 
 appMainRoutes.post("/", async (req: Request, res: Response) => {
     try {
-        const uploadPhotos = await uploadUserPhotosFromReq(req);
-        // console.log(uploadPhotos);
+        // const uploadPhotos = await uploadUserPhotosFromReq(req);
         applyToResponse(res, 200, { msg: "2115" });
     } catch (e: unknown) {
         applyToResponseError(res, e);

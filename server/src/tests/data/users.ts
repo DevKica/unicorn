@@ -1,6 +1,8 @@
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
-export const photoFileName = "avatar123.jpg";
+export const validFileFormat = "avatar123.jpg";
+
+export const invalidFileFormat = "avatar123.bmp";
 
 export const invalidCreateUserBody = {};
 
@@ -8,7 +10,7 @@ export const validCreateUserBody = {
     name: "Pawel",
     surname: "Kica",
     email: TEST_USER_EMAIL,
-    password: "1password1!P",
+    password: "password1!P",
     passwordRepetition: "password1!P",
     birthday: "2003-02-13",
     longitude: "170.123",
@@ -17,10 +19,11 @@ export const validCreateUserBody = {
     gender: "Male",
     sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
+
 export const validCreateUserResponse = {
-    birthday: "2003-02-13T00:00:00.000Z",
-    email: TEST_USER_EMAIL,
     name: "Pawel",
     surname: "Kica",
+    email: TEST_USER_EMAIL,
+    birthday: "2003-02-13T00:00:00.000Z",
     active: false,
 };

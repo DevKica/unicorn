@@ -13,6 +13,8 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
     try {
         await checkEmailAvailability(req.body.email);
 
+        const uploadPhotos = await uploadUserPhotosFromReq(req);
+
         const preparedUser = prepareCreateUserInput(req.body);
 
         const createdUser = await createUser(preparedUser);
@@ -22,8 +24,6 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
         sendVerificationEmailHandler(createdUser.email, {
             emailVerificationId: emailVerification.id,
         });
-
-        const uploadPhotos = await uploadUserPhotosFromReq(req);
 
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });
 
