@@ -3,7 +3,7 @@ import { unvalidCreateUserBody, validCreateUserBody, validCreateUserResponse } f
 import { testPOSTRequest } from "../helpers/testEndpoint";
 
 describe("AUTHENTICATION", () => {
-    beforeAll(() => {});
+    beforeAll(async () => {});
     test("User should not be able to create account with invalid body", async () => {
         await testPOSTRequest("/users", unvalidCreateUserBody, InvalidRequestedBodyInstance);
     });

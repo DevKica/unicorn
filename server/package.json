@@ -11,7 +11,8 @@
         "migrate": "prisma migrate dev",
         "format": "prisma format",
         "test": "jest --detectOpenHandles",
-        "inboxTest": "ts-node src/tests/helpers/testInbox.ts"
+        "inboxtest": "ts-node src/tests/helpers/testInbox.ts",
+        "droptestdb": "NODE_ENV=test ts-node src/prisma/dropTestDb.ts"
     },
     "dependencies": {
         "@joi/date": "^2.1.0",

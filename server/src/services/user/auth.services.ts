@@ -1,9 +1,8 @@
 import { User } from "@prisma/client";
-import console from "console";
 import { UserCreateInput, UserFindUniqueInput, UserType } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";
-import { InvalidCredentials, NotFound } from "../../utils/errors/main";
+import { NotFound } from "../../utils/errors/main";
 import { comparePasswords } from "../../utils/user/auth/comparePasswords";
 
 export async function createUser(input: UserCreateInput) {

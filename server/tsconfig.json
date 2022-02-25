@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es2017",
+        "module": "es2022",
         "outDir": "dist",
         "allowJs": true,
-        "module": "esnext",
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
         "strict": true,
