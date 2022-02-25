@@ -2,6 +2,7 @@
 
 import Imap from "imap";
 import { simpleParser } from "mailparser";
+import { exit } from "process";
 import { TEST_USER_EMAIL, TEST_USER_PASSWORD, SUPPORT_EMAIL_USERNAME } from "../../config/env.config";
 import { logError, logInfo } from "../../utils/logger";
 
@@ -53,6 +54,7 @@ const testGmailInbox = () => {
                         });
                     } catch (e) {
                         logError(e);
+                        exit(1);
                     }
                 });
             });
