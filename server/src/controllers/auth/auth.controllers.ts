@@ -9,6 +9,7 @@ import { prepareCreateUserInput } from "./prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { SuccessResponse } from "../../utils/responses/main";
+import { omit } from "lodash";
 
 export async function returnSuccess(_req: Request, res: Response): Promise<void> {
     applyToResponse(res, 200, SuccessResponse);
@@ -42,7 +43,7 @@ export async function loginUserHandler(req: LoginUserRequest, res: Response): Pr
     try {
         const user = await validateUserPassword(req.body.password, { email: req.body.email });
         await signNewSession({ req, res, id: user.id, active: user.active });
-        applyToResponse(res, 200, user);
+        applyToResponse(res, 200, omit(user, "password"));
     } catch (e: unknown) {
         applyToResponseError(res, e);
     }

@@ -9,4 +9,5 @@ export const userProfileProperties = Prisma.validator<Prisma.UserSelect>()({
     surname: true,
     birthday: true,
     active: true,
+    photos: true,
 });

@@ -4,13 +4,13 @@ export class InvalidRequestedBody extends Error {
     public readonly code: number = 400;
     constructor(public msg?: BetterJoiError[]) {
         super();
-        // Without it instanceof doesnt work properly
+
         Object.setPrototypeOf(this, InvalidRequestedBody.prototype);
     }
 }
 
 export class EmailNotVerified extends Error {
-    public readonly code: number = 403;
+    public readonly code: number = 401;
     public readonly msg: string = "Email not verified";
     constructor() {
         super();
@@ -47,7 +47,7 @@ export class ServerError extends Error {
     }
 }
 export class InvalidCredentials extends Error {
-    public readonly code: number = 400;
+    public readonly code: number = 401;
     public readonly msg: string = "Invalid credentials";
     constructor() {
         super();
@@ -91,5 +91,15 @@ export class BadRequest extends Error {
         super();
 
         Object.setPrototypeOf(this, BadRequest.prototype);
+    }
+}
+
+export class Unauthorized extends Error {
+    public readonly code: number = 401;
+    public readonly msg: string = "Unauthorized";
+    constructor() {
+        super();
+
+        Object.setPrototypeOf(this, Unauthorized.prototype);
     }
 }

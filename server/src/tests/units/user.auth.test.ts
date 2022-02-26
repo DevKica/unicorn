@@ -1,13 +1,28 @@
-import { testPOSTRequest } from "../helpers/testEndpoint";
-import { EmailAlreadyExistsInstance, EmailNotVerifiedInstance, ForbiddenInstance, InvalidFileFormatInstance, InvalidRequestedBodyInstance, PhotoRequiredInstance } from "../data/config";
-import { invalidCreateUserBody, validCreateUserBody, validCreateUserResponse, invalidFileFormat, validFileFormat } from "../data/users";
-import { expectUploadFilesToExists } from "../helpers/customExceptions";
-import { SuccessResponse } from "../../utils/responses/main";
 import removeTestTokens from "../helpers/removeTestTokens";
+import { testPOSTRequest } from "../helpers/testEndpoint";
+import {
+    EmailAlreadyExistsInstance,
+    InvalidCredentialsInstance,
+    InvalidFileFormatInstance,
+    InvalidRequestedBodyInstance,
+    InvalidRequestedLoginBodyInstance,
+    PhotoRequiredInstance,
+} from "../data/config";
+import {
+    invalidCreateUserBody,
+    validCreateUserBody,
+    generalUserDataResponse,
+    invalidFileFormat,
+    validFileFormat,
+    invalidLoginBody,
+    invalidLoginCredentials,
+    validLoginCredentials,
+} from "../data/users";
+import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 
 describe("AUTHENTICATION", () => {
-    describe("CREATE ACCOUNT", () => {
+    describe("CREATING AN ACCOUNT", () => {
         test(`User should NOT be able access USER protected routes before creating account`, async () => {
             await testUserAuthEndpoint(false);
         });
@@ -21,7 +36,7 @@ describe("AUTHENTICATION", () => {
             await testPOSTRequest("/users", validCreateUserBody, InvalidFileFormatInstance, undefined, invalidFileFormat);
         });
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
-            const res = await testPOSTRequest("/users", validCreateUserBody, validCreateUserResponse, 201, validFileFormat);
+            const res = await testPOSTRequest("/users", validCreateUserBody, generalUserDataResponse, 201, validFileFormat);
             expectUploadFilesToExists(res);
         });
         test(`User should NOT be able to create account with email that already exists in database`, async () => {
@@ -34,8 +49,19 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
             removeTestTokens();
         });
-        test("User should NOT be able to access USER protected routes after removing tokens", async () => {
+        test("User should NOT be able to access USER and USER ACTIVE protected routes after removing tokens", async () => {
             await testUserAuthEndpoint(false);
+        });
+    });
+    describe("LOGGING IN", () => {
+        test("User should NOT be able to pass schema validation with invalid body", async () => {
+            await testPOSTRequest("/users/login", invalidLoginBody, InvalidRequestedLoginBodyInstance);
+        });
+        test("User should NOT be able to login with invalid credentials", async () => {
+            await testPOSTRequest("/users/login", invalidLoginCredentials, InvalidCredentialsInstance);
+        });
+        test("User should be able to login with valid credentials", async () => {
+            await testPOSTRequest("/users/login", validLoginCredentials, generalUserDataResponse, 200);
         });
     });
 });

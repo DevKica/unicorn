@@ -1,12 +1,12 @@
-import { SuccessResponse } from "../../utils/responses/main";
-import { ForbiddenInstance, EmailNotVerifiedInstance } from "../data/config";
 import { testPOSTRequest } from "./testEndpoint";
+import { SuccessResponse } from "../../utils/responses/main";
+import { UnauthorizedInstance, EmailNotVerifiedInstance } from "../data/config";
 
 export async function testUserAuthEndpoint(success: boolean): Promise<void> {
     if (success) {
         await testPOSTRequest("/users/auth/", {}, SuccessResponse, 200);
     } else {
-        await testPOSTRequest("/users/auth/", {}, ForbiddenInstance);
+        await testPOSTRequest("/users/auth/", {}, UnauthorizedInstance);
     }
 }
 

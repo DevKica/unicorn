@@ -66,6 +66,11 @@ export const emailSchema = Joi.object({
     ...joiEmail,
 });
 
+export const logInSchema = Joi.object({
+    ...joiEmail,
+    ...joiSinglePassword,
+});
+
 const requiredJoiGeneralInfo = Joi.object(joiGeneralInfo).options({ presence: "required" });
 
 export const createUserSchema = Joi.object({

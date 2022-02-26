@@ -20,10 +20,22 @@ export const validCreateUserBody = {
     sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
 
-export const validCreateUserResponse = {
+export const generalUserDataResponse = {
     name: "Pawel",
     surname: "Kica",
     email: TEST_USER_EMAIL,
     birthday: "2003-02-13T00:00:00.000Z",
     active: false,
+};
+
+export const invalidLoginBody = {};
+
+export const validLoginCredentials = {
+    email: TEST_USER_EMAIL,
+    password: validCreateUserBody.password,
+};
+
+export const invalidLoginCredentials = {
+    email: TEST_USER_EMAIL,
+    password: `${validLoginCredentials.password}1`,
 };
