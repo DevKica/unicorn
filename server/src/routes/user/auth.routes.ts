@@ -1,16 +1,23 @@
 import { Router } from "express";
-const userAuthRouter = Router();
+import { returnSuccess } from "../../controllers/auth/auth.controllers";
+import { requireUser, requireActiveUser } from "../../middleware/requireUser";
+
+const userAuthRoutes = Router();
+
+userAuthRoutes.post("/", requireUser, returnSuccess);
+
+userAuthRoutes.post("/active", requireActiveUser, returnSuccess);
 
 // Verify user's email
-userAuthRouter.post("/verify");
+userAuthRoutes.post("/verify");
 
 // Resend the verification email
-userAuthRouter.post("/resendVerify");
+userAuthRoutes.post("/resendVerify");
 
 // Send to the user's e-mail a link to reset the password
-userAuthRouter.post("/resetPassword");
+userAuthRoutes.post("/resetPassword");
 
 // Create new password from reset password link
-userAuthRouter.patch("/newPassword");
+userAuthRoutes.patch("/newPassword");
 
-export default userAuthRouter;
+export default userAuthRoutes;

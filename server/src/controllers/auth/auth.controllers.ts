@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import { CreateUserRequest, LoginUserRequest } from "../../@types/routes/requests.types.";
 import { signNewSession } from "../../services/session/session.services";
 import { createUser, validateUserPassword } from "../../services/user/auth.services";
@@ -8,6 +8,11 @@ import { applyToResponse, applyToResponseError } from "../../utils/errors/applyT
 import { prepareCreateUserInput } from "./prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
+import { SuccessResponse } from "../../utils/responses/main";
+
+export async function returnSuccess(_req: Request, res: Response): Promise<void> {
+    applyToResponse(res, 200, SuccessResponse);
+}
 
 export async function createUserHandler(req: CreateUserRequest, res: Response): Promise<void> {
     try {

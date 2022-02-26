@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { createUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { createUserSchema } from "../../validation/user.schema";
+import { createUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
+import userAuthRoutes from "./auth.routes";
 
 const userMainRoutes = Router();
 
@@ -18,5 +19,7 @@ userMainRoutes.patch("/general");
 userMainRoutes.get("/", (req, res) => {
     res.json("12");
 });
+
+userMainRoutes.use("/auth", userAuthRoutes);
 
 export default userMainRoutes;

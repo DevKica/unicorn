@@ -1,5 +1,4 @@
 import path from "path";
-import { send } from "process";
 import { COOKIE_TYPE } from "../../config/cookies.config";
 import { apiVersion } from "../data/config";
 import { expectToEqual, expectToEqualError } from "./customExceptions";
