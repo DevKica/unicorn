@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { emailTokenFormat, jwtEnumFormat, userTokenFormat, userTokenFormatInput } from "../@types/utils/jwt.config.types";
+import { ExpiredLink, Forbidden } from "../utils/errors/main";
 import { MAIN_SECRET_TOKEN, ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN } from "./env.config";
 
 export function signJWT(data: jwtEnumFormat, secret: string, expiredTime: string) {
@@ -37,6 +38,12 @@ export function signEmailTokenJWT(data: emailTokenFormat) {
     return signJWT(data, EMAIL_SECRET_TOKEN, EMAIL_TOKEN_TTL);
 }
 
-export function verifyEmailTokenJWT(token: string): { decoded: emailTokenFormat | null; expired: boolean } {
-    return verifyJWT(token, EMAIL_SECRET_TOKEN);
+export function verifyEmailTokenJWT(token: string): emailTokenFormat {
+    const { decoded, expired } = verifyJWT(token, EMAIL_SECRET_TOKEN);
+
+    if (expired) throw new ExpiredLink();
+
+    if (!decoded) throw new Forbidden();
+
+    return decoded;
 }

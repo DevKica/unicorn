@@ -7,3 +7,5 @@ export async function createEmailVerification(input: EmailVerificationCreateInpu
     });
     return emailVerificationObject;
 }
+
+export async function findUniqueEmailVerification() {}

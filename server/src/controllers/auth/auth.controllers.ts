@@ -5,7 +5,7 @@ import { createUser, validateUserPassword } from "../../services/user/auth.servi
 import { createEmailVerification } from "../../services/user/email.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
-import { prepareCreateUserInput } from "./prepareUserCreateInput";
+import { prepareCreateUserInput } from "../../utils/user/auth/prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { SuccessResponse } from "../../utils/responses/main";

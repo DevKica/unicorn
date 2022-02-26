@@ -12,12 +12,12 @@ export async function createUser(input: UserCreateInput) {
     });
 }
 
-export async function betterFindUniqueUser<S extends UserSelectType>(where: UserFindUniqueInput, select: Prisma.Subset<S, UserSelectType>) {
+export async function findUniqueUser<S extends UserSelectType>(where: UserFindUniqueInput, select: Prisma.Subset<S, UserSelectType>) {
     return UserModel.findUnique<{ select: S } & Omit<Prisma.UserFindUniqueArgs, "select" | "include">>({ where, select });
 }
 
 export async function validateUserPassword(passwordToVerify: UserType["password"], filter: UserFindUniqueInput) {
-    const user = await betterFindUniqueUser(filter, { ...userProfileProperties, password: true });
+    const user = await findUniqueUser(filter, { ...userProfileProperties, password: true });
 
     if (!user) throw new NotFound();
 
