@@ -25,7 +25,8 @@ const testGmailInbox = async () => {
                         f.on("message", (msg) => {
                             msg.on("body", (stream) => {
                                 simpleParser(stream, async (_err, parsed) => {
-                                    const { from, subject } = parsed;
+                                    const { from, subject, textAsHtml } = parsed;
+                                    // console.log(textAsHtml);
                                     if (subject === "Email verification" && from?.value[0].address === SUPPORT_EMAIL_USERNAME) {
                                         logInfo("Email verification successfully deleted");
                                     }

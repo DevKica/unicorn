@@ -5,4 +5,5 @@ declare global {
     var accessToken: string;
     var refreshToken: string;
     var counter: number;
+    var userId: string;
 }

@@ -28,7 +28,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
         const emailVerification = await createEmailVerification({ email: createdUser.email, user: { connect: { id: createdUser.id } } });
 
         sendVerificationEmailHandler(createdUser.email, {
-            emailVerificationId: emailVerification.id,
+            objectId: emailVerification.id,
         });
 
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });

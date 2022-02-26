@@ -1,4 +1,3 @@
-import removeTestTokens from "../helpers/removeTestTokens";
 import { testPOSTRequest } from "../helpers/testEndpoint";
 import {
     EmailAlreadyExistsInstance,
@@ -20,6 +19,7 @@ import {
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
+import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -38,6 +38,7 @@ describe("AUTHENTICATION", () => {
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
             const res = await testPOSTRequest("/users", validCreateUserBody, generalUserDataResponse, 201, validFileFormat);
             expectUploadFilesToExists(res);
+            setUserId(res);
         });
         test(`User should NOT be able to create account with email that already exists in database`, async () => {
             await testPOSTRequest("/users", validCreateUserBody, EmailAlreadyExistsInstance);

@@ -12,7 +12,7 @@ export interface userTokenFormat extends userTokenFormatInput, jwt.JwtPayload {
 }
 
 export interface emailTokenFormat extends jwt.JwtPayload {
-    emailVerificationId: EmailVerificationType["id"] | PasswordResetType["id"];
+    objectId: EmailVerificationType["id"] | PasswordResetType["id"];
     newEmail?: string;
 }
 

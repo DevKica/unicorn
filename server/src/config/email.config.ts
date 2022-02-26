@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/json-transport";
-import { jwtEnumFormat } from "../@types/utils/jwt.config.types";
+import { emailTokenFormat, jwtEnumFormat } from "../@types/utils/jwt.config.types";
 import { SUPPORT_EMAIL_PASSWORD, ORIGIN, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN, SUPPORT_EMAIL_USERNAME } from "./env.config";
-import { signJWT } from "./jwt.config";
+import { signEmailTokenJWT, signJWT } from "./jwt.config";
 import { logError, logInfo } from "../utils/logger";
 
 const transporter = nodemailer.createTransport({
@@ -44,7 +44,7 @@ const sendEmailHandler = (clientEmail: string, emailContent: MailOptions) => {
 
 export const sendResetPasswordEmailHandler = (clientEmail: string) => {};
 
-export const sendVerificationEmailHandler = (clientEmail: string, tokenData: jwtEnumFormat) => {
-    const token = signJWT(tokenData, EMAIL_SECRET_TOKEN, EMAIL_TOKEN_TTL);
+export const sendVerificationEmailHandler = (clientEmail: string, tokenData: emailTokenFormat) => {
+    const token = signEmailTokenJWT(tokenData);
     sendEmailHandler(clientEmail, verificationEmailContent(token));
 };

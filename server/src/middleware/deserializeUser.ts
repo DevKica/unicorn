@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { MAIN_SECRET_TOKEN } from "../config/env.config";
-import { verifyJWT } from "../config/jwt.config";
+import { verifyUserTokenJWT } from "../config/jwt.config";
 import { findSingleSession } from "../services/session/session.services";
 import { createAccessCookie, removeAuthCookies } from "../utils/user/auth/cookiesHelper";
 
 const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken, refreshToken } = req.cookies;
 
-    const { decoded: decodedAccess, expired: expiredAccess } = verifyJWT(accessToken, MAIN_SECRET_TOKEN);
+    const { decoded: decodedAccess, expired: expiredAccess } = verifyUserTokenJWT(accessToken);
 
     if (decodedAccess) {
         const session = await findSingleSession({ id: decodedAccess.sessionId });
@@ -17,7 +16,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
     }
 
     if (expiredAccess && refreshToken) {
-        const { decoded: decodedRefresh } = verifyJWT(refreshToken, MAIN_SECRET_TOKEN);
+        const { decoded: decodedRefresh } = verifyUserTokenJWT(refreshToken);
         if (!decodedRefresh) {
             removeAuthCookies(res);
             return next();

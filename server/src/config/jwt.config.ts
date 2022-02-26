@@ -1,21 +1,42 @@
 import jwt from "jsonwebtoken";
-import { jwtEnumFormat } from "../@types/utils/jwt.config.types";
+import { emailTokenFormat, jwtEnumFormat, userTokenFormat, userTokenFormatInput } from "../@types/utils/jwt.config.types";
+import { MAIN_SECRET_TOKEN, ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN } from "./env.config";
 
 export function signJWT(data: jwtEnumFormat, secret: string, expiredTime: string) {
     return jwt.sign(data, secret, { expiresIn: expiredTime });
 }
 
-export function verifyJWT(token: string, secret: string): { expired: boolean; decoded: jwtEnumFormat | null } {
+export function verifyJWT(token: string, secret: string): { expired: boolean; decoded: any | emailTokenFormat | null } {
     try {
-        const decoded = <jwtEnumFormat | null>jwt.verify(token, secret);
+        const decoded = <emailTokenFormat | userTokenFormat | null>jwt.verify(token, secret);
         return {
-            expired: false,
             decoded,
+            expired: false,
         };
     } catch (e: any) {
         return {
-            expired: e.message === "jwt expired",
             decoded: null,
+            expired: e.message === "jwt expired",
         };
     }
+}
+
+export function signUserAccessTokenJWT(data: userTokenFormatInput): string {
+    return signJWT({ ...data, canRefresh: false }, MAIN_SECRET_TOKEN, ACCESS_TOKEN_TTL);
+}
+
+export function signUserRefreshTokenJWT(data: userTokenFormatInput): string {
+    return signJWT({ ...data, canRefresh: true }, MAIN_SECRET_TOKEN, REFRESH_TOKEN_TTL);
+}
+
+export function verifyUserTokenJWT(token: string): { decoded: userTokenFormat | null; expired: boolean } {
+    return verifyJWT(token, MAIN_SECRET_TOKEN);
+}
+
+export function signEmailTokenJWT(data: emailTokenFormat) {
+    return signJWT(data, EMAIL_SECRET_TOKEN, EMAIL_TOKEN_TTL);
+}
+
+export function verifyEmailTokenJWT(token: string): { decoded: emailTokenFormat | null; expired: boolean } {
+    return verifyJWT(token, EMAIL_SECRET_TOKEN);
 }

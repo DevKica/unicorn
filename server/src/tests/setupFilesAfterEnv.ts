@@ -5,3 +5,4 @@ global.request = supertest(server);
 global.accessToken = "";
 global.refreshToken = "";
 global.counter = 1;
+global.userId = "";

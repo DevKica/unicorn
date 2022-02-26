@@ -12,7 +12,7 @@ async function deleteCurrentImages() {
     for (const folder of foldersToRefresh) {
         await fse.remove(path.join(uploadDirname, folder));
         await fse.mkdir(path.join(uploadDirname, folder));
-        logInfo(`${folder.charAt(0).toLocaleUpperCase() + folder.slice(1)}- folder has been revamped`);
+        logInfo(`${folder.charAt(0).toLocaleUpperCase() + folder.slice(1)} - folder has been revamped`);
     }
 }
 
