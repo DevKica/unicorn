@@ -20,3 +20,5 @@ export type EmailVerificationWhereUniqueInput = Prisma.EmailVerificationWhereUni
 
 // PasswordReset
 export type PasswordResetType = PasswordReset;
+export type PasswordResetCreateInput = Prisma.PasswordResetCreateInput;
+export type PasswordResetWhereUniqueInput = Prisma.PasswordResetWhereUniqueInput;

@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import { CreateUserRequest, LoginUserRequest } from "../../@types/routes/requests.types.";
 import { signNewSession } from "../../services/session/session.services";
 import { createUser, validateUserPassword } from "../../services/user/auth.services";
-import { createEmailVerification } from "../../services/user/email.services";
+import { createEmailVerification } from "../../services/user/emailVerification.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "../../utils/user/auth/prepareUserCreateInput";

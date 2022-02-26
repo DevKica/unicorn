@@ -1,5 +1,5 @@
 import { EmailVerificationModel } from "../../prisma/models";
-import { EmailVerificationCreateInput, EmailVerificationType, EmailVerificationWhereUniqueInput } from "../../@types/prisma/static.types";
+import { EmailVerificationCreateInput, EmailVerificationWhereUniqueInput } from "../../@types/prisma/static.types";
 
 export async function createEmailVerification(input: EmailVerificationCreateInput) {
     const emailVerificationObject = await EmailVerificationModel.create({

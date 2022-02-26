@@ -3,7 +3,8 @@ import { LoginUserRequest, MainResponse } from "../@types/routes/requests.types.
 import { sendVerificationEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";
 import { updateUniqueUser, validateUserPassword } from "../services/user/auth.services";
-import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/email.services";
+import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/emailVerification.services";
+import { deletePasswordReset } from "../services/user/passwordReset.services";
 import { applyToResponse, applyToResponseError } from "../utils/errors/applyToResponse";
 import { InactiveLink } from "../utils/errors/main";
 import { SuccessResponse } from "../utils/responses/main";
@@ -44,6 +45,8 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
         await checkEmailAvailability(email);
 
         await deleteEmailVerification({ userId });
+
+        await deletePasswordReset({ userId });
 
         const emailVerification = await createEmailVerification({ email, user: { connect: { id: userId } } });
 

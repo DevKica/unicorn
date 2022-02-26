@@ -160,7 +160,7 @@ model EmailVerification {
 
 model PasswordReset {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String   @unique
   createdAt DateTime @default(now())
   // relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
