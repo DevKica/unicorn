@@ -26,6 +26,7 @@ export const generalUserDataResponse = {
     email: "devkica777@gmail.com",
     birthday: "2003-02-13T00:00:00.000Z",
     active: false,
+    accountType: "Default",
 };
 
 export const invalidLoginBody = {};
@@ -48,6 +49,11 @@ export const validChangeEmailBody = {
 export const newGeneralUserDataResponse = {
     ...generalUserDataResponse,
     email: TEST_USER_EMAIL,
+};
+
+export const newActiveGeneralUserDataResponse = {
+    ...newGeneralUserDataResponse,
+    active: true,
 };
 
 export const newValidLoginCredentials = validChangeEmailBody;

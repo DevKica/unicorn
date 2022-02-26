@@ -2,11 +2,17 @@ import { Request, Response } from "express";
 import { applyToResponseError } from "../utils/errors/applyToResponse";
 import { EmailNotVerified, Unauthorized } from "../utils/errors/main";
 
+function requireUserFn(res: Response) {
+    const user = res.locals.user;
+
+    if (!user) throw new Unauthorized();
+}
+
 export function requireActiveUser(_req: Request, res: Response, next: Function): void {
     try {
         const user = res.locals.user;
 
-        if (!user) throw new Unauthorized();
+        requireUserFn(res);
 
         if (!user.active) throw new EmailNotVerified();
 
@@ -18,10 +24,7 @@ export function requireActiveUser(_req: Request, res: Response, next: Function):
 
 export function requireUser(_req: Request, res: Response, next: Function): void {
     try {
-        const user = res.locals.user;
-
-        if (!user) throw new Unauthorized();
-
+        requireUserFn(res);
         next();
     } catch (e: unknown) {
         applyToResponseError(res, e);

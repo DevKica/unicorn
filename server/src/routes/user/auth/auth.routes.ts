@@ -18,7 +18,7 @@ const mainUserAuthRoutes = Router();
 // PUBLIC ROUTES
 
 // Verify user's email
-publicUserAuthRoutes.post("/verify-email", verifyEmailHandler);
+publicUserAuthRoutes.patch("/verify-email/:token", verifyEmailHandler);
 
 // Send to the user's e-mail a link to reset the password
 publicUserAuthRoutes.post("/reset-password");

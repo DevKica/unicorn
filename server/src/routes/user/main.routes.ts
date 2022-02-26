@@ -20,6 +20,7 @@ userMainRoutes.patch("/general");
 // change user email
 userMainRoutes.patch("/email", [schemaValidation(logInSchema), requireUser], changeEmailHandler);
 
+// main auth routes
 userMainRoutes.use("/auth", mainUserAuthRoutes);
 
 export default userMainRoutes;

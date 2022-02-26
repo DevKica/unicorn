@@ -1,9 +1,9 @@
 import { lookup } from "geoip-lite";
 import { getClientIp } from "@supercharge/request-ip/dist";
-import { SessionCreateInput, SessionFindUniqueInput, SessionType } from "../../@types/prisma/static.types";
 import { SignNewSessionInput } from "../../@types/services/session.types";
 import { SessionModel } from "../../prisma/models";
 import { createAuthCookies } from "../../utils/user/auth/cookiesHelper";
+import { SessionCreateInput, SessionFindUniqueInput, SessionType, SessionWhereInput } from "../../@types/prisma/static.types";
 
 export async function signNewSession(input: SignNewSessionInput): Promise<void> {
     const userData = lookup(getClientIp(input.req) || "");
@@ -19,4 +19,8 @@ export async function createSession(input: SessionCreateInput): Promise<SessionT
 
 export async function findSingleSession(input: SessionFindUniqueInput): Promise<SessionType | null> {
     return await SessionModel.findUnique({ where: input });
+}
+
+export async function deleteAllSessions(input: SessionWhereInput): Promise<void> {
+    await SessionModel.deleteMany({ where: input });
 }

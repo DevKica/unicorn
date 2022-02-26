@@ -9,7 +9,7 @@ import fileUpload from "express-fileupload";
 import { deletePasswordReset } from "./services/user/passwordReset.services";
 import { applyToResponse, applyToResponseError } from "./utils/errors/applyToResponse";
 import { SuccessResponse } from "./utils/responses/main";
-import console from "console";
+import { deleteAllSessions } from "./services/session/session.services";
 
 const server = express();
 
@@ -34,7 +34,7 @@ server.use("/api/v1", appMainRoutes);
 
 server.get("/hello", async (req, res) => {
     try {
-        await deletePasswordReset({ userId: "12" });
+        // await deleteAllSessions({ userId: "12" });
         applyToResponse(res, 200, SuccessResponse);
     } catch (e) {
         applyToResponseError(res, e);

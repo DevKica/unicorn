@@ -15,13 +15,17 @@ import {
     validFileFormat,
     invalidLoginBody,
     invalidLoginCredentials,
-    validLoginCredentials,
     newGeneralUserDataResponse,
     validChangeEmailBody,
+    validLoginCredentials,
+    newValidLoginCredentials,
+    newActiveGeneralUserDataResponse,
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
+import prepareEmailToken from "../helpers/prepareEmailToken";
+import { SuccessResponse } from "../../utils/responses/main";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -52,7 +56,7 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
             removeTestTokens();
         });
-        test("User should NOT be able to access USER and ACTIVE USER protected routes after removing tokens", async () => {
+        test("User should NOT be able to access USER protected routes after removing tokens", async () => {
             await testUserAuthEndpoint(false);
         });
     });
@@ -73,9 +77,22 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
         });
     });
-    describe("USER PROTECTED ROUTES", () => {
+    describe("RELATED TO EMAILS", () => {
+        test(`User should NOT be able to change his email on email that already exists in database`, async () => {
+            await testPATCHRequest("/users/email", validLoginCredentials, EmailAlreadyExistsInstance);
+        });
         test(`User should be able to change his email with valid body`, async () => {
             await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
+        });
+        test(`User should be able to verify his email with valid link`, async () => {
+            await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailToken()}`, {}, SuccessResponse, 200);
+        });
+        test(`User should NOT be able to access USER protected routes after verifying his email`, async () => {
+            await testUserAuthEndpoint(false);
+        });
+        test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
+            await testPOSTRequest("/users/login", newValidLoginCredentials, newActiveGeneralUserDataResponse, 200);
+            await testUserAuthActiveEndpoint(true);
         });
     });
 });

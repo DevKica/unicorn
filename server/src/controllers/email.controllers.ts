@@ -3,6 +3,7 @@ import { LoginUserRequest, MainResponse } from "../@types/routes/requests.types.
 import { sendVerificationEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";
 import { userProfileProperties } from "../prisma/validator";
+import { deleteAllSessions } from "../services/session/session.services";
 import { updateUniqueUser, validateUserPassword } from "../services/user/auth.services";
 import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/emailVerification.services";
 import { deletePasswordReset } from "../services/user/passwordReset.services";
@@ -10,6 +11,7 @@ import { applyToResponse, applyToResponseError } from "../utils/errors/applyToRe
 import { InactiveLink } from "../utils/errors/main";
 import { SuccessResponse } from "../utils/responses/main";
 import checkEmailAvailability from "../utils/user/auth/checkEmailAvalibility";
+import { removeAuthCookies } from "../utils/user/auth/cookiesHelper";
 
 export async function verifyEmailHandler(req: Request, res: Response) {
     try {
@@ -19,8 +21,6 @@ export async function verifyEmailHandler(req: Request, res: Response) {
 
         if (!emailVerification) throw new InactiveLink();
 
-        await deleteEmailVerification({ id: objectId });
-
         if (newEmail) {
             await checkEmailAvailability(newEmail);
 
@@ -28,6 +28,12 @@ export async function verifyEmailHandler(req: Request, res: Response) {
         } else {
             await updateUniqueUser({ id: emailVerification.userId }, { active: true });
         }
+
+        await deleteAllSessions({ userId: emailVerification.userId });
+
+        await deleteEmailVerification({ id: objectId });
+
+        removeAuthCookies(res);
 
         applyToResponse(res, 200, SuccessResponse);
     } catch (e: unknown) {
