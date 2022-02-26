@@ -63,5 +63,12 @@ describe("AUTHENTICATION", () => {
         test("User should be able to login with valid credentials", async () => {
             await testPOSTRequest("/users/login", validLoginCredentials, generalUserDataResponse, 200);
         });
+        test(`User should be able to access USER protected routes after logging in`, async () => {
+            await testUserAuthEndpoint(true);
+        });
+        test(`User should NOT be able to access ACTIVE USER protected routes after logging in to account with unverified email`, async () => {
+            await testUserAuthActiveEndpoint(false);
+        });
     });
+    describe("USER PROTECTED ROUTES", () => {});
 });

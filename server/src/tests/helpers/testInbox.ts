@@ -6,7 +6,7 @@ import { exit } from "process";
 import { TEST_USER_EMAIL, TEST_USER_PASSWORD, SUPPORT_EMAIL_USERNAME } from "../../config/env.config";
 import { logError, logInfo } from "../../utils/logger";
 
-const testGmailInbox = () => {
+const testGmailInbox = async () => {
     try {
         const imap = new Imap({
             user: TEST_USER_EMAIL,
@@ -27,7 +27,7 @@ const testGmailInbox = () => {
                                 simpleParser(stream, async (_err, parsed) => {
                                     const { from, subject } = parsed;
                                     if (subject === "Email verification" && from?.value[0].address === SUPPORT_EMAIL_USERNAME) {
-                                        logInfo("success");
+                                        logInfo("Email verification successfully deleted");
                                     }
                                     // expect(subject).toEqual("Email verification");
                                     // expect(from?.value[0]?.address).toEqual(SUPPORT_EMAIL_USERNAME);
@@ -74,4 +74,10 @@ const testGmailInbox = () => {
     }
 };
 
-testGmailInbox();
+export default testGmailInbox;
+
+if (require.main === module) {
+    (async () => {
+        await testGmailInbox();
+    })();
+}

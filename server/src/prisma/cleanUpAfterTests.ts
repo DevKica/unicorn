@@ -3,6 +3,7 @@ import { uploadDirname } from "../config/upload.config";
 import { logError, logInfo } from "../utils/logger";
 import { UserModel } from "./models";
 import fse from "fs-extra";
+import testGmailInbox from "../tests/helpers/testInbox";
 
 async function deleteCurrentImages() {
     const foldersToRefresh = ["usersPhotos"];
@@ -24,7 +25,7 @@ async function cleanUpAfterTests() {
     if (process.env.NODE_ENV === "test") {
         await removeUserTable();
         await deleteCurrentImages();
-        logInfo("Cleanup was successful");
+        await testGmailInbox();
     } else {
         logError(`NODE_ENV is not equal "test", NODE_ENV=${process.env.NODE_ENV}`);
     }
