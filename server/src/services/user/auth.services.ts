@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { UserCreateInput, UserFindUniqueInput, UserSelectType, UserType } from "../../@types/prisma/static.types";
+import { UserCreateInput, UserWhereUniqueInput, UserSelectType, UserType, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";
 import { NotFound } from "../../utils/errors/main";
@@ -12,16 +12,18 @@ export async function createUser(input: UserCreateInput) {
     });
 }
 
-export async function findUniqueUser<S extends UserSelectType>(where: UserFindUniqueInput, select: Prisma.Subset<S, UserSelectType>) {
+export async function findUniqueUser<S extends UserSelectType>(where: UserWhereUniqueInput, select: Prisma.Subset<S, UserSelectType>) {
     return UserModel.findUnique<{ select: S } & Omit<Prisma.UserFindUniqueArgs, "select" | "include">>({ where, select });
 }
 
-export async function validateUserPassword(passwordToVerify: UserType["password"], filter: UserFindUniqueInput) {
+export async function validateUserPassword(passwordToVerify: UserType["password"], filter: UserWhereUniqueInput) {
     const user = await findUniqueUser(filter, { ...userProfileProperties, password: true });
 
-    if (!user) throw new NotFound();
-
-    await comparePasswords(user.password, passwordToVerify);
+    await comparePasswords(user?.password || "", passwordToVerify);
 
     return user;
+}
+
+export async function updateUniqueUser(filter: UserWhereUniqueInput, input: UserUpdateInput) {
+    return UserModel.update({ where: filter, data: input });
 }

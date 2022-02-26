@@ -50,7 +50,7 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
             removeTestTokens();
         });
-        test("User should NOT be able to access USER and USER ACTIVE protected routes after removing tokens", async () => {
+        test("User should NOT be able to access USER and ACTIVE USER protected routes after removing tokens", async () => {
             await testUserAuthEndpoint(false);
         });
     });

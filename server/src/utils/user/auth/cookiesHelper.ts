@@ -32,6 +32,6 @@ export function createAuthCookies(res: Response, data: userTokenFormatInput): vo
 }
 
 export function removeAuthCookies(res: Response): void {
-    res.clearCookie(ACCESS_TOKEN);
-    res.clearCookie(REFRESH_TOKEN);
+    res.cookie(ACCESS_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
+    res.cookie(REFRESH_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
 }
