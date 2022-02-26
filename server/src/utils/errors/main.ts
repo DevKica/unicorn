@@ -110,3 +110,11 @@ export class InactiveLink extends Error {
         Object.setPrototypeOf(this, InactiveLink.prototype);
     }
 }
+export class InvalidPassword extends Error {
+    public readonly code: number = 401;
+    public readonly msg: string = "Invalid password";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, InvalidPassword.prototype);
+    }
+}

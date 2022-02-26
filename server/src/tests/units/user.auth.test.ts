@@ -3,6 +3,7 @@ import {
     EmailAlreadyExistsInstance,
     InvalidCredentialsInstance,
     InvalidFileFormatInstance,
+    InvalidPasswordInstance,
     InvalidRequestedBodyInstance,
     InvalidRequestedLoginBodyInstance,
     PhotoRequiredInstance,
@@ -20,6 +21,8 @@ import {
     validLoginCredentials,
     newValidLoginCredentials,
     newActiveGeneralUserDataResponse,
+    invalidChangePasswordBody,
+    validChangePasswordBody,
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
@@ -75,6 +78,14 @@ describe("AUTHENTICATION", () => {
         });
         test(`User should NOT be able to access ACTIVE USER protected routes after logging in to account with unverified email`, async () => {
             await testUserAuthActiveEndpoint(false);
+        });
+    });
+    describe("UNVERIFIED EMAIL ROUTES", () => {
+        test(`User should NOT be able to change his password with invalid body`, async () => {
+            await testPATCHRequest("/users/password", invalidChangePasswordBody, InvalidPasswordInstance);
+        });
+        test(`User should be able to change his password with valid body`, async () => {
+            await testPATCHRequest("/users/password", validChangePasswordBody, InvalidPasswordInstance);
         });
     });
     describe("RELATED TO EMAILS", () => {

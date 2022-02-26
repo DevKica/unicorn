@@ -57,3 +57,14 @@ export const newActiveGeneralUserDataResponse = {
 };
 
 export const newValidLoginCredentials = validChangeEmailBody;
+
+export const invalidChangePasswordBody = {
+    oldPassword: invalidLoginCredentials.password,
+    password: "newPassword1!",
+    passwordRepetition: "newPassword1!",
+};
+
+export const validChangePasswordBody = {
+    ...invalidChangePasswordBody,
+    oldPassword: validLoginCredentials.password,
+};
