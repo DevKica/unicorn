@@ -1,5 +1,6 @@
 import { SexualOrientation, ShowMeGender } from "@prisma/client";
-import { Request } from "express";
+import { Request, Response } from "express";
+import { UserType, SessionType } from "../prisma/static.types";
 
 export interface CreateUserBody {
     name: string;
@@ -26,4 +27,13 @@ export interface LoginUserBody {
 
 export interface LoginUserRequest extends Request {
     body: LoginUserBody;
+}
+export interface MainResponse extends Response {
+    locals: {
+        user: {
+            userId: UserType["id"];
+            active: UserType["active"];
+            sessionId: SessionType["id"];
+        };
+    };
 }

@@ -150,7 +150,7 @@ model Message {
 
 model EmailVerification {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String   @unique
   email     String   @unique
   createdAt DateTime @default(now())
   // relations

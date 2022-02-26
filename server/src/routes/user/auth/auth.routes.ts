@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { returnSuccess } from "../../../controllers/auth/auth.controllers";
+import { verifyEmailHandler } from "../../../controllers/email.controllers";
 import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
 
 // public router
@@ -17,21 +18,21 @@ const mainUserAuthRoutes = Router();
 // PUBLIC ROUTES
 
 // Verify user's email
-publicUserAuthRoutes.post("/verify");
+publicUserAuthRoutes.post("/verify-email", verifyEmailHandler);
 
 // Send to the user's e-mail a link to reset the password
-publicUserAuthRoutes.post("/resetPassword");
+publicUserAuthRoutes.post("/reset-password");
 
 // Create new password from reset password link
-publicUserAuthRoutes.patch("/newPassword");
+publicUserAuthRoutes.patch("/set-new-password");
 
 // REQUIRE USER ROUTES
 
 // Resend the verification email
-userAuthRoutes.post("/resendVerify");
+userAuthRoutes.post("/resend-verification-email");
 
 // Basic require user test
-userAuthRoutes.post("/", returnSuccess);
+userAuthRoutes.post("/user", returnSuccess);
 
 // ACTIVE USER ROUTES
 

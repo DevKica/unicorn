@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "NODE_ENV=dev ts-node-dev --respawn --transpile-only src/index.ts",
+        "start": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
         "gen": "prisma generate",
         "push": "prisma db push",
         "studio": "prisma studio",
@@ -12,7 +12,8 @@
         "format": "prisma format",
         "test": "jest --detectOpenHandles",
         "inboxtest": "ts-node src/tests/helpers/testInbox.ts",
-        "cleanup": "NODE_ENV=test ts-node src/prisma/cleanUpAfterTests.ts"
+        "cleanup": "NODE_ENV=test ts-node src/prisma/cleanUpAfterTests.ts",
+        "cleanupdev": "NODE_ENV=development ts-node src/prisma/removeTables.ts"
     },
     "dependencies": {
         "@joi/date": "^2.1.0",
