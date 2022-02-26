@@ -6,7 +6,19 @@ import fs from "fs";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
-export async function testPOSTRequest(endpoint: string, data: any, equalObject: any = false, equalStatus: any = 0, attachFileName: string = "") {
+const afterTest = (res: any, equalObject: any, equalStatus: any = 0) => {
+    try {
+        global.accessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];
+        global.refreshToken = res.header["set-cookie"][1].split(";")[0].split("=")[1];
+    } catch (e: unknown) {}
+    if (equalStatus) {
+        expectToEqual(res, equalStatus, equalObject);
+    } else {
+        expectToEqualError(res, equalObject);
+    }
+};
+
+export async function testPOSTRequest(endpoint: string, data: any, equalObject: any, equalStatus: number = 0, attachFileName: string = "") {
     let buffer: any = "";
     if (attachFileName) {
         buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", attachFileName));
@@ -17,16 +29,23 @@ export async function testPOSTRequest(endpoint: string, data: any, equalObject: 
         .field(data)
         .attach("random", buffer, attachFileName);
 
-    try {
-        global.accessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];
-        global.refreshToken = res.header["set-cookie"][1].split(";")[0].split("=")[1];
-    } catch (e: unknown) {}
-    if (equalStatus) {
-        if (equalObject) {
-            expectToEqual(res, equalStatus, equalObject);
-        }
-    } else {
-        expectToEqualError(res, equalObject);
+    afterTest(res, equalObject, equalStatus);
+
+    return res;
+}
+
+export async function testPATCHRequest(endpoint: string, data: any, equalObject: any, equalStatus: number = 0, attachFileName: string = "") {
+    let buffer: any = "";
+    if (attachFileName) {
+        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", attachFileName));
     }
+    const res = await global.request
+        .patch(`/api/${apiVersion}${endpoint}`)
+        .set("Cookie", [`${ACCESS_TOKEN}=${global.accessToken}`, `${REFRESH_TOKEN}=${global.refreshToken}`])
+        .field(data)
+        .attach("random", buffer, attachFileName);
+
+    afterTest(res, equalObject, equalStatus);
+
     return res;
 }

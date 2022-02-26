@@ -6,6 +6,10 @@ import cookieParser from "cookie-parser";
 import appMainRoutes from "./routes/app.main.routes";
 import deserializeUser from "./middleware/deserializeUser";
 import fileUpload from "express-fileupload";
+import { deletePasswordReset } from "./services/user/passwordReset.services";
+import { applyToResponse, applyToResponseError } from "./utils/errors/applyToResponse";
+import { SuccessResponse } from "./utils/responses/main";
+import console from "console";
 
 const server = express();
 
@@ -28,6 +32,14 @@ server.use(deserializeUser);
 
 server.use("/api/v1", appMainRoutes);
 
+server.get("/hello", async (req, res) => {
+    try {
+        await deletePasswordReset({ userId: "12" });
+        applyToResponse(res, 200, SuccessResponse);
+    } catch (e) {
+        applyToResponseError(res, e);
+    }
+});
 // server.get("/create", async (_: Request, res: Response) => {
 //     const date = new Date("2020-01-05");
 //     const data = await TestTime.create({ data: { birthday: date } });

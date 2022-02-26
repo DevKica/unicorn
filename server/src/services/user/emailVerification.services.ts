@@ -14,5 +14,5 @@ export async function findEmailVerification(input: EmailVerificationWhereUniqueI
 }
 
 export async function deleteEmailVerification(input: EmailVerificationWhereUniqueInput) {
-    EmailVerificationModel.delete({ where: input });
+    if (await findEmailVerification(input)) await EmailVerificationModel.delete({ where: input });
 }

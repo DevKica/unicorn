@@ -1,4 +1,4 @@
-import { testPOSTRequest } from "../helpers/testEndpoint";
+import { testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import {
     EmailAlreadyExistsInstance,
     InvalidCredentialsInstance,
@@ -16,6 +16,8 @@ import {
     invalidLoginBody,
     invalidLoginCredentials,
     validLoginCredentials,
+    newGeneralUserDataResponse,
+    validChangeEmailBody,
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
@@ -71,5 +73,9 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
         });
     });
-    describe("USER PROTECTED ROUTES", () => {});
+    describe("USER PROTECTED ROUTES", () => {
+        test(`User should be able to change his email with valid body`, async () => {
+            await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
+        });
+    });
 });

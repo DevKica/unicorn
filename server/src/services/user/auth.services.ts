@@ -2,12 +2,12 @@ import { Prisma } from "@prisma/client";
 import { UserCreateInput, UserWhereUniqueInput, UserSelectType, UserType, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";
-import { InvalidCredentials, NotFound } from "../../utils/errors/main";
+import { InvalidCredentials } from "../../utils/errors/main";
 import { comparePasswords } from "../../utils/user/auth/comparePasswords";
 
-export async function createUser(input: UserCreateInput) {
+export async function createUser(data: UserCreateInput) {
     return UserModel.create({
-        data: input,
+        data,
         select: userProfileProperties,
     });
 }
@@ -26,6 +26,6 @@ export async function validateUserPassword(passwordToVerify: UserType["password"
     return user;
 }
 
-export async function updateUniqueUser(filter: UserWhereUniqueInput, input: UserUpdateInput) {
-    return UserModel.update({ where: filter, data: input });
+export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true }) {
+    return UserModel.update({ where, data, select });
 }

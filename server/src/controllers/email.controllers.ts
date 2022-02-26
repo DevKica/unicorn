@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { LoginUserRequest, MainResponse } from "../@types/routes/requests.types.";
 import { sendVerificationEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";
+import { userProfileProperties } from "../prisma/validator";
 import { updateUniqueUser, validateUserPassword } from "../services/user/auth.services";
 import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/emailVerification.services";
 import { deletePasswordReset } from "../services/user/passwordReset.services";
@@ -50,16 +51,15 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
 
         const emailVerification = await createEmailVerification({ email, user: { connect: { id: userId } } });
 
-        if (active) {
-            sendVerificationEmailHandler(email, {
-                objectId: emailVerification.id,
-                newEmail: email,
-            });
-        } else {
-            await updateUniqueUser({ id: userId }, { email });
+        if (!active) {
             sendVerificationEmailHandler(email, { objectId: emailVerification.id });
+            const user = await updateUniqueUser({ id: userId }, { email }, userProfileProperties);
+            return applyToResponse(res, 200, user);
         }
-
+        sendVerificationEmailHandler(email, {
+            objectId: emailVerification.id,
+            newEmail: email,
+        });
         applyToResponse(res, 200, SuccessResponse);
     } catch (e: unknown) {
         applyToResponseError(res, e);

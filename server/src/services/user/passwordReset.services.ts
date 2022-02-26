@@ -14,5 +14,5 @@ export async function findPasswordReset(input: PasswordResetWhereUniqueInput) {
 }
 
 export async function deletePasswordReset(input: PasswordResetWhereUniqueInput) {
-    PasswordResetModel.delete({ where: input });
+    if (await findPasswordReset(input)) await PasswordResetModel.delete({ where: input });
 }

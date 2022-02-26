@@ -9,7 +9,7 @@ export const invalidCreateUserBody = {};
 export const validCreateUserBody = {
     name: "Pawel",
     surname: "Kica",
-    email: TEST_USER_EMAIL,
+    email: "devkica777@gmail.com",
     password: "password1!P",
     passwordRepetition: "password1!P",
     birthday: "2003-02-13",
@@ -23,7 +23,7 @@ export const validCreateUserBody = {
 export const generalUserDataResponse = {
     name: "Pawel",
     surname: "Kica",
-    email: TEST_USER_EMAIL,
+    email: "devkica777@gmail.com",
     birthday: "2003-02-13T00:00:00.000Z",
     active: false,
 };
@@ -31,11 +31,23 @@ export const generalUserDataResponse = {
 export const invalidLoginBody = {};
 
 export const validLoginCredentials = {
-    email: TEST_USER_EMAIL,
+    email: "devkica777@gmail.com",
     password: validCreateUserBody.password,
 };
 
 export const invalidLoginCredentials = {
-    email: TEST_USER_EMAIL,
+    email: "devkica777@gmail.com",
     password: `${validLoginCredentials.password}1`,
 };
+
+export const validChangeEmailBody = {
+    ...validLoginCredentials,
+    email: TEST_USER_EMAIL,
+};
+
+export const newGeneralUserDataResponse = {
+    ...generalUserDataResponse,
+    email: TEST_USER_EMAIL,
+};
+
+export const newValidLoginCredentials = validChangeEmailBody;

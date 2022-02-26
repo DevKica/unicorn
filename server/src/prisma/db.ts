@@ -13,6 +13,7 @@ export const prisma =
     global.prisma ||
     new PrismaClient({
         log: ["info", "warn", "error"],
+        errorFormat: "pretty",
         datasources: { db: { url: databaseUrl } },
     });
 
