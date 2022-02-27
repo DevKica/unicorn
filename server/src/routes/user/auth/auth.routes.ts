@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { returnSuccess } from "../../../controllers/auth/auth.controllers";
 import { verifyEmailHandler } from "../../../controllers/email.controllers";
+import { changePasswordHandler } from "../../../controllers/password.controllers";
 import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
+import { schemaValidation } from "../../../middleware/schemaValidation";
+import { changePasswordSchema } from "../../../validation/user.schema";
 
 // public router
 const publicUserAuthRoutes = Router();
@@ -30,6 +33,9 @@ publicUserAuthRoutes.patch("/set-new-password");
 
 // Resend the verification email
 userAuthRoutes.post("/resend-verification-email");
+
+// Change user password
+userAuthRoutes.patch("/password", schemaValidation(changePasswordSchema), changePasswordHandler);
 
 // Basic require user test
 userAuthRoutes.post("/user", returnSuccess);

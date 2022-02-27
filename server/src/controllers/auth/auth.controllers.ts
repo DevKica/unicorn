@@ -4,7 +4,7 @@ import { signNewSession } from "../../services/session/session.services";
 import { createUser, validateUserPassword } from "../../services/user/auth.services";
 import { createEmailVerification } from "../../services/user/emailVerification.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
-import { applyToResponse, applyToResponseError } from "../../utils/errors/applyToResponse";
+import { applyToResponse, applyToResponseCustom } from "../../utils/errors/applyToResponse";
 import { prepareCreateUserInput } from "../../utils/user/auth/prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
@@ -35,7 +35,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
 
         applyToResponse(res, 201, { ...createdUser, photos: uploadPhotos });
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }
 
@@ -45,6 +45,6 @@ export async function loginUserHandler(req: LoginUserRequest, res: Response): Pr
         await signNewSession({ req, res, id: user.id, active: user.active });
         applyToResponse(res, 200, omit(user, "password"));
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }

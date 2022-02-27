@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { applyToResponseError } from "../utils/errors/applyToResponse";
+import { applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { EmailNotVerified, Unauthorized } from "../utils/errors/main";
 
 function requireUserFn(res: Response) {
@@ -18,7 +18,7 @@ export function requireActiveUser(_req: Request, res: Response, next: Function):
 
         next();
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }
 
@@ -27,6 +27,6 @@ export function requireUser(_req: Request, res: Response, next: Function): void 
         requireUserFn(res);
         next();
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }

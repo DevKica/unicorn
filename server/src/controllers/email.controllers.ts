@@ -7,7 +7,7 @@ import { deleteAllSessions } from "../services/session/session.services";
 import { updateUniqueUser, validateUserPassword } from "../services/user/auth.services";
 import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/emailVerification.services";
 import { deletePasswordReset } from "../services/user/passwordReset.services";
-import { applyToResponse, applyToResponseError } from "../utils/errors/applyToResponse";
+import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { InactiveLink } from "../utils/errors/main";
 import { SuccessResponse } from "../utils/responses/main";
 import checkEmailAvailability from "../utils/user/auth/checkEmailAvalibility";
@@ -29,15 +29,13 @@ export async function verifyEmailHandler(req: Request, res: Response) {
             await updateUniqueUser({ id: emailVerification.userId }, { active: true });
         }
 
-        await deleteAllSessions({ userId: emailVerification.userId });
+        await deleteAllSessions({ userId: emailVerification.userId }, res);
 
         await deleteEmailVerification({ id: objectId });
 
-        removeAuthCookies(res);
-
         applyToResponse(res, 200, SuccessResponse);
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }
 
@@ -68,6 +66,6 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
         });
         applyToResponse(res, 200, SuccessResponse);
     } catch (e: unknown) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 }

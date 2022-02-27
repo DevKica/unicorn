@@ -1,7 +1,7 @@
 import path from "path";
 import { COOKIE_TYPE } from "../../config/cookies.config";
 import { apiVersion } from "../data/config";
-import { expectToEqual, expectToEqualError } from "./customExceptions";
+import { expectToEqual, expectToEqualCustom } from "./customExceptions";
 import fs from "fs";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
@@ -14,7 +14,7 @@ const afterTest = (res: any, equalObject: any, equalStatus: any = 0) => {
     if (equalStatus) {
         expectToEqual(res, equalStatus, equalObject);
     } else {
-        expectToEqualError(res, equalObject);
+        expectToEqualCustom(res, equalObject);
     }
 };
 

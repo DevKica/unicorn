@@ -1,7 +1,7 @@
 import type { Schema } from "joi";
 import { Request, Response, NextFunction } from "express";
 import { betterValidationResult } from "../@types/middleware/schemaValidation.types";
-import { applyToResponseError } from "../utils/errors/applyToResponse";
+import { applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { InvalidRequestedBody } from "../utils/errors/main";
 import createBetterJoiErrors from "../validation/helpers/betterJoiError";
 
@@ -18,6 +18,6 @@ export const schemaValidation = (schema: Schema) => (req: Request, res: Response
         if (result !== true) throw new InvalidRequestedBody(result.error);
         next();
     } catch (e: unknown) {
-        return applyToResponseError(res, e);
+        return applyToResponseCustom(res, e);
     }
 };

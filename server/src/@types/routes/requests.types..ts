@@ -21,8 +21,8 @@ export interface CreateUserRequest extends Request {
 }
 
 export interface LoginUserBody {
-    email: string;
-    password: string;
+    email: UserType["email"];
+    password: UserType["password"];
 }
 
 export interface LoginUserRequest extends Request {
@@ -36,4 +36,14 @@ export interface MainResponse extends Response {
             sessionId: SessionType["id"];
         };
     };
+}
+
+export interface ChangePasswordBody {
+    oldPassword: UserType["password"];
+    password: UserType["password"];
+    passwordRepetition: UserType["password"];
+}
+
+export interface ChangePasswordRequest extends Request {
+    body: ChangePasswordBody;
 }

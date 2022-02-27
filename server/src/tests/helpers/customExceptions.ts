@@ -3,7 +3,7 @@ import { omit } from "lodash";
 import checkIfFileExists from "../../utils/user/upload/checkIfFileExists";
 import { userPhotosResolutions, usersPhotosDirname } from "../../config/upload.config";
 
-export function expectToEqualError(res: any, error: any) {
+export function expectToEqualCustom(res: any, error: any) {
     expect(res.body.msg).toEqual(error.msg);
     expect(res.status).toEqual(error.code);
 }

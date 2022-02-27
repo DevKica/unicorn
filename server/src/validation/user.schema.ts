@@ -86,7 +86,7 @@ export const generalInfoSchema = Joi.object({
 });
 
 export const changePasswordSchema = Joi.object({
-    oldPassword: Joi.string(),
+    oldPassword: Joi.string().required().trim(),
     ...joiPasswordWithRepetition,
 });
 

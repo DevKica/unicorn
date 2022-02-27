@@ -7,7 +7,7 @@ import appMainRoutes from "./routes/app.main.routes";
 import deserializeUser from "./middleware/deserializeUser";
 import fileUpload from "express-fileupload";
 import { deletePasswordReset } from "./services/user/passwordReset.services";
-import { applyToResponse, applyToResponseError } from "./utils/errors/applyToResponse";
+import { applyToResponse, applyToResponseCustom } from "./utils/errors/applyToResponse";
 import { SuccessResponse } from "./utils/responses/main";
 import { deleteAllSessions } from "./services/session/session.services";
 
@@ -37,7 +37,7 @@ server.get("/hello", async (req, res) => {
         // await deleteAllSessions({ userId: "12" });
         applyToResponse(res, 200, SuccessResponse);
     } catch (e) {
-        applyToResponseError(res, e);
+        applyToResponseCustom(res, e);
     }
 });
 // server.get("/create", async (_: Request, res: Response) => {

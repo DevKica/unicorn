@@ -1,1 +1,1 @@
-export const SuccessResponse = { msg: "Success" };
+export const SuccessResponse = { msg: "Success", code: 200 };

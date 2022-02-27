@@ -1,3 +1,4 @@
+import { valid } from "joi";
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
 export const validFileFormat = "avatar123.jpg";
@@ -36,14 +37,11 @@ export const validLoginCredentials = {
     password: validCreateUserBody.password,
 };
 
+const { email: validEmail, password: validPassword } = validLoginCredentials;
+
 export const invalidLoginCredentials = {
     email: "devkica777@gmail.com",
     password: `${validLoginCredentials.password}1`,
-};
-
-export const validChangeEmailBody = {
-    ...validLoginCredentials,
-    email: TEST_USER_EMAIL,
 };
 
 export const newGeneralUserDataResponse = {
@@ -56,8 +54,6 @@ export const newActiveGeneralUserDataResponse = {
     active: true,
 };
 
-export const newValidLoginCredentials = validChangeEmailBody;
-
 export const invalidChangePasswordBody = {
     oldPassword: invalidLoginCredentials.password,
     password: "newPassword1!",
@@ -67,4 +63,22 @@ export const invalidChangePasswordBody = {
 export const validChangePasswordBody = {
     ...invalidChangePasswordBody,
     oldPassword: validLoginCredentials.password,
+};
+const { password: newPassword } = validChangePasswordBody;
+
+export const newPasswordLoginCredentials = {
+    email: validEmail,
+    password: newPassword,
+};
+
+export const validChangeEmailBody = {
+    email: TEST_USER_EMAIL,
+    password: newPassword,
+};
+
+const { email: newEmail } = validChangeEmailBody;
+
+export const newEmailAndPasswordLoginCredentials = {
+    email: newEmail,
+    password: newPassword,
 };

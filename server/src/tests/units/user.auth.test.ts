@@ -3,7 +3,6 @@ import {
     EmailAlreadyExistsInstance,
     InvalidCredentialsInstance,
     InvalidFileFormatInstance,
-    InvalidPasswordInstance,
     InvalidRequestedBodyInstance,
     InvalidRequestedLoginBodyInstance,
     PhotoRequiredInstance,
@@ -19,16 +18,17 @@ import {
     newGeneralUserDataResponse,
     validChangeEmailBody,
     validLoginCredentials,
-    newValidLoginCredentials,
     newActiveGeneralUserDataResponse,
     invalidChangePasswordBody,
     validChangePasswordBody,
+    newPasswordLoginCredentials,
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
 import prepareEmailToken from "../helpers/prepareEmailToken";
 import { SuccessResponse } from "../../utils/responses/main";
+import { newEmailAndPasswordLoginCredentials } from "./../data/users";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -80,30 +80,41 @@ describe("AUTHENTICATION", () => {
             await testUserAuthActiveEndpoint(false);
         });
     });
-    describe("UNVERIFIED EMAIL ROUTES", () => {
-        test(`User should NOT be able to change his password with invalid body`, async () => {
-            await testPATCHRequest("/users/password", invalidChangePasswordBody, InvalidPasswordInstance);
+    describe("USER ONLY PROTECTED ROUTES", () => {
+        describe("RELATED TO PASSWORD", () => {
+            test(`User should NOT be able to change his password with invalid body`, async () => {
+                await testPATCHRequest("/users/auth/password", invalidChangePasswordBody, InvalidCredentialsInstance);
+            });
+            test(`User should be able to change his password with valid body`, async () => {
+                await testPATCHRequest("/users/auth/password", validChangePasswordBody, SuccessResponse);
+            });
+            test(`User should NOT be able to access USER protected routes after changing his password`, async () => {
+                await testUserAuthEndpoint(false);
+            });
+            test("User should NOT be able to login with old password", async () => {
+                await testPOSTRequest("/users/login", validLoginCredentials, InvalidCredentialsInstance);
+            });
+            test("User should be able to login with new password", async () => {
+                await testPOSTRequest("/users/login", newPasswordLoginCredentials, generalUserDataResponse, 200);
+            });
         });
-        test(`User should be able to change his password with valid body`, async () => {
-            await testPATCHRequest("/users/password", validChangePasswordBody, InvalidPasswordInstance);
-        });
-    });
-    describe("RELATED TO EMAILS", () => {
-        test(`User should NOT be able to change his email on email that already exists in database`, async () => {
-            await testPATCHRequest("/users/email", validLoginCredentials, EmailAlreadyExistsInstance);
-        });
-        test(`User should be able to change his email with valid body`, async () => {
-            await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
-        });
-        test(`User should be able to verify his email with valid link`, async () => {
-            await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailToken()}`, {}, SuccessResponse, 200);
-        });
-        test(`User should NOT be able to access USER protected routes after verifying his email`, async () => {
-            await testUserAuthEndpoint(false);
-        });
-        test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
-            await testPOSTRequest("/users/login", newValidLoginCredentials, newActiveGeneralUserDataResponse, 200);
-            await testUserAuthActiveEndpoint(true);
+        describe("RELATED TO EMAIL", () => {
+            test(`User should NOT be able to change his email on email that already exists in database`, async () => {
+                await testPATCHRequest("/users/email", newPasswordLoginCredentials, EmailAlreadyExistsInstance);
+            });
+            test(`User should be able to change his email with valid body`, async () => {
+                await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
+            });
+            test(`User should be able to verify his email with valid link`, async () => {
+                await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailToken()}`, {}, SuccessResponse, 200);
+            });
+            test(`User should NOT be able to access USER protected routes after verifying his email`, async () => {
+                await testUserAuthEndpoint(false);
+            });
+            test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
+                await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, newActiveGeneralUserDataResponse, 200);
+                await testUserAuthActiveEndpoint(true);
+            });
         });
     });
 });
