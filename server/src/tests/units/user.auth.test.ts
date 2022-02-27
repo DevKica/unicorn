@@ -5,6 +5,7 @@ import {
     InvalidFileFormatInstance,
     InvalidRequestedBodyInstance,
     InvalidRequestedLoginBodyInstance,
+    NotFoundInstance,
     PhotoRequiredInstance,
 } from "../data/config";
 import {
@@ -22,6 +23,8 @@ import {
     invalidChangePasswordBody,
     validChangePasswordBody,
     newPasswordLoginCredentials,
+    validEmailBody,
+    invalidEmailBody,
 } from "../data/users";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
@@ -90,6 +93,12 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should NOT be able to access USER protected routes after changing his password`, async () => {
                 await testUserAuthEndpoint(false);
+            });
+            test(`User should NOT be able to reset his password with email that does not exists`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", invalidEmailBody, NotFoundInstance);
+            });
+            test(`User should be able to reset his password with valid email`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", validEmailBody, SuccessResponse);
             });
             test("User should NOT be able to login with old password", async () => {
                 await testPOSTRequest("/users/login", validLoginCredentials, InvalidCredentialsInstance);

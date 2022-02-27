@@ -11,6 +11,7 @@ import {
     InvalidFileFormat,
     InvalidPassword,
     InvalidRequestedBody,
+    NotFound,
     PhotoRequired,
     ServerError,
     Unauthorized,
@@ -27,6 +28,7 @@ export const EmailNotVerifiedInstance = new EmailNotVerified();
 export const UnauthorizedInstance = new Unauthorized();
 export const InvalidCredentialsInstance = new InvalidCredentials();
 export const InvalidPasswordInstance = new InvalidPassword();
+export const NotFoundInstance = new NotFound();
 
 export const InvalidRequestedBodyInstance = new InvalidRequestedBody(validate(createUserSchema, invalidCreateUserBody).error);
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, invalidLoginBody).error);

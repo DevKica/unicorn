@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { UserCreateInput, UserWhereUniqueInput, UserSelectType, UserType, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";
-import { InvalidCredentials } from "../../utils/errors/main";
+import { InvalidCredentials, NotFound } from "../../utils/errors/main";
 import { comparePasswords } from "../../utils/user/auth/comparePasswords";
 
 export async function createUser(data: UserCreateInput) {
@@ -10,6 +10,10 @@ export async function createUser(data: UserCreateInput) {
         data,
         select: userProfileProperties,
     });
+}
+
+export async function checkIfUserExists(where: UserWhereUniqueInput) {
+    if (!(await findUniqueUser(where, { id: true }))) throw new NotFound();
 }
 
 export async function findUniqueUser<S extends UserSelectType>(where: UserWhereUniqueInput, select: Prisma.Subset<S, UserSelectType>) {

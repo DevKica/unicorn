@@ -1,4 +1,3 @@
-import { valid } from "joi";
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
 export const validFileFormat = "avatar123.jpg";
@@ -29,8 +28,15 @@ export const generalUserDataResponse = {
     active: false,
     accountType: "Default",
 };
+export const invalidEmailBody = {
+    email: "pkica123@gmai.com",
+};
 
 export const invalidLoginBody = {};
+
+export const validEmailBody = {
+    email: "devkica777@gmail.com",
+};
 
 export const validLoginCredentials = {
     email: "devkica777@gmail.com",

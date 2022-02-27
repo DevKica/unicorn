@@ -24,7 +24,7 @@ const verificationEmailContent = (token: string) => {
         </a>`,
     };
 };
-const resetPasswordEmailContent = (token: string) => {
+const passwordResetEmailContent = (token: string) => {
     return {
         from: SUPPORT_EMAIL_USERNAME,
         subject: "Set your new password",
@@ -42,7 +42,10 @@ const sendEmailHandler = (clientEmail: string, emailContent: MailOptions) => {
     });
 };
 
-export const sendResetPasswordEmailHandler = (clientEmail: string) => {};
+export const sendResetPasswordEmailHandler = (clientEmail: string, tokenData: emailTokenFormat) => {
+    const token = signEmailTokenJWT(tokenData);
+    sendEmailHandler(clientEmail, passwordResetEmailContent(token));
+};
 
 export const sendVerificationEmailHandler = (clientEmail: string, tokenData: emailTokenFormat) => {
     const token = signEmailTokenJWT(tokenData);

@@ -1,10 +1,11 @@
 import { Router } from "express";
+import { sendResetPasswordEmailHandler } from "../../../config/email.config";
 import { returnSuccess } from "../../../controllers/auth/auth.controllers";
 import { verifyEmailHandler } from "../../../controllers/email.controllers";
-import { changePasswordHandler } from "../../../controllers/password.controllers";
+import { changePasswordHandler, sendPasswordResetEmailHandler } from "../../../controllers/password.controllers";
 import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
 import { schemaValidation } from "../../../middleware/schemaValidation";
-import { changePasswordSchema } from "../../../validation/user.schema";
+import { changePasswordSchema, emailSchema } from "../../../validation/user.schema";
 
 // public router
 const publicUserAuthRoutes = Router();
@@ -24,7 +25,7 @@ const mainUserAuthRoutes = Router();
 publicUserAuthRoutes.patch("/verify-email/:token", verifyEmailHandler);
 
 // Send to the user's e-mail a link to reset the password
-publicUserAuthRoutes.post("/reset-password");
+publicUserAuthRoutes.post("/reset-password", schemaValidation(emailSchema), sendPasswordResetEmailHandler);
 
 // Create new password from reset password link
 publicUserAuthRoutes.patch("/set-new-password");

@@ -1,8 +1,8 @@
 export function removeTestTokens(): void {
-    global.accessToken = "";
-    global.refreshToken = "";
+    global.testAccessToken = "";
+    global.testRefreshToken = "";
 }
 
 export function setUserId(res: any): void {
-    global.userId = res.body.id;
+    global.testUserId = res.body.id;
 }
