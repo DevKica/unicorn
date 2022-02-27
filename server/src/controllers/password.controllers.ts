@@ -47,6 +47,7 @@ export async function verifySetNewPasswordLinkHandler(req: Request, res: Respons
     try {
         const { objectId } = verifyEmailTokenJWT(req.params.token);
         const passwordReset = findPasswordReset({ id: objectId });
+
         if (!passwordReset) throw new InactiveLink();
 
         applySuccessToResponse(res);
@@ -66,8 +67,9 @@ export async function setNewPasswordHandler(req: Request, res: Response) {
 
         if (!user.active) {
             await updateUniqueUser({ id: user.id }, { active: true });
-            await deleteAllSessions({ id: user.id }, res);
         }
+        await deleteAllSessions({ id: user.id }, res);
+
         await deletePasswordReset({ id: objectId });
 
         applySuccessToResponse(res);

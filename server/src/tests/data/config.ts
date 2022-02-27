@@ -2,7 +2,7 @@
 
 import { createUserSchema, logInSchema } from "../../validation/user.schema";
 import { validate } from "./../../middleware/schemaValidation";
-import { invalidCreateUserBody, invalidLoginBody } from "./users";
+import { invalidCreateUserBody, invalidLoginBody } from "./user";
 import {
     EmailAlreadyExists,
     EmailNotVerified,

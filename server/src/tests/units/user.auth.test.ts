@@ -11,12 +11,10 @@ import {
 import {
     invalidCreateUserBody,
     validCreateUserBody,
-    generalUserDataResponse,
-    invalidFileFormat,
-    validFileFormat,
+    basicUserData,
     invalidLoginBody,
     invalidLoginCredentials,
-    newGeneralUserDataResponse,
+    newBasicUserData,
     validChangeEmailBody,
     validLoginCredentials,
     newActiveGeneralUserDataResponse,
@@ -25,13 +23,14 @@ import {
     newPasswordLoginCredentials,
     validEmailBody,
     invalidEmailBody,
-} from "../data/users";
+} from "../data/user";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
 import { SuccessResponse } from "../../utils/responses/main";
-import { newEmailAndPasswordLoginCredentials } from "./../data/users";
+import { newEmailAndPasswordLoginCredentials } from "../data/user";
 import { prepareEmailVericationToken } from "../helpers/prepareEmailToken";
+import { invalidFileFormat, validFileFormat } from "../data/files";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -48,7 +47,7 @@ describe("AUTHENTICATION", () => {
             await testPOSTRequest("/users", validCreateUserBody, InvalidFileFormatInstance, undefined, invalidFileFormat);
         });
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
-            const res = await testPOSTRequest("/users", validCreateUserBody, generalUserDataResponse, 201, validFileFormat);
+            const res = await testPOSTRequest("/users", validCreateUserBody, basicUserData, 201, validFileFormat);
             expectUploadFilesToExists(res);
             setUserId(res);
         });
@@ -74,7 +73,7 @@ describe("AUTHENTICATION", () => {
             await testPOSTRequest("/users/login", invalidLoginCredentials, InvalidCredentialsInstance);
         });
         test("User should be able to login with valid credentials", async () => {
-            await testPOSTRequest("/users/login", validLoginCredentials, generalUserDataResponse, 200);
+            await testPOSTRequest("/users/login", validLoginCredentials, basicUserData, 200);
         });
         test(`User should be able to access USER protected routes after logging in`, async () => {
             await testUserAuthEndpoint(true);
@@ -98,7 +97,7 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/login", validLoginCredentials, InvalidCredentialsInstance);
             });
             test("User should be able to login with new password", async () => {
-                await testPOSTRequest("/users/login", newPasswordLoginCredentials, generalUserDataResponse, 200);
+                await testPOSTRequest("/users/login", newPasswordLoginCredentials, basicUserData, 200);
             });
             test(`User should NOT be able to send reset password request to email that does not exists`, async () => {
                 await testPOSTRequest("/users/auth/reset-password", invalidEmailBody, NotFoundInstance);
@@ -112,7 +111,7 @@ describe("AUTHENTICATION", () => {
                 await testPATCHRequest("/users/email", newPasswordLoginCredentials, EmailAlreadyExistsInstance);
             });
             test(`User should be able to change his email with valid body`, async () => {
-                await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
+                await testPATCHRequest("/users/email", validChangeEmailBody, newBasicUserData, 200);
             });
             test(`User should be able to verify his email with valid link`, async () => {
                 await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailVericationToken()}`, {}, SuccessResponse, 200);

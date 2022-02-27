@@ -2,10 +2,10 @@ import { Router } from "express";
 import { sendResetPasswordEmailHandler } from "../../../config/email.config";
 import { returnSuccess } from "../../../controllers/auth/auth.controllers";
 import { verifyEmailHandler } from "../../../controllers/email.controllers";
-import { changePasswordHandler, sendPasswordResetEmailHandler } from "../../../controllers/password.controllers";
+import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../../controllers/password.controllers";
 import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
 import { schemaValidation } from "../../../middleware/schemaValidation";
-import { changePasswordSchema, emailSchema } from "../../../validation/user.schema";
+import { changePasswordSchema, emailSchema, passwordWithRepetitionSchema } from "../../../validation/user.schema";
 
 // public router
 const publicUserAuthRoutes = Router();
@@ -28,7 +28,9 @@ publicUserAuthRoutes.patch("/verify-email/:token", verifyEmailHandler);
 publicUserAuthRoutes.post("/reset-password", schemaValidation(emailSchema), sendPasswordResetEmailHandler);
 
 // Create new password from reset password link
-publicUserAuthRoutes.patch("/set-new-password");
+publicUserAuthRoutes.post("/verify-link/:token", verifySetNewPasswordLinkHandler);
+
+publicUserAuthRoutes.patch("/set-new-password/:token", schemaValidation(passwordWithRepetitionSchema), setNewPasswordHandler);
 
 // REQUIRE USER ROUTES
 
