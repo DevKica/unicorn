@@ -30,6 +30,6 @@ export async function validateUserPassword(passwordToVerify: UserType["password"
     return user;
 }
 
-export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true }) {
+export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true, active: true }) {
     return UserModel.update({ where, data, select });
 }

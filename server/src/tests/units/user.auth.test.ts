@@ -29,9 +29,9 @@ import {
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
-import prepareEmailToken from "../helpers/prepareEmailToken";
 import { SuccessResponse } from "../../utils/responses/main";
 import { newEmailAndPasswordLoginCredentials } from "./../data/users";
+import { prepareEmailVericationToken } from "../helpers/prepareEmailToken";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -94,17 +94,17 @@ describe("AUTHENTICATION", () => {
             test(`User should NOT be able to access USER protected routes after changing his password`, async () => {
                 await testUserAuthEndpoint(false);
             });
-            test(`User should NOT be able to reset his password with email that does not exists`, async () => {
-                await testPOSTRequest("/users/auth/reset-password", invalidEmailBody, NotFoundInstance);
-            });
-            test(`User should be able to reset his password with valid email`, async () => {
-                await testPOSTRequest("/users/auth/reset-password", validEmailBody, SuccessResponse);
-            });
             test("User should NOT be able to login with old password", async () => {
                 await testPOSTRequest("/users/login", validLoginCredentials, InvalidCredentialsInstance);
             });
             test("User should be able to login with new password", async () => {
                 await testPOSTRequest("/users/login", newPasswordLoginCredentials, generalUserDataResponse, 200);
+            });
+            test(`User should NOT be able to send reset password request to email that does not exists`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", invalidEmailBody, NotFoundInstance);
+            });
+            test(`User should be able to send reset password request to valid email`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", validEmailBody, SuccessResponse);
             });
         });
         describe("RELATED TO EMAIL", () => {
@@ -115,7 +115,7 @@ describe("AUTHENTICATION", () => {
                 await testPATCHRequest("/users/email", validChangeEmailBody, newGeneralUserDataResponse, 200);
             });
             test(`User should be able to verify his email with valid link`, async () => {
-                await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailToken()}`, {}, SuccessResponse, 200);
+                await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailVericationToken()}`, {}, SuccessResponse, 200);
             });
             test(`User should NOT be able to access USER protected routes after verifying his email`, async () => {
                 await testUserAuthEndpoint(false);

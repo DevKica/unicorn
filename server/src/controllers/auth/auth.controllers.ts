@@ -34,7 +34,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active });
 
         applyToResponse(res, 201, { ...createdUser, photos: uploadPhotos });
-    } catch (e: unknown) {
+    } catch (e) {
         applyToResponseCustom(res, e);
     }
 }
@@ -44,7 +44,7 @@ export async function loginUserHandler(req: LoginUserRequest, res: Response): Pr
         const user = await validateUserPassword(req.body.password, { email: req.body.email });
         await signNewSession({ req, res, id: user.id, active: user.active });
         applyToResponse(res, 200, omit(user, "password"));
-    } catch (e: unknown) {
+    } catch (e) {
         applyToResponseCustom(res, e);
     }
 }

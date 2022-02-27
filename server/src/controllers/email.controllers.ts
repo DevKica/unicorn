@@ -34,7 +34,7 @@ export async function verifyEmailHandler(req: Request, res: Response) {
         await deleteEmailVerification({ id: objectId });
 
         applyToResponse(res, 200, SuccessResponse);
-    } catch (e: unknown) {
+    } catch (e) {
         applyToResponseCustom(res, e);
     }
 }
@@ -65,7 +65,7 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
             newEmail: email,
         });
         applyToResponse(res, 200, SuccessResponse);
-    } catch (e: unknown) {
+    } catch (e) {
         applyToResponseCustom(res, e);
     }
 }
