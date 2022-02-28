@@ -145,12 +145,33 @@ export const passwordResetBody = {
         },
     },
 };
-
-export const changeEmailBody = {
+export const setNewPasswordBody = {
     valid: {
-        ...newEmail,
-        ...newPassword,
+        ...password,
+        ...passwordRepetition,
     },
+    invalid: {
+        schema: {
+            ...invalidPasswordSchema,
+        },
+    },
+};
+export const loginCredentials = loginBody.valid;
+
+export const newEmailLoginCredentials = {
+    ...newEmail,
+    ...password,
+};
+export const newPasswordLoginCredentials = {
+    ...email,
+    ...newPassword,
+};
+export const newEmailAndPasswordLoginCredentials = {
+    ...newEmail,
+    ...newPassword,
+};
+export const changeEmailBody = {
+    valid: newEmailAndPasswordLoginCredentials,
     invalid: {
         password: {
             ...newEmail,
@@ -161,14 +182,4 @@ export const changeEmailBody = {
             ...newPassword,
         },
     },
-};
-
-export const newPasswordLoginCredentials = {
-    ...email,
-    ...newPassword,
-};
-
-export const newEmailAndPasswordLoginCredentials = {
-    ...newEmail,
-    ...newPassword,
 };

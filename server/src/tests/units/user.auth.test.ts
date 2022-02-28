@@ -7,6 +7,7 @@ import {
     InvalidFileFormatInstance,
     InvalidRequestedCreateUserBodyInstance,
     InvalidRequestedLoginBodyInstance,
+    InvalidSetNewPasswordBodyInstance,
     NotFoundInstance,
     PhotoRequiredInstance,
 } from "../data/config";
@@ -16,17 +17,20 @@ import {
     changePasswordBody,
     createUserBody,
     loginBody,
+    loginCredentials,
     newBasicActiveUserData,
     newBasicUserData,
     newEmailAndPasswordLoginCredentials,
+    newEmailLoginCredentials,
     newPasswordLoginCredentials,
     passwordResetBody,
+    setNewPasswordBody,
 } from "../data/user";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
 import { SuccessResponse } from "../../utils/responses/main";
-import { prepareEmailVericationToken } from "../helpers/prepareEmailToken";
+import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidFileFormat, validFileFormat } from "../data/files";
 
 describe("AUTHENTICATION", () => {
@@ -118,14 +122,13 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to send reset password request to valid email`, async () => {
                 await testPOSTRequest("/users/auth/reset-password", valid, SuccessResponse);
             });
-            test(`User should NOT be able to access set new password route without valid token`, async () => {
-                await testPOSTRequest("/users/auth/verify-link/123", {}, ForbiddenInstance);
-            });
         });
         describe("Change and verify email", () => {
             const { valid, invalid } = changeEmailBody;
 
             test(`User should NOT be able to change his email on email that already exists in database`, async () => {
+                // login
+                await testPOSTRequest("/users/login", newPasswordLoginCredentials, basicUserData, 200);
                 await testPATCHRequest("/users/email", invalid.emailAlreadyExists, EmailAlreadyExistsInstance);
             });
             test(`User should NOT be able to change his email with invalid password`, async () => {
@@ -143,6 +146,19 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
                 await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, newBasicActiveUserData, 200);
                 await testUserAuthActiveEndpoint(true);
+            });
+        });
+        describe("Set new password from email", () => {
+            const { valid, invalid } = setNewPasswordBody;
+
+            test(`User should NOT be able to access set new password route without valid token`, async () => {
+                await testPOSTRequest("/users/auth/verify-link/123", {}, ForbiddenInstance);
+            });
+            test(`User should NOT be able to set new password with valid link but invalid body`, async () => {
+                await testPATCHRequest(`/users/auth/set-new-password/${await preparePasswordResetToken()}`, invalid.schema, InvalidSetNewPasswordBodyInstance);
+            });
+            test(`User should be able to set new password with valid link`, async () => {
+                await testPATCHRequest(`/users/auth/set-new-password/${await preparePasswordResetToken()}`, valid, SuccessResponse);
             });
         });
     });

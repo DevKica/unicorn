@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { filter } from "lodash";
 import { UserCreateInput, UserWhereUniqueInput, UserSelectType, UserType, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties } from "../../prisma/validator";

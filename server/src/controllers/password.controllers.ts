@@ -68,6 +68,8 @@ export async function setNewPasswordHandler(req: Request, res: Response) {
         if (!user.active) {
             await updateUniqueUser({ id: user.id }, { active: true });
         }
+        if (!user) return;
+
         await deleteAllSessions({ id: user.id }, res);
 
         await deletePasswordReset({ id: objectId });

@@ -14,8 +14,8 @@ import {
     ServerError,
     Unauthorized,
 } from "../../utils/errors/main";
-import { createUserBody, changePasswordBody, loginBody } from "./user";
-import { changePasswordSchema, createUserSchema, logInSchema } from "../../validation/user.schema";
+import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody } from "./user";
+import { changePasswordSchema, createUserSchema, logInSchema, passwordWithRepetitionSchema } from "../../validation/user.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -31,5 +31,6 @@ export const NotFoundInstance = new NotFound();
 export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
 export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordBody.invalid.schema).error);
+export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordBody.invalid.schema).error);
 
 export const apiVersion = "v1";
