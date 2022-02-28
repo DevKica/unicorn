@@ -1,9 +1,5 @@
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
-const newEmail = {
-    email: TEST_USER_EMAIL,
-};
-
 export const basicUserData = {
     name: "Pawel",
     surname: "Kica",
@@ -13,49 +9,28 @@ export const basicUserData = {
     accountType: "Default",
 };
 
+const email = "devKica777@gmail.com";
+
+const password = "Password1!";
+
+export const invalidEmailSchema = "@devKica@.com";
+
+const invalidPasswordSchema = "invalidPassword1";
+
+const invalidPassword = "invalidPassword1!";
+
+const newEmail = TEST_USER_EMAIL;
+
+const newPassword = `new${password}`;
+
 export const newBasicUserData = {
     ...basicUserData,
-    ...newEmail,
+    email: newEmail,
 };
 
 export const newBasicActiveUserData = {
     ...newBasicUserData,
-    ...{ active: true },
-};
-
-const email = {
-    email: "devKica777@gmail.com",
-};
-export const invalidEmailSchema = {
-    email: "@devKica@.com",
-};
-
-const password = {
-    password: "Password1!",
-};
-const passwordRepetition = {
-    passwordRepetition: password.password,
-};
-
-const invalidPassword = {
-    password: "invalidPassword1!",
-};
-const invalidOldPassword = {
-    oldPassword: "invalidOldPassword1!",
-};
-
-const invalidPasswordSchema = {
-    password: "invalidPassword1",
-};
-const invalidOldPasswordSchema = {
-    oldPassword: invalidPasswordSchema.password,
-};
-
-const newPassword = {
-    password: `new${password.password}`,
-};
-const newPasswordRepetition = {
-    passwordRepetition: newPassword.password,
+    active: true,
 };
 
 export const invalidSchemaCreateUserBody = {
@@ -86,9 +61,7 @@ export const validCreateUserBody = {
     sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
 
-const nonExistentEmail = {
-    email: "example@gmail.com",
-};
+const nonExistentEmail = "example@gmail.com";
 
 export const createUserBody = {
     valid: validCreateUserBody,
@@ -99,17 +72,17 @@ export const createUserBody = {
 
 export const loginBody = {
     valid: {
-        ...email,
-        ...password,
+        email,
+        password,
     },
     invalid: {
         credentials: {
-            ...email,
-            ...invalidPassword,
+            email,
+            password: invalidPassword,
         },
         schema: {
-            ...invalidEmailSchema,
-            ...invalidPasswordSchema,
+            email: invalidEmailSchema,
+            password: invalidPasswordSchema,
         },
     },
 };
@@ -117,73 +90,74 @@ export const loginBody = {
 export const loginCredentials = loginBody.valid;
 
 export const newEmailLoginCredentials = {
-    ...newEmail,
-    ...password,
+    email: newEmail,
+    password,
 };
 export const newPasswordLoginCredentials = {
-    ...email,
-    ...newPassword,
+    email,
+    password: newPassword,
 };
 export const newEmailAndPasswordLoginCredentials = {
-    ...newEmail,
-    ...newPassword,
+    email: newEmail,
+    password: newPassword,
 };
 
 export const changeEmailBody = {
     valid: newEmailAndPasswordLoginCredentials,
     invalid: {
         password: {
-            ...newEmail,
-            ...invalidPassword,
+            email: newEmail,
+            password: invalidPassword,
         },
         emailAlreadyExists: {
-            ...email,
-            ...newPassword,
+            email,
+            password: newPassword,
         },
     },
 };
 
 export const changePasswordBody = {
     valid: {
-        oldPassword: password.password,
-        ...newPassword,
-        ...newPasswordRepetition,
+        oldPassword: password,
+        password: newPassword,
+        passwordRepetition: newPassword,
     },
     invalid: {
         schema: {
-            ...invalidOldPasswordSchema,
-            ...invalidPasswordSchema,
+            oldPassword: invalidPassword,
+            password: newPassword,
+            // passwordRepetition is required
         },
         oldPassword: {
-            ...invalidOldPassword,
-            ...newPassword,
-            ...newPasswordRepetition,
+            oldPassword: invalidPassword,
+            password: newPassword,
+            passwordRepetition: newPassword,
         },
     },
 };
 
 export const passwordResetBody = {
     valid: {
-        ...newEmail,
+        email: newEmail,
     },
     invalid: {
         nonExistentEmail: {
-            ...nonExistentEmail,
+            email: nonExistentEmail,
         },
         schema: {
-            ...invalidEmailSchema,
+            email: invalidEmailSchema,
         },
     },
 };
 
 export const setNewPasswordBody = {
     valid: {
-        ...password,
-        ...passwordRepetition,
+        password,
+        passwordRepetition: password,
     },
     invalid: {
         schema: {
-            ...invalidPasswordSchema,
+            password: invalidPasswordSchema,
         },
     },
 };

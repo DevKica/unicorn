@@ -32,6 +32,6 @@ export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(v
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
 export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordBody.invalid.schema).error);
 export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordBody.invalid.schema).error);
-export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, invalidEmailSchema).error);
+export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, { email: invalidEmailSchema }).error);
 
 export const apiVersion = "v1";
