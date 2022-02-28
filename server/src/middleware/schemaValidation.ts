@@ -15,6 +15,7 @@ export const validate = (schema: Schema, dataToValidate: Object): betterValidati
 export const schemaValidation = (schema: Schema) => (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = validate(schema, req.body || {});
+
         if (result !== true) throw new InvalidRequestedBody(result.error);
         next();
     } catch (e: unknown) {

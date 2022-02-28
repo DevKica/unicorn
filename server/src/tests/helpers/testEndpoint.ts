@@ -6,7 +6,7 @@ import { expectToEqual, expectToEqualCustom } from "./customExceptions";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
-const afterTest = (res: any, equalObject: any, equalStatus: any = 0) => {
+export const afterTest = (res: any, equalObject: any, equalStatus: any = 0) => {
     try {
         global.testAccessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];
         global.testRefreshToken = res.header["set-cookie"][1].split(";")[0].split("=")[1];

@@ -13,9 +13,15 @@ export const basicUserData = {
     accountType: "Default",
 };
 
-export const newBasicUserData = Object.assign(basicUserData, newEmail);
+export const newBasicUserData = {
+    ...basicUserData,
+    ...newEmail,
+};
 
-export const newBasicActiveUserData = Object.assign(newBasicUserData, { active: true });
+export const newBasicActiveUserData = {
+    ...newBasicUserData,
+    ...{ active: true },
+};
 
 const email = {
     email: "devKica777@gmail.com",
@@ -52,17 +58,17 @@ const newPasswordRepetition = {
     passwordRepetition: newPassword.password,
 };
 export const invalidSchemaCreateUserBody = {
-    name: "Pawel1",
-    surname: "Kica1",
-    email: "devkica777@gmail.com",
+    name: "777",
+    surname: "123",
+    email: "devKica777@gmail.com",
     password: "Password1!",
-    passwordRepetition: "Password1! repetition heh",
+    passwordRepetition: "Password1!",
     birthday: "2003-02-13",
-    longitude: "11.11.11",
-    latitude: "-380.21",
-    showMeGender: "Malee",
-    gender: 10,
-    sexualOrientation: ["Gay", "Lesbian", "Heterosexualll"],
+    longitude: "170.123",
+    latitude: "50.213",
+    showMeGender: "Male",
+    gender: "10",
+    sexualOrientation: ["empty", "emptyv2"],
 };
 
 export const validCreateUserBody = {
@@ -79,8 +85,8 @@ export const validCreateUserBody = {
     sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
 
-const invalidEmailBody = {
-    email: "pkica123@@gmail.com",
+const nonExistentEmail = {
+    email: "example@gmail.com",
 };
 
 export const createUserBody = {
@@ -91,29 +97,78 @@ export const createUserBody = {
 };
 
 export const loginBody = {
-    valid: Object.assign(email, password),
+    valid: {
+        ...email,
+        ...password,
+    },
     invalid: {
-        credentials: Object.assign(email, invalidPassword),
-        schema: Object.assign(invalidEmailSchema, invalidPasswordSchema),
+        credentials: {
+            ...email,
+            ...invalidPassword,
+        },
+        schema: {
+            ...invalidEmailSchema,
+            ...invalidPasswordSchema,
+        },
     },
 };
 
 export const changePasswordBody = {
-    valid: Object.assign(password, newPassword, newPasswordRepetition),
+    valid: {
+        oldPassword: password.password,
+        ...newPassword,
+        ...newPasswordRepetition,
+    },
     invalid: {
-        schema: Object.assign(invalidOldPasswordSchema, invalidPasswordSchema),
-        oldPassword: Object.assign(invalidOldPassword, newPassword, newPasswordRepetition),
+        schema: {
+            ...invalidOldPasswordSchema,
+            ...invalidPasswordSchema,
+        },
+        oldPassword: {
+            ...invalidOldPassword,
+            ...newPassword,
+            ...newPasswordRepetition,
+        },
+    },
+};
+
+export const passwordResetBody = {
+    valid: {
+        ...email,
+    },
+    invalid: {
+        nonExistentEmail: {
+            ...nonExistentEmail,
+        },
+        schema: {
+            ...invalidEmailSchema,
+        },
     },
 };
 
 export const changeEmailBody = {
-    valid: Object.assign(newEmail, newPassword),
+    valid: {
+        ...newEmail,
+        ...newPassword,
+    },
     invalid: {
-        password: Object.assign(newEmail, invalidPassword),
-        emailAlreadyExists: Object.assign(email, newPassword),
+        password: {
+            ...newEmail,
+            ...invalidPassword,
+        },
+        emailAlreadyExists: {
+            ...email,
+            ...newPassword,
+        },
     },
 };
 
-export const newPasswordLoginCredentials = Object.assign(email, password);
+export const newPasswordLoginCredentials = {
+    ...email,
+    ...newPassword,
+};
 
-export const newEmailAndPasswordLoginCredentials = Object.assign(newEmail, newPassword);
+export const newEmailAndPasswordLoginCredentials = {
+    ...newEmail,
+    ...newPassword,
+};

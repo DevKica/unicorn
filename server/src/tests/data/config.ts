@@ -1,8 +1,6 @@
 // @ts-nocheck
 
-import { createUserSchema, logInSchema } from "../../validation/user.schema";
 import { validate } from "./../../middleware/schemaValidation";
-import { invalidCreateUserBody, invalidLoginBody } from "./user";
 import {
     EmailAlreadyExists,
     EmailNotVerified,
@@ -16,8 +14,8 @@ import {
     ServerError,
     Unauthorized,
 } from "../../utils/errors/main";
-
-export const apiVersion = "v1";
+import { createUserBody, changePasswordBody, loginBody } from "./user";
+import { changePasswordSchema, createUserSchema, logInSchema } from "../../validation/user.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -30,5 +28,8 @@ export const InvalidCredentialsInstance = new InvalidCredentials();
 export const InvalidPasswordInstance = new InvalidPassword();
 export const NotFoundInstance = new NotFound();
 
-export const InvalidRequestedBodyInstance = new InvalidRequestedBody(validate(createUserSchema, invalidCreateUserBody).error);
-export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, invalidLoginBody).error);
+export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
+export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
+export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordBody.invalid.schema).error);
+
+export const apiVersion = "v1";
