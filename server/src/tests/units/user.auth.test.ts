@@ -1,6 +1,7 @@
 import { testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import {
     EmailAlreadyExistsInstance,
+    ForbiddenInstance,
     InvalidChangePasswordBodyInstance,
     InvalidCredentialsInstance,
     InvalidFileFormatInstance,
@@ -116,6 +117,9 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should be able to send reset password request to valid email`, async () => {
                 await testPOSTRequest("/users/auth/reset-password", valid, SuccessResponse);
+            });
+            test(`User should NOT be able to access set new password route without valid token`, async () => {
+                await testPOSTRequest("/users/auth/verify-link/123", {}, ForbiddenInstance);
             });
         });
         describe("Change and verify email", () => {
