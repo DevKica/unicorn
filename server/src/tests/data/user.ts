@@ -26,7 +26,7 @@ export const newBasicActiveUserData = {
 const email = {
     email: "devKica777@gmail.com",
 };
-const invalidEmailSchema = {
+export const invalidEmailSchema = {
     email: "@devKica@.com",
 };
 
@@ -57,6 +57,7 @@ const newPassword = {
 const newPasswordRepetition = {
     passwordRepetition: newPassword.password,
 };
+
 export const invalidSchemaCreateUserBody = {
     name: "777",
     surname: "123",
@@ -113,6 +114,35 @@ export const loginBody = {
     },
 };
 
+export const loginCredentials = loginBody.valid;
+
+export const newEmailLoginCredentials = {
+    ...newEmail,
+    ...password,
+};
+export const newPasswordLoginCredentials = {
+    ...email,
+    ...newPassword,
+};
+export const newEmailAndPasswordLoginCredentials = {
+    ...newEmail,
+    ...newPassword,
+};
+
+export const changeEmailBody = {
+    valid: newEmailAndPasswordLoginCredentials,
+    invalid: {
+        password: {
+            ...newEmail,
+            ...invalidPassword,
+        },
+        emailAlreadyExists: {
+            ...email,
+            ...newPassword,
+        },
+    },
+};
+
 export const changePasswordBody = {
     valid: {
         oldPassword: password.password,
@@ -134,7 +164,7 @@ export const changePasswordBody = {
 
 export const passwordResetBody = {
     valid: {
-        ...email,
+        ...newEmail,
     },
     invalid: {
         nonExistentEmail: {
@@ -145,6 +175,7 @@ export const passwordResetBody = {
         },
     },
 };
+
 export const setNewPasswordBody = {
     valid: {
         ...password,
@@ -153,33 +184,6 @@ export const setNewPasswordBody = {
     invalid: {
         schema: {
             ...invalidPasswordSchema,
-        },
-    },
-};
-export const loginCredentials = loginBody.valid;
-
-export const newEmailLoginCredentials = {
-    ...newEmail,
-    ...password,
-};
-export const newPasswordLoginCredentials = {
-    ...email,
-    ...newPassword,
-};
-export const newEmailAndPasswordLoginCredentials = {
-    ...newEmail,
-    ...newPassword,
-};
-export const changeEmailBody = {
-    valid: newEmailAndPasswordLoginCredentials,
-    invalid: {
-        password: {
-            ...newEmail,
-            ...invalidPassword,
-        },
-        emailAlreadyExists: {
-            ...email,
-            ...newPassword,
         },
     },
 };

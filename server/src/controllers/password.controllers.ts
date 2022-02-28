@@ -32,7 +32,7 @@ export async function sendPasswordResetEmailHandler(req: Request, res: Response)
         const user = await findUniqueUser({ email }, { id: true });
         if (!user) throw new NotFound();
 
-        await deletePasswordReset({ id: user.id });
+        await deletePasswordReset({ userId: user.id });
 
         const passwordReset = await createPasswordReset({ user: { connect: { id: user.id } } });
 
@@ -59,6 +59,7 @@ export async function verifySetNewPasswordLinkHandler(req: Request, res: Respons
 export async function setNewPasswordHandler(req: Request, res: Response) {
     try {
         const { objectId } = verifyEmailTokenJWT(req.params.token);
+
         const passwordReset = await findPasswordReset({ id: objectId });
 
         if (!passwordReset) throw new InactiveLink();

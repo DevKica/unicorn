@@ -4,6 +4,7 @@ import {
     ForbiddenInstance,
     InvalidChangePasswordBodyInstance,
     InvalidCredentialsInstance,
+    InvalidEmailBodyInstance,
     InvalidFileFormatInstance,
     InvalidRequestedCreateUserBodyInstance,
     InvalidRequestedLoginBodyInstance,
@@ -110,25 +111,10 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/login", newPasswordLoginCredentials, basicUserData, 200);
             });
         });
-        describe("Reset password", () => {
-            const { valid, invalid } = passwordResetBody;
-
-            test(`User should NOT be able to send reset password request to email that does not exists`, async () => {
-                await testPOSTRequest("/users/auth/reset-password", invalid.nonExistentEmail, NotFoundInstance);
-            });
-            test(`User should NOT be able to send reset password request to an email that does not match schema`, async () => {
-                await testPOSTRequest("/users/auth/reset-password", invalid.nonExistentEmail, NotFoundInstance);
-            });
-            test(`User should be able to send reset password request to valid email`, async () => {
-                await testPOSTRequest("/users/auth/reset-password", valid, SuccessResponse);
-            });
-        });
         describe("Change and verify email", () => {
             const { valid, invalid } = changeEmailBody;
 
             test(`User should NOT be able to change his email on email that already exists in database`, async () => {
-                // login
-                await testPOSTRequest("/users/login", newPasswordLoginCredentials, basicUserData, 200);
                 await testPATCHRequest("/users/email", invalid.emailAlreadyExists, EmailAlreadyExistsInstance);
             });
             test(`User should NOT be able to change his email with invalid password`, async () => {
@@ -146,6 +132,19 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
                 await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, newBasicActiveUserData, 200);
                 await testUserAuthActiveEndpoint(true);
+            });
+        });
+        describe("Reset password", () => {
+            const { valid, invalid } = passwordResetBody;
+
+            test(`User should NOT be able to send reset password request to email that does not exists`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", invalid.nonExistentEmail, NotFoundInstance);
+            });
+            test(`User should NOT be able to send reset password request to an email that does not match schema`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", invalid.schema, InvalidEmailBodyInstance);
+            });
+            test(`User should be able to send reset password request to valid email`, async () => {
+                await testPOSTRequest("/users/auth/reset-password", valid, SuccessResponse);
             });
         });
         describe("Set new password from email", () => {
