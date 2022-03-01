@@ -11,7 +11,6 @@ import {
     InvalidSetNewPasswordBodyInstance,
     NotFoundInstance,
     PhotoRequiredInstance,
-    UnauthorizedInstance,
 } from "../data/config";
 import {
     basicUserData,
@@ -29,12 +28,19 @@ import {
 } from "../data/user";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
-import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
+import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidFileFormat, validFileFormat } from "../data/files";
 import { SuccessResponse } from "../../utils/responses/main";
+import { removeUserTable } from "../../prisma/cleanup/cleanUpDev";
 
 describe("AUTHENTICATION", () => {
+    beforeAll(async () => {
+        await removeUserTable();
+    });
+    afterAll(() => {
+        removeGlobals();
+    });
     describe("CREATING AN ACCOUNT", () => {
         const { valid, invalid } = createUserBody;
 
@@ -63,7 +69,7 @@ describe("AUTHENTICATION", () => {
         });
         test(`User should NOT be able to access ACTIVE USER protected routes after creating an account`, async () => {
             await testUserAuthActiveEndpoint(false);
-            removeTestTokens();
+            removeAuthTokens();
         });
         test("User should NOT be able to access USER protected routes after removing tokens", async () => {
             await testUserAuthEndpoint(false);
@@ -123,7 +129,7 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to change his email with valid body`, async () => {
                 await testPATCHRequest("/users/email", valid, newBasicUserData, 200);
             });
-            test(`User should be to resend email verification with previous request`, async () => {
+            test(`User should be able to resend email verification with previous request`, async () => {
                 await testPOSTRequest("/users/auth/resend-verification-email", {}, SuccessResponse);
             });
             test(`User should be able to verify his email with valid link`, async () => {
@@ -136,7 +142,7 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, newBasicActiveUserData, 200);
                 await testUserAuthActiveEndpoint(true);
             });
-            test(`User should NOT be to resend email verification without previous request`, async () => {
+            test(`User should NOT be able to resend email verification without previous request`, async () => {
                 await testPOSTRequest("/users/auth/resend-verification-email", {}, NotFoundInstance);
             });
         });

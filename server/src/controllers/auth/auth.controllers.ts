@@ -44,7 +44,7 @@ export async function loginUserHandler(req: LoginUserRequest, res: Response): Pr
     try {
         const user = await validateUserPassword(req.body.password, { email: req.body.email });
         await signNewSession({ req, res, id: user.id, active: user.active });
-        applyToResponse(res, 200, omit(user, "password"));
+        applyToResponse(res, 200, user);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

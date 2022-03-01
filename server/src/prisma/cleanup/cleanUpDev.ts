@@ -1,9 +1,9 @@
-import { logError, logInfo } from "../utils/logger";
-import { UserModel } from "./models";
+import { logError, logInfo } from "../../utils/logger";
+import { UserModel } from "../models";
+import { deleteCurrentImages } from "./cleanUpAfterTests";
 
-async function removeUserTable() {
+export async function removeUserTable() {
     if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
-        logInfo(`NODE_ENV is equal to "${process.env.NODE_ENV}"`);
         await UserModel.deleteMany({});
         logInfo("User table was removed");
     } else {
@@ -11,10 +11,9 @@ async function removeUserTable() {
     }
 }
 
-export default removeUserTable;
-
 if (require.main === module) {
     (async () => {
         await removeUserTable();
+        await deleteCurrentImages();
     })();
 }

@@ -1,3 +1,4 @@
+import { omit } from "lodash";
 import { UserWhereUniqueInput, UserType } from "../../@types/prisma/static.types";
 import { userProfileProperties } from "../../prisma/validator";
 import { InvalidCredentials, NotFound } from "../../utils/errors/main";
@@ -15,5 +16,5 @@ export async function validateUserPassword(passwordToVerify: UserType["password"
 
     await comparePasswords(user.password, passwordToVerify);
 
-    return user;
+    return omit(user, "password");
 }

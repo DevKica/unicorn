@@ -21,5 +21,5 @@ export const userPhotosResolutions = {
 
 const localDirname = __dirname;
 
-export const uploadDirname = path.join(localDirname, "..", "..", "public");
-export const usersPhotosDirname = path.join(uploadDirname, "usersPhotos");
+export const uploadMainPath = path.join(localDirname, "..", "..", "public");
+export const usersPhotosDirname = path.join(uploadMainPath, "usersPhotos");

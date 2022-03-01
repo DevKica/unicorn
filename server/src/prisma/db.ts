@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "test") {
 export const prisma =
     global.prisma ||
     new PrismaClient({
-        log: ["info", "warn", "error"],
+        log: process.env.NODE_ENV !== "test" ? ["info", "warn", "error"] : ["warn", "error"],
         errorFormat: "pretty",
         datasources: { db: { url: databaseUrl } },
     });

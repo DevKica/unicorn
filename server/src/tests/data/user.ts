@@ -1,12 +1,21 @@
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
 export const basicUserData = {
-    name: "Pawel",
-    surname: "Kica",
-    email: "devkica777@gmail.com",
-    birthday: "2003-02-13T00:00:00.000Z",
-    active: false,
     accountType: "Default",
+    active: false,
+    birthday: "2003-02-13T00:00:00.000Z",
+    city: "",
+    description: "",
+    email: "devkica777@gmail.com",
+    gender: "Male",
+    latitude: "50.123",
+    longitude: "170.123",
+    name: "Pawel",
+    sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
+    showMeAgeLowerLimit: 18,
+    showMeAgeUpperLimit: 23,
+    showMeGender: "Male",
+    surname: "Kica",
 };
 
 const email = "devKica777@gmail.com";
@@ -23,11 +32,20 @@ const newEmail = TEST_USER_EMAIL;
 
 const newPassword = `new${password}`;
 
+export const activeBasicUserData = {
+    ...basicUserData,
+    active: true,
+};
+
 export const newBasicUserData = {
     ...basicUserData,
     email: newEmail,
 };
 
+export const basicActiveUserData = {
+    ...basicUserData,
+    active: true,
+};
 export const newBasicActiveUserData = {
     ...newBasicUserData,
     active: true,

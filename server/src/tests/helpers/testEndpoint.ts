@@ -17,6 +17,13 @@ export const afterTest = (res: any, equalObject: any, equalStatus: any = 0) => {
         expectToEqualCustom(res, equalObject);
     }
 };
+export async function testGETRequest(endpoint: string, equalObject: any, equalStatus: number = 0) {
+    const res = await global.request.get(`/api/${apiVersion}${endpoint}`).set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);
+
+    afterTest(res, equalObject, equalStatus);
+
+    return res;
+}
 
 export async function testPOSTRequest(endpoint: string, data: any, equalObject: any, equalStatus: number = 0, attachFileName: string = "") {
     let buffer: any = "";

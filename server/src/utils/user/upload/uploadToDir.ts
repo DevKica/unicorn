@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import { Request } from "express";
 import sharp from "sharp";
 import { promisify } from "util";
-import { BadRequest, InvalidFileFormat, PhotoRequired } from "../../errors/main";
+import { InvalidFileFormat, PhotoRequired } from "../../errors/main";
 import { userPhotosResolutions, usersPhotosDirname } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
 

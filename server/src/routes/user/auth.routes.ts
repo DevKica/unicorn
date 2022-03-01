@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { sendResetPasswordEmailHandler } from "../../../config/email.config";
-import { returnSuccess } from "../../../controllers/auth/auth.controllers";
-import { resendVerificationEmailHandler, verifyEmailHandler } from "../../../controllers/email.controllers";
-import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../../controllers/password.controllers";
-import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
-import { schemaValidation } from "../../../middleware/schemaValidation";
-import { changePasswordSchema, emailSchema, passwordWithRepetitionSchema } from "../../../validation/user.schema";
+import { returnSuccess } from "../../controllers/auth/auth.controllers";
+import { resendVerificationEmailHandler, verifyEmailHandler } from "../../controllers/email.controllers";
+import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../controllers/password.controllers";
+import { requireUser, requireActiveUser } from "../../middleware/requireUser";
+import { schemaValidation } from "../../middleware/schemaValidation";
+import { changePasswordSchema, emailSchema, passwordWithRepetitionSchema } from "../../validation/user.schema";
 
 // public router
 const publicUserAuthRoutes = Router();
