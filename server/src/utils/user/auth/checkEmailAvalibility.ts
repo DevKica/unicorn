@@ -1,4 +1,4 @@
-import { findUniqueUser } from "../../../services/user/auth.services";
+import { findUniqueUser } from "../../../services/user/user.services";
 import { EmailAlreadyExists } from "../../errors/main";
 
 async function checkEmailAvailability(email: string): Promise<void> {

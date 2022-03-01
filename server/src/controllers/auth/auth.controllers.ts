@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import { CreateUserRequest, LoginUserRequest } from "../../@types/routes/requests.types.";
 import { signNewSession } from "../../services/session/session.services";
-import { createUser, validateUserPassword } from "../../services/user/auth.services";
 import { createEmailVerification } from "../../services/user/emailVerification.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
 import { applyToResponse, applyToResponseCustom } from "../../utils/errors/applyToResponse";
@@ -10,6 +9,8 @@ import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility"
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { SuccessResponse } from "../../utils/responses/main";
 import { omit } from "lodash";
+import { validateUserPassword } from "../../services/user/auth.services";
+import { createUser } from "../../services/user/user.services";
 
 export async function returnSuccess(_req: Request, res: Response): Promise<void> {
     applyToResponse(res, 200, SuccessResponse);

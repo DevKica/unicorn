@@ -10,7 +10,7 @@
         "studio": "prisma studio",
         "migrate": "prisma migrate dev",
         "format": "prisma format",
-        "test": "jest --detectOpenHandles",
+        "test": "jest --detectOpenHandles --runInBand && NODE_ENV=test ts-node src/prisma/cleanUpAfterTests.ts",
         "inboxtest": "ts-node src/tests/helpers/testInbox.ts",
         "cleanup": "NODE_ENV=test ts-node src/prisma/cleanUpAfterTests.ts",
         "cleanupdev": "NODE_ENV=development ts-node src/prisma/removeTables.ts"

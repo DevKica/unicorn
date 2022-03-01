@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { sendResetPasswordEmailHandler } from "../../../config/email.config";
 import { returnSuccess } from "../../../controllers/auth/auth.controllers";
-import { verifyEmailHandler } from "../../../controllers/email.controllers";
+import { resendVerificationEmailHandler, verifyEmailHandler } from "../../../controllers/email.controllers";
 import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../../controllers/password.controllers";
 import { requireUser, requireActiveUser } from "../../../middleware/requireUser";
 import { schemaValidation } from "../../../middleware/schemaValidation";
@@ -27,15 +27,16 @@ publicUserAuthRoutes.patch("/verify-email/:token", verifyEmailHandler);
 // Send to the user's e-mail a link to reset the password
 publicUserAuthRoutes.post("/reset-password", schemaValidation(emailSchema), sendPasswordResetEmailHandler);
 
-// Create new password from reset password link
+// Verify if the link is valid
 publicUserAuthRoutes.post("/verify-link/:token", verifySetNewPasswordLinkHandler);
 
+// Create new password from reset password link
 publicUserAuthRoutes.patch("/set-new-password/:token", schemaValidation(passwordWithRepetitionSchema), setNewPasswordHandler);
 
 // REQUIRE USER ROUTES
 
 // Resend the verification email
-userAuthRoutes.post("/resend-verification-email");
+userAuthRoutes.post("/resend-verification-email", resendVerificationEmailHandler);
 
 // Change user password
 userAuthRoutes.patch("/password", schemaValidation(changePasswordSchema), changePasswordHandler);

@@ -1,19 +1,19 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { LoginUserRequest, MainResponse } from "../@types/routes/requests.types.";
 import { sendVerificationEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";
 import { userProfileProperties } from "../prisma/validator";
 import { deleteAllSessions } from "../services/session/session.services";
-import { updateUniqueUser, validateUserPassword } from "../services/user/auth.services";
+import { validateUserPassword } from "../services/user/auth.services";
 import { createEmailVerification, deleteEmailVerification, findEmailVerification } from "../services/user/emailVerification.services";
 import { deletePasswordReset } from "../services/user/passwordReset.services";
-import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { InactiveLink } from "../utils/errors/main";
+import { updateUniqueUser } from "../services/user/user.services";
+import { applyToResponse, applyToResponseCustom, applySuccessToResponse } from "../utils/errors/applyToResponse";
+import { InactiveLink, NotFound } from "../utils/errors/main";
 import { SuccessResponse } from "../utils/responses/main";
 import checkEmailAvailability from "../utils/user/auth/checkEmailAvalibility";
-import { removeAuthCookies } from "../utils/user/auth/cookiesHelper";
 
-export async function verifyEmailHandler(req: Request, res: Response) {
+export async function verifyEmailHandler(req: Request, res: Response): Promise<void> {
     try {
         const { newEmail, objectId } = verifyEmailTokenJWT(req.params.token);
 
@@ -39,7 +39,7 @@ export async function verifyEmailHandler(req: Request, res: Response) {
     }
 }
 
-export async function changeEmailHandler(req: LoginUserRequest, res: MainResponse) {
+export async function changeEmailHandler(req: LoginUserRequest, res: MainResponse): Promise<void> {
     try {
         const { userId, active } = res.locals.user;
 
@@ -65,6 +65,29 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
             newEmail: email,
         });
         applyToResponse(res, 200, SuccessResponse);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function resendVerificationEmailHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { userId, active } = res.locals.user;
+
+        const emailVerification = await findEmailVerification({ userId });
+
+        if (!emailVerification) throw new NotFound();
+
+        if (!active) {
+            sendVerificationEmailHandler(emailVerification.email, { objectId: emailVerification.id });
+        } else {
+            sendVerificationEmailHandler(emailVerification.email, {
+                objectId: emailVerification.id,
+                newEmail: emailVerification.email,
+            });
+        }
+
+        applySuccessToResponse(res);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

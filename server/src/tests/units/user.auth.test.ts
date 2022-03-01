@@ -11,6 +11,7 @@ import {
     InvalidSetNewPasswordBodyInstance,
     NotFoundInstance,
     PhotoRequiredInstance,
+    UnauthorizedInstance,
 } from "../data/config";
 import {
     basicUserData,
@@ -21,6 +22,7 @@ import {
     newBasicActiveUserData,
     newBasicUserData,
     newEmailAndPasswordLoginCredentials,
+    newEmailLoginCredentials,
     newPasswordLoginCredentials,
     passwordResetBody,
     setNewPasswordBody,
@@ -28,9 +30,9 @@ import {
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeTestTokens, setUserId } from "../helpers/globalHelpers";
-import { SuccessResponse } from "../../utils/responses/main";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidFileFormat, validFileFormat } from "../data/files";
+import { SuccessResponse } from "../../utils/responses/main";
 
 describe("AUTHENTICATION", () => {
     describe("CREATING AN ACCOUNT", () => {
@@ -121,6 +123,9 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to change his email with valid body`, async () => {
                 await testPATCHRequest("/users/email", valid, newBasicUserData, 200);
             });
+            test(`User should be to resend email verification with previous request`, async () => {
+                await testPOSTRequest("/users/auth/resend-verification-email", {}, SuccessResponse);
+            });
             test(`User should be able to verify his email with valid link`, async () => {
                 await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailVericationToken()}`, {}, SuccessResponse, 200);
             });
@@ -130,6 +135,9 @@ describe("AUTHENTICATION", () => {
             test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
                 await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, newBasicActiveUserData, 200);
                 await testUserAuthActiveEndpoint(true);
+            });
+            test(`User should NOT be to resend email verification without previous request`, async () => {
+                await testPOSTRequest("/users/auth/resend-verification-email", {}, NotFoundInstance);
             });
         });
         describe("Reset password", () => {
@@ -156,6 +164,12 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should be able to set new password with valid link`, async () => {
                 await testPATCHRequest(`/users/auth/set-new-password/${await preparePasswordResetToken()}`, valid, SuccessResponse);
+            });
+            test(`User should NOT be able to login with old password`, async () => {
+                await testPOSTRequest("/users/login", newEmailAndPasswordLoginCredentials, InvalidCredentialsInstance);
+            });
+            test(`User should be able to login with new password`, async () => {
+                await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);
             });
         });
     });
