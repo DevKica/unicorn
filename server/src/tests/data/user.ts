@@ -8,13 +8,13 @@ export const basicUserData = {
     description: "",
     email: "devkica777@gmail.com",
     gender: "Male",
-    latitude: "50.123",
-    longitude: "170.123",
+    longitude: "100.01",
+    latitude: "50.05",
     name: "Pawel",
-    sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
+    sexualOrientation: ["Heterosexual", "Lesbian"],
     showMeAgeLowerLimit: 18,
     showMeAgeUpperLimit: 23,
-    showMeGender: "Male",
+    showMeGender: "Female",
     surname: "Kica",
 };
 
@@ -61,8 +61,8 @@ export const invalidSchemaCreateUserBody = {
     passwordRepetition: "Password1!",
     birthday: "2003-02-13",
     longitude: "170.123",
-    latitude: "50.213",
-    showMeGender: "Male",
+    latitude: "50.50.12",
+    showMeGender: "Female",
     gender: "10",
     sexualOrientation: ["empty", "emptyv2"],
 };
@@ -74,11 +74,11 @@ export const validCreateUserBody = {
     password: "Password1!",
     passwordRepetition: "Password1!",
     birthday: "2003-02-13",
-    longitude: "170.123",
-    latitude: "50.123",
-    showMeGender: "Male",
+    longitude: "100.01",
+    latitude: "50.05",
+    showMeGender: "Female",
     gender: "Male",
-    sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
+    sexualOrientation: ["Heterosexual", "Lesbian"],
 };
 
 export const createUserBody = {

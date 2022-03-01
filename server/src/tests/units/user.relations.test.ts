@@ -1,19 +1,19 @@
-import seedProfile from "../../prisma/seed/profile.seed";
+import seedUsersRelations from "../../prisma/seed/users.relations.seed";
 import { removeGlobals } from "../helpers/globalHelpers";
 import { testGETRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user";
 import { apiVersion, NotFoundInstance } from "../data/config";
 
-describe("PROFILE", () => {
+describe("RELATIONS", () => {
     beforeAll(async () => {
-        await seedProfile();
+        await seedUsersRelations();
         await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
     });
     afterAll(async () => {
         removeGlobals();
     });
     test(`User should be able get private profile info`, async () => {
-        // await testGETRequest("/users/profile/private", activeBasicUserData, 200);
+        await testGETRequest("/users/profile/private", activeBasicUserData, 200);
     });
     test(`The server should return not found in case the image does not exist`, async () => {
         await testGETRequest("/users/profile/photo/123/123", NotFoundInstance);
