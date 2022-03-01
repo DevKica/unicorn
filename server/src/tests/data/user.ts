@@ -18,11 +18,13 @@ export const basicUserData = {
     surname: "Kica",
 };
 
+export const invalidEmailSchema = "@devKica@.com";
+
 const email = "devKica777@gmail.com";
 
-const password = "Password1!";
+const nonExistentEmail = "example@gmail.com";
 
-export const invalidEmailSchema = "@devKica@.com";
+const password = "Password1!";
 
 const invalidPasswordSchema = "invalidPassword1";
 
@@ -78,8 +80,6 @@ export const validCreateUserBody = {
     gender: "Male",
     sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
-
-const nonExistentEmail = "example@gmail.com";
 
 export const createUserBody = {
     valid: validCreateUserBody,

@@ -2,7 +2,7 @@ import users from "./data/users";
 import seedModel from "./seed.model";
 
 async function seedProfile() {
-    seedModel("user", users);
+    await seedModel("user", users);
 }
 
 export default seedProfile;
