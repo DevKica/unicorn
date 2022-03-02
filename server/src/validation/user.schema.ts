@@ -10,8 +10,8 @@ import { regexLongitude, regexLatitude, regexBasicAlphabet, regexPassword } from
 const JoiExtend = Joi.extend(JoiDate);
 
 const joiLocation = {
-    longitude: Joi.string().trim().required().pattern(regexLongitude),
-    latitude: Joi.string().trim().required().pattern(regexLatitude),
+    longitude: Joi.string().trim().pattern(regexLongitude),
+    latitude: Joi.string().trim().pattern(regexLatitude),
 };
 
 // Birthday is immutable after user is created
@@ -29,14 +29,22 @@ const joiGeneralInfo = {
         .items(Joi.string().custom(joiValidateEnums(Object.keys(SexualOrientation)))),
 };
 
-const joiAdditionalInfo = Joi.object({
+const joiAdditionalInfo = {
     city: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
-});
+    description: Joi.string().trim().max(500),
+};
 
 const joiBasicMatchingInfo = {
     showMeGender: Joi.string()
         .trim()
         .custom(joiValidateEnums(Object.keys(ShowMeGender))),
+};
+
+const joiMainMatchingInfo = {
+    ...joiBasicMatchingInfo,
+    ...joiLocation,
+    showMeAgeLowerLimit: Joi.number().min(18).max(80),
+    showMeAgeUpperLimit: Joi.number().min(20).max(100),
 };
 
 const joiSinglePassword = {
@@ -71,20 +79,21 @@ export const logInSchema = Joi.object({
     ...joiSinglePassword,
 });
 
-const requiredJoiGeneralInfo = Joi.object(joiGeneralInfo).options({ presence: "required" });
+const requiredJoiGeneralInfo = Joi.object({ ...joiGeneralInfo, ...joiLocation }).options({ presence: "required" });
 
 export const createUserSchema = Joi.object({
     ...joiEmail,
     ...joiPasswordWithRepetition,
     ...joiBirthday,
-    ...joiLocation,
     ...joiBasicMatchingInfo,
 }).concat(requiredJoiGeneralInfo);
 
 export const generalInfoSchema = Joi.object({
     ...joiGeneralInfo,
+    ...joiAdditionalInfo,
 });
 
+export const mainMatchingfInfoSchema = Joi.object(joiMainMatchingInfo);
 export const changePasswordSchema = Joi.object({
     oldPassword: Joi.string().required().trim(),
     ...joiPasswordWithRepetition,

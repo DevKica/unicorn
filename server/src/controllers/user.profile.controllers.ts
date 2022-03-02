@@ -3,7 +3,7 @@ import { existsSync } from "fs";
 import path from "path";
 import { usersPhotosDirname } from "../config/upload.config";
 import { userProfileProperties } from "../prisma/validator";
-import { findUniqueUser } from "../services/user/user.services";
+import { findUniqueUser, updateUniqueUser } from "../services/user/user.services";
 import { applyToResponseCustom, applyToResponse } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
 
@@ -28,6 +28,18 @@ export async function getUserPrivateInfoHandler(req: Request, res: Response): Pr
         const user = await findUniqueUser({ id: userId }, userProfileProperties);
 
         if (!user) throw Error;
+
+        applyToResponse(res, 200, user);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function updateUniqueUserHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { userId } = res.locals.user;
+
+        const user = await updateUniqueUser({ id: userId }, req.body, userProfileProperties);
 
         applyToResponse(res, 200, user);
     } catch (e) {

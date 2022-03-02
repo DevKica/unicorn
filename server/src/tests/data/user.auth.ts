@@ -3,7 +3,7 @@ import { TEST_USER_EMAIL } from "../../config/env.config";
 export const basicUserData = {
     accountType: "Default",
     active: false,
-    birthday: "2003-02-13T00:00:00.000Z",
+    birthday: "2002-01-01T00:00:00.000Z",
     city: "",
     description: "",
     email: "devkica777@gmail.com",
@@ -13,7 +13,7 @@ export const basicUserData = {
     name: "Pawel",
     sexualOrientation: ["Heterosexual", "Lesbian"],
     showMeAgeLowerLimit: 18,
-    showMeAgeUpperLimit: 23,
+    showMeAgeUpperLimit: 24,
     showMeGender: "Female",
     surname: "Kica",
 };
@@ -73,7 +73,7 @@ export const validCreateUserBody = {
     email: "devkica777@gmail.com",
     password: "Password1!",
     passwordRepetition: "Password1!",
-    birthday: "2003-02-13",
+    birthday: "2002-01-01",
     longitude: "100.01",
     latitude: "50.05",
     showMeGender: "Female",

@@ -25,7 +25,7 @@ import {
     newPasswordLoginCredentials,
     passwordResetBody,
     setNewPasswordBody,
-} from "../data/user";
+} from "../data/user.auth";
 import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
