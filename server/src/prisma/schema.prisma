@@ -62,7 +62,7 @@ enum SexualOrientation {
   Demisexual
   Asexual
   Queer
-  Undefined
+  Questioning
 }
 
 enum AccountType {

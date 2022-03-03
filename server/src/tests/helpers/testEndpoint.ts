@@ -56,3 +56,14 @@ export async function testPATCHRequest(endpoint: string, data: any, equalObject:
 
     return res;
 }
+
+export async function testDELETERequest(endpoint: string, data: any, equalObject: any, equalStatus: number = 0) {
+    const res = await global.request
+        .delete(`/api/${apiVersion}${endpoint}`)
+        .set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`])
+        .field(data);
+
+    afterTest(res, equalObject, equalStatus);
+
+    return res;
+}

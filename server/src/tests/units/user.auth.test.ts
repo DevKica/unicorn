@@ -1,4 +1,4 @@
-import { testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
+import { testDELETERequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import {
     EmailAlreadyExistsInstance,
     ForbiddenInstance,
@@ -176,6 +176,21 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should be able to login with new password`, async () => {
                 await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);
+            });
+        });
+        describe("Log out", () => {
+            test(`User should be able to log out`, async () => {
+                await testDELETERequest("/sessions", {}, SuccessResponse);
+            });
+            test(`User should NOT be able to access USER protected routes after logging out`, async () => {
+                await testUserAuthEndpoint(false);
+            });
+            test(`User should be able to delete all sessions`, async () => {
+                await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);
+                await testDELETERequest("/sessions/all", {}, SuccessResponse);
+            });
+            test(`User should NOT be able to access USER protected routes deleting all sessions`, async () => {
+                await testUserAuthEndpoint(false);
             });
         });
     });

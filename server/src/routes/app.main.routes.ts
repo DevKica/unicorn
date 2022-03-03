@@ -1,6 +1,7 @@
-import userMainRoutes from "./user/main.routes";
+import usersMainRoutes from "./users/main.routes";
 import { Request, Response, Router } from "express";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
+import sessionsMainRoutes from "./sessions/main.routes";
 
 const appMainRoutes = Router();
 
@@ -12,6 +13,8 @@ appMainRoutes.post("/", async (req: Request, res: Response) => {
     }
 });
 
-appMainRoutes.use("/users", userMainRoutes);
+appMainRoutes.use("/users", usersMainRoutes);
+
+appMainRoutes.use("/sessions", sessionsMainRoutes);
 
 export default appMainRoutes;

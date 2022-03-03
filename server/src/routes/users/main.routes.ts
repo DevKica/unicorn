@@ -9,24 +9,24 @@ import mainUserAuthRoutes from "./auth.routes";
 import userProfileRoutes from "./profile.routes";
 import { getProfilePhotoHandler } from "../../controllers/user.profile.controllers";
 
-const userMainRoutes = Router();
+const usersMainRoutes = Router();
 
 // Create user
-userMainRoutes.post("/", schemaValidation(createUserSchema), createUserHandler);
+usersMainRoutes.post("/", schemaValidation(createUserSchema), createUserHandler);
 
 // Login user
-userMainRoutes.post("/login", schemaValidation(logInSchema), loginUserHandler);
+usersMainRoutes.post("/login", schemaValidation(logInSchema), loginUserHandler);
 
 // change user email
-userMainRoutes.patch("/email", [schemaValidation(logInSchema), requireUser], changeEmailHandler);
+usersMainRoutes.patch("/email", [schemaValidation(logInSchema), requireUser], changeEmailHandler);
 
 // main auth routes
-userMainRoutes.use("/auth", mainUserAuthRoutes);
+usersMainRoutes.use("/auth", mainUserAuthRoutes);
 
 // profile routes
 
-userMainRoutes.get("/profile/photo/:size/:photoName", getProfilePhotoHandler);
+usersMainRoutes.get("/profile/photo/:size/:photoName", getProfilePhotoHandler);
 
-userMainRoutes.use("/profile", requireActiveUser, userProfileRoutes);
+usersMainRoutes.use("/profile", requireActiveUser, userProfileRoutes);
 
-export default userMainRoutes;
+export default usersMainRoutes;

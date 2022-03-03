@@ -26,7 +26,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
         const session = await findSingleSession({ id: decodedRefresh.sessionId });
         if (!session || !session.valid) return next();
 
-        createAccessCookie(res, { userId: decodedRefresh.userId, sessionId: decodedRefresh.sessionI, active: decodedRefresh.active });
+        createAccessCookie(res, { userId: decodedRefresh.userId, sessionId: decodedRefresh.sessionI, active: decodedRefresh.active, accountType: decodedRefresh.accountType });
 
         res.locals.user = decodedRefresh;
 

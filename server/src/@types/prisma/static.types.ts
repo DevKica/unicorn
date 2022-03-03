@@ -11,7 +11,7 @@ export type UserSelectType = Prisma.UserSelect;
 // Session
 export type SessionType = Session;
 export type SessionCreateInput = Prisma.SessionCreateInput;
-export type SessionFindUniqueInput = Prisma.SessionWhereUniqueInput;
+export type SessionWhereUniqueInput = Prisma.SessionWhereUniqueInput;
 export type SessionWhereInput = Prisma.SessionWhereInput;
 
 // EmailVerification
