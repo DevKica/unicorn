@@ -1,6 +1,6 @@
-import Joi from "Joi";
+import Joi, { custom } from "Joi";
 import { regexBasicAlphabet } from "./helpers/regexes";
-import { joiGeneralInfo, joiLocation, joiShowMeGender } from "./user.auth.schema";
+import { joiGeneralInfo, joiShowMeGender } from "./user.auth.schema";
 
 export const joiAdditionalInfo = {
     city: Joi.string().trim().min(1).max(128).pattern(regexBasicAlphabet),
@@ -18,4 +18,10 @@ export const generalInfoSchema = Joi.object({
     ...joiAdditionalInfo,
 });
 
-export const matchingfInfoSchema = Joi.object(joiMatchingInfo);
+export const matchingInfoSchema = Joi.object(joiMatchingInfo).custom((obj, helpers) => {
+    const { showMeAgeUpperLimit, showMeAgeLowerLimit } = obj;
+    if (showMeAgeUpperLimit - showMeAgeLowerLimit < 2) {
+        return helpers.error("any.invalid");
+    }
+    return obj;
+});
