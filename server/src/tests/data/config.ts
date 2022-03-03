@@ -15,8 +15,9 @@ import {
     Unauthorized,
 } from "../../utils/errors/main";
 import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema } from "./user.auth";
-import { changePasswordSchema, createUserSchema, emailSchema, generalInfoSchema, logInSchema, mainMatchingfInfoSchema, passwordWithRepetitionSchema } from "../../validation/user.schema";
+import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema } from "../../validation/user.auth.schema";
 import { updateUserProfileBody } from "./user.relations";
+import { generalInfoSchema, matchingfInfoSchema } from "../../validation/user.profile.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -35,6 +36,6 @@ export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(valida
 export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordBody.invalid.schema).error);
 export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, { email: invalidEmailSchema }).error);
 export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(validate(generalInfoSchema, updateUserProfileBody.invalid.general).error);
-export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(mainMatchingfInfoSchema, updateUserProfileBody.invalid.matching).error);
+export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingfInfoSchema, updateUserProfileBody.invalid.matching).error);
 
 export const apiVersion = "v1";

@@ -3,7 +3,7 @@ import { removeGlobals } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
-import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance } from "../data/config";
+import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance } from "../data/config";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -26,17 +26,17 @@ describe("RELATIONS", () => {
             const res = await global.request.get(`/api/${apiVersion}/users/profile/photo/large/pawelKica1`);
             expect(res.headers["content-type"]).toEqual("image/jpeg");
         });
-        test(`User should NOT be able to update his general profile settings with invalid body`, async () => {
+        test(`User should NOT be able to update his general settings with invalid body`, async () => {
             await testPATCHRequest("/users/profile/general", invalid.general, InvalidUpdateUserGeneralInfoInstance);
         });
-        // test(`User should NOT be able to update his matching profile settings with invalid body`, async () => {
-        // await testPATCHRequest("/users/profile/general", invalid.matching, InvalidUpdateUserGeneralInfoInstance);
-        // });
+        test(`User should NOT be able to update his matching settings with invalid body`, async () => {
+            await testPATCHRequest("/users/profile/matching", invalid.matching, InvalidUpdateUserMatchingInfoInstance);
+        });
         test(`User should be able to update his general profile settings with valid body`, async () => {
             await testPATCHRequest("/users/profile/general", valid.general, newGeneralUpdateUserData, 200);
         });
-        // test(`User should be able to update his matching profile settings with valid body`, async () => {
-        //     await testPATCHRequest("/users/profile/general", valid.matching, afterFullUpdateUserData, 200);
-        // });
+        test(`User should be able to update his matching profile settings with valid body`, async () => {
+            await testPATCHRequest("/users/profile/matching", valid.matching, afterFullUpdateUserData, 200);
+        });
     });
 });

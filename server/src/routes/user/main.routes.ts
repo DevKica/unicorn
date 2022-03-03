@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { schemaValidation } from "../../middleware/schemaValidation";
-import { createUserSchema, logInSchema } from "../../validation/user.schema";
+import { createUserSchema, logInSchema } from "../../validation/user.auth.schema";
 import { createUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
 import { requireActiveUser, requireUser } from "../../middleware/requireUser";
 import { changeEmailHandler } from "../../controllers/email.controllers";

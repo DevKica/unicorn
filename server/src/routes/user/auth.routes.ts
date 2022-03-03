@@ -4,7 +4,7 @@ import { resendVerificationEmailHandler, verifyEmailHandler } from "../../contro
 import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../controllers/password.controllers";
 import { requireUser, requireActiveUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
-import { changePasswordSchema, emailSchema, passwordWithRepetitionSchema } from "../../validation/user.schema";
+import { changePasswordSchema, emailSchema, passwordWithRepetitionSchema } from "../../validation/user.auth.schema";
 
 // public router
 const publicUserAuthRoutes = Router();
