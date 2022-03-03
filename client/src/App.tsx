@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { useState } from "react";
-import { createUser, uploadFile } from "./api/userInstance";
+import { createUser, uploadFile, testRoute } from "./api/userInstance";
 
 const App = () => {
   const [file, setFile] = useState<any>(null);
@@ -33,6 +33,9 @@ const App = () => {
       />
       <button onClick={handleSendFile}>Send file</button>
       <div>{JSON.stringify(file)}</div>
+      <div>
+        <button onClick={testRoute}>Test route</button>
+      </div>
     </div>
   );
 };

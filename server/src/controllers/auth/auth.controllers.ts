@@ -31,7 +31,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
             objectId: emailVerification.id,
         });
 
-        await signNewSession({ req, res, id: createdUser.id, active: createdUser.active, accountType: createdUser.accountType });
+        await signNewSession({ req, res, id: createdUser.id, active: createdUser.active, accountType: createdUser.accountType, subExpiration: createdUser.subExpiration });
 
         applyToResponse(res, 201, { ...createdUser, photos: uploadPhotos });
     } catch (e) {
@@ -42,7 +42,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
 export async function loginUserHandler(req: LoginUserRequest, res: Response): Promise<void> {
     try {
         const user = await validateUserPassword(req.body.password, { email: req.body.email });
-        await signNewSession({ req, res, id: user.id, active: user.active, accountType: user.accountType });
+        await signNewSession({ req, res, id: user.id, active: user.active, accountType: user.accountType, subExpiration: user.subExpiration });
         applyToResponse(res, 200, user);
     } catch (e) {
         applyToResponseCustom(res, e);

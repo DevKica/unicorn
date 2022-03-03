@@ -5,6 +5,7 @@ import { requireUser } from "../../middleware/requireUser";
 
 const sessionsMainRoutes = Router();
 
+// protected by require user middleware
 sessionsMainRoutes.use("/", requireUser);
 
 // delete single session (log out)

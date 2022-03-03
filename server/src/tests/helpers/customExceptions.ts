@@ -9,7 +9,7 @@ export function expectToEqualCustom(res: any, error: any) {
 }
 
 export function expectToEqual(res: any, status: number, data: Object) {
-    expect(omit(res.body, "id", "photos", "createdAt")).toEqual(data);
+    expect(omit(res.body, "id", "photos", "createdAt", "subExpiration")).toEqual(data);
     expect(res.status).toEqual(status);
 }
 

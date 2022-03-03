@@ -4,7 +4,8 @@ import { Request, Response } from "express";
 export interface SignNewSessionInput {
     id: UserType["id"];
     active: UserType["active"];
-    accountType: UserType["accountType"];
+    accountType: string;
+    subExpiration: UserType["subExpiration"];
     req: Request;
     res: Response;
 }

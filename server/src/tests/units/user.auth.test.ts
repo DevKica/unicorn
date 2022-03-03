@@ -11,6 +11,7 @@ import {
     InvalidSetNewPasswordBodyInstance,
     NotFoundInstance,
     PhotoRequiredInstance,
+    UnauthorizedInstance,
 } from "../data/config";
 import {
     basicUserData,
@@ -31,8 +32,8 @@ import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/spe
 import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidFileFormat, validFileFormat } from "../data/files";
-import { SuccessResponse } from "../../utils/responses/main";
 import { removeUserTable } from "../../prisma/cleanup/cleanUpDev";
+import { SuccessResponse } from "../../utils/responses/main";
 
 describe("AUTHENTICATION", () => {
     beforeAll(async () => {
@@ -183,7 +184,7 @@ describe("AUTHENTICATION", () => {
                 await testDELETERequest("/sessions", {}, SuccessResponse);
             });
             test(`User should NOT be able to access USER protected routes after logging out`, async () => {
-                await testUserAuthEndpoint(false);
+                await testDELETERequest("/sessions", {}, UnauthorizedInstance);
             });
             test(`User should be able to delete all sessions`, async () => {
                 await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);

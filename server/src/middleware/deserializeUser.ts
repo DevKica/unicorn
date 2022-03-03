@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyUserTokenJWT } from "../config/jwt.config";
 import { findSingleSession } from "../services/session/session.services";
-import { createAccessCookie, removeAuthCookies } from "../utils/user/auth/cookiesHelper";
+import { createAccessCookie, createAuthCookies, removeAuthCookies } from "../utils/user/auth/cookiesHelper";
 
 const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken, refreshToken } = req.cookies;
@@ -11,6 +11,14 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
     if (decodedAccess) {
         const session = await findSingleSession({ id: decodedAccess.sessionId });
         if (!session || !session.valid) return next();
+        if (decodedAccess.accountType !== "Default") {
+            if (new Date(decodedAccess.subExpiration) < new Date()) {
+                const userTokenData = { userId: decodedAccess.userId, sessionId: decodedAccess.sessionId, active: decodedAccess.active, accountType: "Default", subExpiration: new Date() };
+                createAuthCookies(res, userTokenData);
+                res.locals.user = userTokenData;
+                return next();
+            }
+        }
         res.locals.user = decodedAccess;
         return next();
     }
@@ -26,11 +34,19 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
         const session = await findSingleSession({ id: decodedRefresh.sessionId });
         if (!session || !session.valid) return next();
 
-        createAccessCookie(res, { userId: decodedRefresh.userId, sessionId: decodedRefresh.sessionI, active: decodedRefresh.active, accountType: decodedRefresh.accountType });
+        if (decodedRefresh.accountType !== "Default") {
+            if (decodedRefresh.subExpiration < new Date()) {
+                const userTokenData = { userId: decodedRefresh.userId, sessionId: decodedRefresh.sessionId, active: decodedRefresh.active, accountType: "Default", subExpiration: new Date() };
+                createAuthCookies(res, userTokenData);
+                res.locals.user = userTokenData;
+                return next();
+            }
+        }
+        const { userId, sessionId, active, accountType, subExpiration } = decodedRefresh;
+
+        createAccessCookie(res, { userId, sessionId, active, accountType, subExpiration });
 
         res.locals.user = decodedRefresh;
-
-        next();
     }
     next();
 };

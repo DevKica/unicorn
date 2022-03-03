@@ -8,7 +8,6 @@ export function applyToResponseCustom(res: Response, e: any): void {
     try {
         res.status(e.code).json({ msg: e.msg });
     } catch (e: unknown) {
-        logError(e);
         const serverError = new ServerError();
         res.status(serverError.code).json({ msg: serverError.msg });
     }

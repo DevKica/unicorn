@@ -16,6 +16,8 @@ model User {
   email               String              @unique
   active              Boolean             @default(false)
   accountType         AccountType         @default(Default)
+  // temporary subscriptions - more prestige account type
+  subExpiration       DateTime            @default(now())
   // profile
   birthday            DateTime
   description         String              @default("") @db.VarChar(500)
@@ -45,7 +47,6 @@ model User {
   userMember        UserMember[]
   EmailVerification EmailVerification[]
   PasswordReset     PasswordReset[]
-  PremiumUser       PremiumUser[]
 }
 
 enum ShowMeGender {
@@ -165,14 +166,4 @@ model PasswordReset {
   createdAt DateTime @default(now())
   // relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model PremiumUser {
-  id             String      @id @default(cuid())
-  userId         String      @unique
-  accountType    AccountType
-  expirationDate DateTime
-  createdAt      DateTime    @default(now())
-  // relations
-  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

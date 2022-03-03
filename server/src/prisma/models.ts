@@ -4,7 +4,6 @@ import {
     LikeModelType,
     MessageModelType,
     PasswordResetModelType,
-    PremiumUserModelType,
     SessionModelType,
     UserModelType,
     UsersRelationModelType,
@@ -19,4 +18,3 @@ export const ConversationModel: ConversationModelType = prisma.conversation;
 export const MessageModel: MessageModelType = prisma.message;
 export const EmailVerificationModel: EmailVerificationModelType = prisma.emailVerification;
 export const PasswordResetModel: PasswordResetModelType = prisma.passwordReset;
-export const PremiumUserModel: PremiumUserModelType = prisma.premiumUser;

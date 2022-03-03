@@ -12,7 +12,7 @@ export async function signNewSession(input: SignNewSessionInput): Promise<void> 
 
     const { id: sessionId } = await createSession({ city: userData?.city || "", country: userData?.country || "", userAgent: input.req.get("user-agent") || "", user: { connect: { id: input.id } } });
 
-    createAuthCookies(input.res, { userId: input.id, active: input.active, sessionId, accountType: input.accountType });
+    createAuthCookies(input.res, { userId: input.id, active: input.active, sessionId, accountType: input.accountType, subExpiration: input.subExpiration });
 }
 
 export async function createSession(input: SessionCreateInput): Promise<SessionType> {

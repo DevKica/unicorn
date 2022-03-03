@@ -5,7 +5,7 @@ import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.pro
 
 const userProfileRoutes = Router();
 
-userProfileRoutes.get("/private", getUserPrivateInfoHandler);
+userProfileRoutes.get("/", getUserPrivateInfoHandler);
 
 userProfileRoutes.patch("/general", schemaValidation(generalInfoSchema), updateUniqueUserHandler);
 
