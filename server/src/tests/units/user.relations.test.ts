@@ -4,6 +4,7 @@ import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/te
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
 import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance } from "../data/config";
+import console from "console";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
