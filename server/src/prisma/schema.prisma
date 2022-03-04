@@ -42,11 +42,10 @@ model User {
   firstUser  UsersRelation[] @relation("firstUser")
   secondUser UsersRelation[] @relation("secondUser")
   message    Message[]
-  // what
 
-  userMember        UserMember[]
   EmailVerification EmailVerification[]
   PasswordReset     PasswordReset[]
+  Conversations     Conversation[]
 }
 
 enum ShowMeGender {
@@ -119,23 +118,12 @@ enum UsersRelationStatus {
 }
 
 model Conversation {
-  id        String       @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  members   UserMember[]
-  createdAt DateTime     @default(now())
+  members   User[]
+  createdAt DateTime  @default(now())
   // relations
   message   Message[]
-}
-
-model UserMember {
-  id             String       @default(cuid())
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  conversationId String
-  // relations
-
-  @@id([userId, conversationId])
 }
 
 model Message {

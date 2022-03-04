@@ -14,8 +14,8 @@ import {
     ServerError,
     Unauthorized,
 } from "../../utils/errors/main";
-import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema } from "./user.auth";
-import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema } from "../../validation/user.auth.schema";
+import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
+import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
 import { updateUserProfileBody } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
 
@@ -37,5 +37,6 @@ export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(valida
 export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, { email: invalidEmailSchema }).error);
 export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(validate(generalInfoSchema, updateUserProfileBody.invalid.general).error);
 export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingInfoSchema, updateUserProfileBody.invalid.matching).error);
+export const InvalidPasswordInstance = new InvalidRequestedBody(validate(singlePasswordSchema, { password: invalidPasswordSchema }).error);
 
 export const apiVersion = "v1";

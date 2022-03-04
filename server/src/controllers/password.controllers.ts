@@ -3,7 +3,7 @@ import { sendResetPasswordEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";
 import { deleteAllSessions } from "../services/session/session.services";
 import { validateUserPassword } from "../services/user/auth.services";
-import { createPasswordReset, deletePasswordReset, findPasswordReset } from "../services/user/passwordReset.services";
+import { createPasswordReset, deletePasswordReset, findPasswordReset } from "../services/passwordReset.services";
 import { updateUniqueUser, findUniqueUser } from "../services/user/user.services";
 import { applySuccessToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { InactiveLink, NotFound } from "../utils/errors/main";

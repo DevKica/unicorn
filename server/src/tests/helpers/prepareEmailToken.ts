@@ -1,6 +1,6 @@
 import { signEmailTokenJWT } from "../../config/jwt.config";
-import { findEmailVerification } from "../../services/user/emailVerification.services";
-import { findPasswordReset } from "../../services/user/passwordReset.services";
+import { findEmailVerification } from "../../services/emailVerification.services";
+import { findPasswordReset } from "../../services/passwordReset.services";
 
 export const prepareEmailVericationToken = async (): Promise<string> => {
     const emailVerification = await findEmailVerification({ userId: global.testUserId });

@@ -26,7 +26,7 @@ const nonExistentEmail = "example@gmail.com";
 
 const password = "Password1!";
 
-const invalidPasswordSchema = "invalidPassword1";
+export const invalidPasswordSchema = "invalidPassword1";
 
 const invalidPassword = "invalidPassword1!";
 
@@ -176,6 +176,18 @@ export const setNewPasswordBody = {
     invalid: {
         schema: {
             password: invalidPasswordSchema,
+        },
+    },
+};
+
+export const deleteAccountBody = {
+    valid: { password },
+    invalid: {
+        schema: {
+            password: invalidPasswordSchema,
+        },
+        credentials: {
+            password: invalidPassword,
         },
     },
 };

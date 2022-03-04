@@ -1,14 +1,14 @@
 import { Response, Request } from "express";
 import { CreateUserRequest, LoginUserRequest } from "../../@types/routes/requests.types.";
 import { deleteAllSessions, deleteSingleSession, signNewSession } from "../../services/session/session.services";
-import { createEmailVerification } from "../../services/user/emailVerification.services";
+import { createEmailVerification } from "../../services/emailVerification.services";
 import { sendVerificationEmailHandler } from "../../config/email.config";
 import { prepareCreateUserInput } from "../../utils/user/auth/prepareUserCreateInput";
 import checkEmailAvailability from "../../utils/user/auth/checkEmailAvalibility";
 import { uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { SuccessResponse } from "../../utils/responses/main";
 import { validateUserPassword } from "../../services/user/auth.services";
-import { createUser } from "../../services/user/user.services";
+import { createUser, deleteUniqueUser } from "../../services/user/user.services";
 import { applyToResponse, applyToResponseCustom, applySuccessToResponse } from "../../utils/errors/applyToResponse";
 
 export async function returnSuccess(_req: Request, res: Response): Promise<void> {
@@ -44,6 +44,19 @@ export async function loginUserHandler(req: LoginUserRequest, res: Response): Pr
         const user = await validateUserPassword(req.body.password, { email: req.body.email });
         await signNewSession({ req, res, id: user.id, active: user.active, accountType: user.accountType, subExpiration: user.subExpiration });
         applyToResponse(res, 200, user);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function deleteUserHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { userId } = res.locals.user;
+        await validateUserPassword(req.body.password, { id: userId });
+
+        await deleteUniqueUser({ id: userId });
+
+        applySuccessToResponse(res);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

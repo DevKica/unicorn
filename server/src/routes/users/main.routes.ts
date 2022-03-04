@@ -3,11 +3,11 @@ import { Router } from "express";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { requireActiveUser, requireUser } from "../../middleware/requireUser";
 // schemas
-import { createUserSchema, logInSchema } from "../../validation/user.auth.schema";
+import { createUserSchema, logInSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
 // handlers
 import { changeEmailHandler } from "../../controllers/email.controllers";
 import { getProfilePhotoHandler } from "../../controllers/user.profile.controllers";
-import { createUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
+import { createUserHandler, deleteUserHandler, loginUserHandler } from "../../controllers/auth/auth.controllers";
 // routes
 import mainUserAuthRoutes from "./auth.routes";
 import userProfileRoutes from "./profile.routes";
@@ -23,6 +23,9 @@ usersMainRoutes.post("/login", schemaValidation(logInSchema), loginUserHandler);
 
 // change user email
 usersMainRoutes.patch("/email", [schemaValidation(logInSchema), requireUser], changeEmailHandler);
+
+// delete user account
+usersMainRoutes.delete("/", [schemaValidation(singlePasswordSchema), requireUser], deleteUserHandler);
 
 // profile routes
 

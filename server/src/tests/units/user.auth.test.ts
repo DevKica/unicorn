@@ -6,6 +6,7 @@ import {
     InvalidCredentialsInstance,
     InvalidEmailBodyInstance,
     InvalidFileFormatInstance,
+    InvalidPasswordInstance,
     InvalidRequestedCreateUserBodyInstance,
     InvalidRequestedLoginBodyInstance,
     InvalidSetNewPasswordBodyInstance,
@@ -18,6 +19,7 @@ import {
     changeEmailBody,
     changePasswordBody,
     createUserBody,
+    deleteAccountBody,
     loginBody,
     newBasicActiveUserData,
     newBasicUserData,
@@ -102,13 +104,13 @@ describe("AUTHENTICATION", () => {
             test(`User should NOT be able to pass change password schema validation with invalid body`, async () => {
                 await testPATCHRequest("/users/auth/password", invalid.schema, InvalidChangePasswordBodyInstance);
             });
-            test(`User should NOT be able to change his password with invalid old password`, async () => {
+            test(`User should NOT be able to change password with invalid old password`, async () => {
                 await testPATCHRequest("/users/auth/password", invalid.oldPassword, InvalidCredentialsInstance);
             });
-            test(`User should be able to change his password with valid body`, async () => {
+            test(`User should be able to change  password with valid body`, async () => {
                 await testPATCHRequest("/users/auth/password", valid, SuccessResponse);
             });
-            test(`User should NOT be able to access USER protected routes after changing his password`, async () => {
+            test(`User should NOT be able to access USER protected routes after changing password`, async () => {
                 await testUserAuthEndpoint(false);
             });
             test("User should NOT be able to login with old password", async () => {
@@ -121,22 +123,22 @@ describe("AUTHENTICATION", () => {
         describe("Change and verify email", () => {
             const { valid, invalid } = changeEmailBody;
 
-            test(`User should NOT be able to change his email on email that already exists in database`, async () => {
+            test(`User should NOT be able to change email on email that already exists in database`, async () => {
                 await testPATCHRequest("/users/email", invalid.emailAlreadyExists, EmailAlreadyExistsInstance);
             });
-            test(`User should NOT be able to change his email with invalid password`, async () => {
+            test(`User should NOT be able to change email with invalid password`, async () => {
                 await testPATCHRequest("/users/email", invalid.password, InvalidCredentialsInstance);
             });
-            test(`User should be able to change his email with valid body`, async () => {
+            test(`User should be able to change email with valid body`, async () => {
                 await testPATCHRequest("/users/email", valid, newBasicUserData, 200);
             });
             test(`User should be able to resend email verification with previous request`, async () => {
                 await testPOSTRequest("/users/auth/resend-verification-email", {}, SuccessResponse);
             });
-            test(`User should be able to verify his email with valid link`, async () => {
+            test(`User should be able to verify email with valid link`, async () => {
                 await testPATCHRequest(`/users/auth/verify-email/${await prepareEmailVericationToken()}`, {}, SuccessResponse, 200);
             });
-            test(`User should NOT be able to access USER protected routes after verifying his email`, async () => {
+            test(`User should NOT be able to access USER protected routes after verifying email`, async () => {
                 await testUserAuthEndpoint(false);
             });
             test(`User should be able to access ACTIVE USER protected routes after logging in to active account`, async () => {
@@ -192,6 +194,22 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should NOT be able to access USER protected routes deleting all sessions`, async () => {
                 await testUserAuthEndpoint(false);
+            });
+        });
+        describe("Delete account", () => {
+            const { valid, invalid } = deleteAccountBody;
+            test(`User should NOT be able to pass password schema with invalid value of it`, async () => {
+                await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);
+                await testDELETERequest("/users", invalid.schema, InvalidPasswordInstance);
+            });
+            test(`User should NOT be able to delete account with invalid password`, async () => {
+                await testDELETERequest("/users", invalid.credentials, InvalidCredentialsInstance);
+            });
+            test(`User should be able to delete account with valid password`, async () => {
+                await testDELETERequest("/users", valid, SuccessResponse);
+            });
+            test(`User should NOT be to login to deleted account`, async () => {
+                await testPOSTRequest("/users/login", newEmailLoginCredentials, InvalidCredentialsInstance);
             });
         });
     });
