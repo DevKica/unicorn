@@ -1,9 +1,16 @@
 import { Router } from "express";
-import { getUserPrivateInfoHandler, updateUniqueUserHandler } from "../../controllers/user.profile.controllers";
+import { getProfilePhotoHandler, getUserPrivateInfoHandler, updateUniqueUserHandler } from "../../controllers/user.profile.controllers";
+import { requireActiveUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
 
 const userProfileRoutes = Router();
+
+// one exceptional not protected profile route, using to viewing photos
+userProfileRoutes.get("/photo/:size/:photoName", getProfilePhotoHandler);
+
+// middleware
+userProfileRoutes.use("/", requireActiveUser);
 
 userProfileRoutes.get("/", getUserPrivateInfoHandler);
 

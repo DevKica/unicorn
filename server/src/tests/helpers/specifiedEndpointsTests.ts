@@ -4,16 +4,16 @@ import { UnauthorizedInstance, EmailNotVerifiedInstance } from "../data/config";
 
 export async function testUserAuthEndpoint(success: boolean): Promise<void> {
     if (success) {
-        await testPOSTRequest("/users/auth/user", {}, SuccessResponse);
+        await testPOSTRequest("/auth/user", {}, SuccessResponse);
     } else {
-        await testPOSTRequest("/users/auth/user", {}, UnauthorizedInstance);
+        await testPOSTRequest("/auth/user", {}, UnauthorizedInstance);
     }
 }
 
 export async function testUserAuthActiveEndpoint(success: boolean): Promise<void> {
     if (success) {
-        await testPOSTRequest("/users/auth/active", {}, SuccessResponse);
+        await testPOSTRequest("/auth/active", {}, SuccessResponse);
     } else {
-        await testPOSTRequest("/users/auth/active", {}, EmailNotVerifiedInstance);
+        await testPOSTRequest("/auth/active", {}, EmailNotVerifiedInstance);
     }
 }
