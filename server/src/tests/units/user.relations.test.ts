@@ -4,7 +4,8 @@ import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/te
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
 import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance } from "../data/config";
-import console from "console";
+import formatMatchedUsers from "../helpers/formatMatchedUsers";
+import { opositeGenderFemales } from "../../prisma/seed/data/users";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -38,6 +39,11 @@ describe("RELATIONS", () => {
         });
         test(`User should be able to update his matching profile settings with valid body`, async () => {
             await testPATCHRequest("/users/profile/matching", valid.matching, afterFullUpdateUserData, 200);
+        });
+    });
+    describe("MATCHING", () => {
+        test("Testiiing", async () => {
+            await testGETRequest("/users", formatMatchedUsers(opositeGenderFemales), 200);
         });
     });
 });

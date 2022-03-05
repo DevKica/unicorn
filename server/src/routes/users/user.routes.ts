@@ -2,7 +2,8 @@ import { Router } from "express";
 import { createUserHandler, deleteUserHandler, loginUserHandler, returnSuccess } from "../../controllers/auth/auth.controllers";
 import { changeEmailHandler, resendVerificationEmailHandler, verifyEmailHandler } from "../../controllers/email.controllers";
 import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../controllers/password.controllers";
-import { requireUser } from "../../middleware/requireUser";
+import { getUsersToMatchHandler } from "../../controllers/user.profile.controllers";
+import { requireActiveUser, requireUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
 
@@ -11,6 +12,9 @@ const publicUserRoutes = Router();
 
 // require user
 const requireUserRoutes = Router();
+
+// require active user
+const requireActiveUserRoutes = Router();
 
 // main router
 const userRoutes = Router();
@@ -49,10 +53,18 @@ requireUserRoutes.patch("/email", schemaValidation(logInSchema), changeEmailHand
 // delete user account
 requireUserRoutes.delete("/", schemaValidation(singlePasswordSchema), deleteUserHandler);
 
+// REQUIRE ACTIVE ROUTES
+
+// get users to match
+
+requireActiveUserRoutes.get("/", getUsersToMatchHandler);
+
 // MERGE ROUTES
 
 userRoutes.use("/", publicUserRoutes);
 
 userRoutes.use("/", requireUser, requireUserRoutes);
+
+userRoutes.use("/", requireActiveUser, requireActiveUserRoutes);
 
 export default userRoutes;

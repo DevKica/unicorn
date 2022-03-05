@@ -14,7 +14,7 @@ export const basicUserData = {
     sexualOrientation: ["Heterosexual", "Lesbian"],
     showMeAgeLowerLimit: 18,
     showMeAgeUpperLimit: 24,
-    showMeGender: "Female",
+    showMeGender: "All",
     surname: "Kica",
 };
 
@@ -62,7 +62,7 @@ export const invalidSchemaCreateUserBody = {
     birthday: "2003-02-13",
     longitude: "170.123",
     latitude: "50.50.12",
-    showMeGender: "Female",
+    showMeGender: "All",
     gender: "10",
     sexualOrientation: ["empty", "emptyv2"],
 };
@@ -76,7 +76,7 @@ export const validCreateUserBody = {
     birthday: "2002-01-01",
     longitude: "100.01",
     latitude: "50.05",
-    showMeGender: "Female",
+    showMeGender: "All",
     gender: "Male",
     sexualOrientation: ["Heterosexual", "Lesbian"],
 };

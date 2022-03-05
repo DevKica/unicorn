@@ -7,7 +7,7 @@ export const updateUserProfileBody = {
             surname: "Crabgame",
         },
         matching: {
-            showMeGender: "All",
+            showMeGender: "Female",
         },
     },
     invalid: {

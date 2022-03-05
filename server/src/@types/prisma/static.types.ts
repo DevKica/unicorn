@@ -5,6 +5,7 @@ import type { PasswordReset, User, Session, EmailVerification } from "@prisma/cl
 export type UserType = User;
 export type UserCreateInput = Prisma.UserCreateInput;
 export type UserWhereUniqueInput = Prisma.UserWhereUniqueInput;
+export type UserWhereInput = Prisma.UserWhereInput;
 export type UserUpdateInput = Prisma.UserUpdateInput;
 export type UserSelectType = Prisma.UserSelect;
 

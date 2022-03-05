@@ -1,7 +1,8 @@
-import { Prisma } from "@prisma/client";
-import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput } from "../../@types/prisma/static.types";
+import { Prisma, User } from "@prisma/client";
+import { UserFilterToMatch, userMatchProperties } from "../../@types/prisma/matchedUsers.types";
+import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput, UserWhereInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
-import { userProfileProperties } from "../../prisma/validator";
+import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
 
 export async function createUser(data: UserCreateInput) {
     return await UserModel.create({
@@ -20,4 +21,23 @@ export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUp
 
 export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<void> {
     await UserModel.delete({ where });
+}
+
+export async function getUsersToMatch(data: UserFilterToMatch): Promise<userMatchProperties[]> {
+    const whereObject = {
+        active: true,
+        gender: data.showMeGender,
+        NOT: {
+            id: {
+                equals: data.id,
+            },
+        },
+    };
+    if (data.showMeGender === "All") {
+        delete whereObject.gender;
+    }
+    return await UserModel.findMany({
+        where: whereObject,
+        select: userSelectMatchProperties,
+    });
 }
