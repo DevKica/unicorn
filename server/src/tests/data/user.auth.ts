@@ -12,6 +12,7 @@ export const basicUserData = {
     latitude: "50.05",
     name: "Pawel",
     sexualOrientation: ["Heterosexual", "Lesbian"],
+    showMeDistance: 50,
     showMeAgeLowerLimit: 18,
     showMeAgeUpperLimit: 24,
     showMeGender: "All",

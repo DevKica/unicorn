@@ -21,6 +21,7 @@ export interface UserFilterToMatch {
     showMeGender?: UserType["showMeGender"];
     latitude: UserType["latitude"];
     longitude: UserType["longitude"];
+    showMeDistance: UserType["showMeDistance"];
     showMeAgeUpperLimit: UserType["showMeAgeUpperLimit"];
     showMeAgeLowerLimit: UserType["showMeAgeLowerLimit"];
 }

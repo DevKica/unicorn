@@ -1,4 +1,3 @@
-import console from "console";
 import { Request, Response } from "express";
 import { existsSync } from "fs";
 import path from "path";
@@ -61,6 +60,7 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
             showMeAgeLowerLimit: user.showMeAgeLowerLimit,
             showMeAgeUpperLimit: user.showMeAgeUpperLimit,
             showMeGender: user.showMeGender,
+            showMeDistance: user.showMeDistance,
             latitude: user.latitude,
             longitude: user.longitude,
         };

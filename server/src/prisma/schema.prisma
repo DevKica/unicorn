@@ -29,6 +29,7 @@ model User {
   showMeGender        ShowMeGender
   showMeAgeLowerLimit Int
   showMeAgeUpperLimit Int
+  showMeDistance      Int                 @default(50)
   latitude            String
   longitude           String
   // others

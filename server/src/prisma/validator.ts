@@ -18,6 +18,7 @@ export const userProfileProperties = Prisma.validator<Prisma.UserSelect>()({
     gender: true,
     city: true,
     showMeGender: true,
+    showMeDistance: true,
     showMeAgeLowerLimit: true,
     showMeAgeUpperLimit: true,
     latitude: true,
