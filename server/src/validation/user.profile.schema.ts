@@ -9,9 +9,9 @@ export const joiAdditionalInfo = {
 
 const joiMatchingInfo = {
     ...joiShowMeGender,
+    showMeDistance: Joi.number().min(10).max(100),
     showMeAgeLowerLimit: Joi.number().min(18).max(80),
     showMeAgeUpperLimit: Joi.number().min(20).max(100),
-    showMeDistance: Joi.number().min(10).max(100),
 };
 
 export const generalInfoSchema = Joi.object({

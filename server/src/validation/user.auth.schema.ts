@@ -1,4 +1,4 @@
-import Joi from "Joi";
+import Joi, { CustomHelpers } from "Joi";
 import JoiDate from "@joi/date";
 import { SexualOrientation, ShowMeGender } from "@prisma/client";
 import { matchError } from "./helpers/betterSingleJoiMessage";
@@ -15,8 +15,14 @@ const joiBirthday = {
 };
 
 export const joiLocation = {
-    longitude: Joi.string().trim().pattern(regexLongitude),
-    latitude: Joi.string().trim().pattern(regexLatitude),
+    longitude: Joi.custom((value: any, helpers: CustomHelpers) => {
+        if (!regexLongitude.test(value)) return helpers.error("any.invalid");
+        return value;
+    }),
+    latitude: Joi.custom((value: any, helpers: CustomHelpers) => {
+        if (!regexLatitude.test(value)) return helpers.error("any.invalid");
+        return value;
+    }),
 };
 
 export const joiGeneralInfo = {

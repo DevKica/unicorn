@@ -34,5 +34,8 @@ export const userSelectMatchProperties = Prisma.validator<Prisma.UserSelect>()({
     description: true,
     city: true,
     sexualOrientation: true,
+    showMeGender: true,
     gender: true,
+    latitude: true,
+    longitude: true,
 });

@@ -16,7 +16,7 @@ model User {
   email               String              @unique
   active              Boolean             @default(false)
   accountType         AccountType         @default(Default)
-  // temporary subscriptions - more prestige account type
+  // temporary subscriptions to more prestige account type
   subExpiration       DateTime            @default(now())
   // profile
   birthday            DateTime
@@ -30,8 +30,8 @@ model User {
   showMeAgeLowerLimit Int
   showMeAgeUpperLimit Int
   showMeDistance      Int                 @default(50)
-  latitude            String
-  longitude           String
+  latitude            Float
+  longitude           Float
   // others
   createdAt           DateTime            @default(now())
   // relations

@@ -57,6 +57,7 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
 
         const filter = {
             id: user.id,
+            gender: user.gender,
             showMeAgeLowerLimit: user.showMeAgeLowerLimit,
             showMeAgeUpperLimit: user.showMeAgeUpperLimit,
             showMeGender: user.showMeGender,

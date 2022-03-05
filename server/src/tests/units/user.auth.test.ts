@@ -198,6 +198,7 @@ describe("AUTHENTICATION", () => {
         });
         describe("Delete account", () => {
             const { valid, invalid } = deleteAccountBody;
+
             test(`Not authenticated user should NOT be able to delete account`, async () => {
                 await testDELETERequest("/users", valid, UnauthorizedInstance);
             });

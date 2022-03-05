@@ -16,8 +16,14 @@ export interface userMatchProperties extends userMatchPropertiesTemplate {
     birthday: UserType["birthday"];
 }
 
+export interface userMatchSelectProperties extends userMatchPropertiesTemplate, userMatchProperties {
+    showMeGender: UserType["showMeGender"];
+    latitude: UserType["latitude"];
+    longitude: UserType["longitude"];
+}
 export interface UserFilterToMatch {
     id: UserType["id"];
+    gender: UserType["gender"];
     showMeGender?: UserType["showMeGender"];
     latitude: UserType["latitude"];
     longitude: UserType["longitude"];

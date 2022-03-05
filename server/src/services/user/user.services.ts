@@ -1,8 +1,10 @@
-import { Prisma, User } from "@prisma/client";
-import { UserFilterToMatch, userMatchProperties } from "../../@types/prisma/matchedUsers.types";
+import { Prisma } from "@prisma/client";
+import { omit } from "lodash";
+import { UserFilterToMatch, userMatchProperties, userMatchSelectProperties } from "../../@types/prisma/matchedUsers.types";
 import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput, UserWhereInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
+import calcDistance from "../../utils/user/calcDistance";
 
 export async function createUser(data: UserCreateInput) {
     return await UserModel.create({
@@ -23,21 +25,35 @@ export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<voi
     await UserModel.delete({ where });
 }
 
-export async function getUsersToMatch(data: UserFilterToMatch): Promise<userMatchProperties[]> {
-    const whereObject = {
-        active: true,
-        gender: data.showMeGender,
-        NOT: {
-            id: {
-                equals: data.id,
+export async function getUsersToMatch(filters: UserFilterToMatch): Promise<userMatchProperties[]> {
+    const lt = new Date();
+    lt.setFullYear(lt.getFullYear() - filters.showMeAgeLowerLimit);
+    const gt = new Date();
+    gt.setFullYear(gt.getFullYear() - filters.showMeAgeUpperLimit);
+
+    const users = await UserModel.findMany({
+        where: {
+            active: true,
+            gender: filters.showMeGender,
+            birthday: {
+                gt,
+                lt,
+            },
+            NOT: {
+                id: {
+                    equals: filters.id,
+                },
             },
         },
-    };
-    if (data.showMeGender === "All") {
-        delete whereObject.gender;
-    }
-    return await UserModel.findMany({
-        where: whereObject,
         select: userSelectMatchProperties,
     });
+    const filteredUsers: userMatchProperties[] = [];
+
+    users.forEach((e: userMatchSelectProperties) => {
+        const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
+        if (distance < filters.showMeDistance && (e.showMeGender === filters.gender || e.showMeGender === "All")) {
+            filteredUsers.push(omit(e, "latitude", "longitude", "showMeGender"));
+        }
+    });
+    return filteredUsers;
 }

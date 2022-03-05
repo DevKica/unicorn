@@ -3,9 +3,9 @@ import { removeGlobals } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
-import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance } from "../data/config";
+import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance, UnauthorizedInstance } from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
-import { opositeGenderFemales } from "../../prisma/seed/data/users";
+import { allShowMeGenderFemalesUnder24, opositeShowMeGenderFemalesUnder24 } from "../../prisma/seed/data/users";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -42,8 +42,9 @@ describe("RELATIONS", () => {
         });
     });
     describe("MATCHING", () => {
-        test("Testiiing", async () => {
-            await testGETRequest("/users", formatMatchedUsers(opositeGenderFemales), 200);
+        test("User should be able to get properly filtered users to match", async () => {
+            await testGETRequest("/users", formatMatchedUsers([...opositeShowMeGenderFemalesUnder24, ...allShowMeGenderFemalesUnder24]), 200);
+            // await testGETRequest("/users", formatMatchedUsers(opositeShowMeGenderFemalesUnder24), 200);
         });
     });
 });

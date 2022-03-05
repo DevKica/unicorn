@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
+        "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
         "gen": "prisma generate",
         "push": "prisma db push",
         "studio": "prisma studio",
@@ -13,7 +13,8 @@
         "inboxtest": "ts-node src/tests/helpers/testInbox.ts",
         "test": "NODE_ENV=test jest --detectOpenHandles --runInBand && NODE_ENV=test ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
         "cleanup": "NODE_ENV=test ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
-        "cleanupdev": "NODE_ENV=development ts-node src/prisma/cleanup/cleanUpDev.ts"
+        "cleanupdev": "NODE_ENV=development ts-node src/prisma/cleanup/cleanUpDev.ts",
+        "seeddev": "NODE_ENV=development ts-node src/prisma/seed/users.relations.seed.ts"
     },
     "dependencies": {
         "@joi/date": "^2.1.0",
