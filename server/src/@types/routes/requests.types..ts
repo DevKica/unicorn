@@ -12,8 +12,8 @@ export interface CreateUserBody {
     password: string;
     passwordRepetition: string;
     birthday: Date;
-    longitude: string;
-    latitude: string;
+    longitude: number;
+    latitude: number;
 }
 
 export interface CreateUserRequest extends Request {

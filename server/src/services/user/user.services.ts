@@ -46,6 +46,9 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<userM
             },
         },
         select: userSelectMatchProperties,
+        orderBy: {
+            birthday: "desc",
+        },
     });
     const filteredUsers: userMatchProperties[] = [];
 

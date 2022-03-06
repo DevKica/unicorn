@@ -11,7 +11,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
     if (decodedAccess) {
         const session = await findSingleSession({ id: decodedAccess.sessionId });
         if (!session || !session.valid) return next();
-        if (decodedAccess.accountType !== "Default") {
+        if (decodedAccess.accountType !== "default") {
             if (new Date(decodedAccess.subExpiration) < new Date()) {
                 const userTokenData = { userId: decodedAccess.userId, sessionId: decodedAccess.sessionId, active: decodedAccess.active, accountType: "Default", subExpiration: new Date() };
                 createAuthCookies(res, userTokenData);

@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { LoginUserRequest, MainResponse } from "../@types/routes/requests.types.";
 import { sendVerificationEmailHandler } from "../config/email.config";
 import { verifyEmailTokenJWT } from "../config/jwt.config";

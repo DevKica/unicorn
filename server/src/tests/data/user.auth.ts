@@ -1,7 +1,7 @@
 import { TEST_USER_EMAIL } from "../../config/env.config";
 
 export const basicUserData = {
-    accountType: "Default",
+    accountType: "default",
     active: false,
     birthday: "2002-01-01T00:00:00.000Z",
     city: "",
@@ -11,12 +11,12 @@ export const basicUserData = {
     longitude: 100.01,
     latitude: 50.05,
     name: "Pawel",
+    surname: "Kica",
     sexualOrientation: ["Heterosexual", "Lesbian"],
     showMeDistance: 50,
     showMeAgeLowerLimit: 18,
     showMeAgeUpperLimit: 24,
     showMeGender: "All",
-    surname: "Kica",
 };
 
 export const invalidEmailSchema = "@devKica@.com";

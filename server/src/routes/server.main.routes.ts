@@ -4,6 +4,7 @@ import sessionsMainRoutes from "./sessions/main.routes";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import authMainRoutes from "./auth/main.routes";
 import console from "console";
+import { createConversation } from "../services/conversation.services";
 
 const serverMainRoutes = Router();
 
@@ -62,8 +63,15 @@ serverMainRoutes.get("/", async (req: Request, res: Response) => {
         // console.log(likes);
         // const user = await UserModel.findFirst({ where: { id: "6" } });
         // console.log(user);
-
-        applyToResponse(res, 200, {});
+        // const user = await checkIfUserExists({ id: "0" }, { name: true });
+        const conv = await createConversation({
+            name: `Pawel and Madison`,
+            members: {
+                connect: [{ id: "5" }, { id: "6" }],
+            },
+        });
+        console.log(conv);
+        applyToResponse(res, 200, conv);
     } catch (e: unknown) {
         console.log(e);
         applyToResponseCustom(res, e);

@@ -6,10 +6,6 @@ export async function createLike(data: LikeCreateInput): Promise<void> {
 }
 
 export async function findLike(where: any) {
-    await LikeModel.findFirst({ where });
-}
-
-export async function checkIfLikesRelationExists(where: any) {
     return await LikeModel.findFirst({ where });
 }
 

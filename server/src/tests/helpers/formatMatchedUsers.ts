@@ -24,7 +24,6 @@ function formatMatchedUsers(data: userMatchProperties[]) {
         };
         index += 1;
     });
-
     return result;
 }
 

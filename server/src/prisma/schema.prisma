@@ -15,7 +15,7 @@ model User {
   password            String
   email               String              @unique
   active              Boolean             @default(false)
-  accountType         AccountType         @default(Default)
+  accountType         AccountType         @default(default)
   // temporary subscriptions to more prestige account type
   subExpiration       DateTime            @default(now())
   // profile
@@ -68,10 +68,10 @@ enum SexualOrientation {
 }
 
 enum AccountType {
-  Default
-  Silver
-  Gold
-  Black
+  default
+  silver
+  gold
+  black
 }
 
 model Session {
@@ -90,7 +90,7 @@ model Like {
   id           String     @id @default(cuid())
   userId       String
   jugdedUserId String
-  typeOfLike   TypeOfLike @default(Default)
+  typeOfLike   TypeOfLike @default(default)
   createdAt    DateTime   @default(now())
   // relations
   user         User       @relation("user", fields: [userId], references: [id], onDelete: Cascade)
@@ -98,8 +98,9 @@ model Like {
 }
 
 enum TypeOfLike {
-  Default
-  Super
+  default
+  super
+  notInterested
 }
 
 model UsersRelation {
@@ -133,11 +134,18 @@ model Message {
   content        String
   userId         String
   conversationId String
+  type MessageType
   isDeleted      Boolean
   createdAt      DateTime     @default(now())
   // relations
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+enum MessageType {
+    voice
+    photo
+    video
+    default
 }
 
 model EmailVerification {
