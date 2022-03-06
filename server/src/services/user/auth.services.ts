@@ -5,7 +5,11 @@ import { InvalidCredentials, NotFound } from "../../utils/errors/main";
 import { comparePasswords } from "../../utils/user/auth/comparePasswords";
 import { findUniqueUser } from "./user.services";
 
-export async function checkIfUserExists(where: UserWhereUniqueInput) {
+interface CheckIfActiveUserInput extends UserWhereUniqueInput {
+    active: boolean;
+}
+
+export async function checkIfUserExists(where: CheckIfActiveUserInput) {
     if (!(await findUniqueUser(where, { id: true }))) throw new NotFound();
 }
 

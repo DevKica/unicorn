@@ -90,7 +90,7 @@ model Like {
   id           String     @id @default(cuid())
   userId       String
   jugdedUserId String
-  typeOfLike   TypeOfLike
+  typeOfLike   TypeOfLike @default(Default)
   createdAt    DateTime   @default(now())
   // relations
   user         User       @relation("user", fields: [userId], references: [id], onDelete: Cascade)
@@ -116,6 +116,7 @@ model UsersRelation {
 enum UsersRelationStatus {
   rejected
   accepted
+  removed
 }
 
 model Conversation {

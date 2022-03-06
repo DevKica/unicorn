@@ -186,6 +186,7 @@ const users = [
     ...opositeShowMeGenderFemalesUnder24,
     ...opositeShowMeGenderFemalesAbove24,
     ...allShowMeGenderFemalesUnder24,
+    ...sameShowMeGenderFemalesUnder24,
 ];
 
 users.forEach(async (e) => {

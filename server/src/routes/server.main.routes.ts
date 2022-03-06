@@ -3,15 +3,11 @@ import usersMainRoutes from "./users/main.routes";
 import sessionsMainRoutes from "./sessions/main.routes";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import authMainRoutes from "./auth/main.routes";
-import { userMatchProperties, userMatchSelectProperties } from "../@types/prisma/matchedUsers.types";
-import { PrismaClient } from "@prisma/client";
-import { UserModel } from "../prisma/models";
-import { userSelectMatchProperties } from "../prisma/validator";
-import calcDistance from "../utils/user/calcDistance";
-import { omit } from "lodash";
+import console from "console";
 
 const serverMainRoutes = Router();
 
+// its one big playground route, just for testing
 serverMainRoutes.get("/", async (req: Request, res: Response) => {
     try {
         // const users: userMatchProperties[] =
@@ -23,48 +19,53 @@ serverMainRoutes.get("/", async (req: Request, res: Response) => {
         //         `"public"."User"."latitude"`,
         //         `"public"."User"."longitude"`
         //     )} AND (NOT "public"."User"."id" = ${data.id}))`;
-        const filters = {
-            id: "1",
-            showMeGender: "Female",
-            gender: "Male",
-            showMeAgeLowerLimit: 18,
-            showMeAgeUpperLimit: 30,
-            showMeDistance: 1,
-            latitude: 50.05,
-            longitude: 100.01,
-        };
-        const lt = new Date();
-        lt.setFullYear(lt.getFullYear() - filters.showMeAgeLowerLimit);
-        const gt = new Date();
-        gt.setFullYear(gt.getFullYear() - filters.showMeAgeUpperLimit);
+        // const filters = {
+        //     id: "1",
+        //     showMeGender: "Female",
+        //     gender: "Male",
+        //     showMeAgeLowerLimit: 18,
+        //     showMeAgeUpperLimit: 30,
+        //     showMeDistance: 1,
+        //     latitude: 50.05,
+        //     longitude: 100.01,
+        // };
+        // const lt = new Date();
+        // lt.setFullYear(lt.getFullYear() - filters.showMeAgeLowerLimit);
+        // const gt = new Date();
+        // gt.setFullYear(gt.getFullYear() - filters.showMeAgeUpperLimit);
 
-        const users = await UserModel.findMany({
-            where: {
-                active: true,
-                gender: filters.showMeGender,
-                birthday: {
-                    gt,
-                    lt,
-                },
-                NOT: {
-                    id: {
-                        equals: filters.id,
-                    },
-                },
-            },
-            select: userSelectMatchProperties,
-        });
-        const filteredUsers: userMatchProperties[] = [];
+        // const users = await UserModel.findMany({
+        //     where: {
+        //         active: true,
+        //         gender: filters.showMeGender,
+        //         birthday: {
+        //             gt,
+        //             lt,
+        //         },
+        //         NOT: {
+        //             id: {
+        //                 equals: filters.id,
+        //             },
+        //         },
+        //     },
+        //     select: userSelectMatchProperties,
+        // });
+        // const filteredUsers: userMatchProperties[] = [];
 
-        users.forEach((e: userMatchSelectProperties) => {
-            const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
-            if ((distance < filters.showMeDistance && e.showMeGender === filters.gender) || e.showMeGender === "All") {
-                filteredUsers.push(omit(e, "latitude", "longitude", "showMeGender"));
-            }
-        });
+        // users.forEach((e: userMatchSelectProperties) => {
+        //     const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
+        //     if ((distance < filters.showMeDistance && e.showMeGender === filters.gender) || e.showMeGender === "All") {
+        //         filteredUsers.push(omit(e, "latitude", "longitude", "showMeGender"));
+        //     }
+        // });
+        // const likes = await checkIfLikesRelationExists({});
+        // console.log(likes);
+        // const user = await UserModel.findFirst({ where: { id: "6" } });
+        // console.log(user);
 
-        applyToResponse(res, 200, filteredUsers);
+        applyToResponse(res, 200, {});
     } catch (e: unknown) {
+        console.log(e);
         applyToResponseCustom(res, e);
     }
 });

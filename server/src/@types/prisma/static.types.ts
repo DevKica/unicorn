@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import type { PasswordReset, User, Session, EmailVerification } from "@prisma/client";
+import type { UsersRelation, Like, PasswordReset, User, Session, EmailVerification } from "@prisma/client";
 
 // User
 export type UserType = User;
@@ -24,3 +24,11 @@ export type EmailVerificationWhereUniqueInput = Prisma.EmailVerificationWhereUni
 export type PasswordResetType = PasswordReset;
 export type PasswordResetCreateInput = Prisma.PasswordResetCreateInput;
 export type PasswordResetWhereUniqueInput = Prisma.PasswordResetWhereUniqueInput;
+
+// Like
+export type LikeObjectType = Like;
+export type LikeCreateInput = Prisma.LikeCreateInput;
+
+// UsersRelation
+export type UsersRelationObjectType = UsersRelation;
+export type UsersRelationCreateInput = Prisma.UsersRelationCreateInput;
