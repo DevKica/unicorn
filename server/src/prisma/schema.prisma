@@ -89,12 +89,12 @@ model Session {
 model Like {
   id           String     @id @default(cuid())
   userId       String
-  jugdedUserId String
+  judgedUserId String @map("jugdedUserId")
   typeOfLike   TypeOfLike @default(default)
   createdAt    DateTime   @default(now())
   // relations
   user         User       @relation("user", fields: [userId], references: [id], onDelete: Cascade)
-  judgedUser   User       @relation("judgedUser", fields: [jugdedUserId], references: [id], onDelete: Cascade)
+  judgedUser   User       @relation("judgedUser", fields: [judgedUserId], references: [id], onDelete: Cascade)
 }
 
 enum TypeOfLike {

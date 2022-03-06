@@ -7,6 +7,8 @@ export const joiAdditionalInfo = {
     description: Joi.string().trim().max(500),
 };
 
+export const additionalInfoSchema = Joi.object(joiAdditionalInfo).options({ presence: "required" });
+
 const joiMatchingInfo = {
     ...joiShowMeGender,
     showMeDistance: Joi.number().min(10).max(100),

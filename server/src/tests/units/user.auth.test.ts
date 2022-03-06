@@ -6,7 +6,7 @@ import {
     InvalidCredentialsInstance,
     InvalidEmailBodyInstance,
     InvalidFileFormatInstance,
-    InvalidPasswordInstance,
+    InvalidPasswordSchemaInstance,
     InvalidRequestedCreateUserBodyInstance,
     InvalidRequestedLoginBodyInstance,
     InvalidSetNewPasswordBodyInstance,
@@ -204,7 +204,7 @@ describe("AUTHENTICATION", () => {
             });
             test(`User should NOT be able to pass password schema with invalid value of it`, async () => {
                 await testPOSTRequest("/users/login", newEmailLoginCredentials, newBasicActiveUserData, 200);
-                await testDELETERequest("/users", invalid.schema, InvalidPasswordInstance);
+                await testDELETERequest("/users", invalid.schema, InvalidPasswordSchemaInstance);
             });
             test(`User should NOT be able to delete account with invalid password`, async () => {
                 await testDELETERequest("/users", invalid.credentials, InvalidCredentialsInstance);

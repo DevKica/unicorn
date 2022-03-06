@@ -30,3 +30,28 @@ export const afterFullUpdateUserData = {
     ...newGeneralUpdateUserData,
     ...updateUserProfileBody.valid.matching,
 };
+
+export const createLikeBody = {
+    valid: {
+        judgedUserId: "4",
+        typeOfLike: "default",
+    },
+    invalid: {
+        schema: {
+            judgedUserId: "1",
+            typeOfLike: "superr",
+        },
+        inactiveUser: {
+            judgedUserId: "2",
+            typeOfLike: "default",
+        },
+        nonPremium: {
+            judgedUserId: "4",
+            typeOfLike: "super",
+        },
+    },
+};
+
+export const getMatchedResponse = {
+    name: "Dani and MissFortune",
+};

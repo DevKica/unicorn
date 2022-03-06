@@ -1,1 +1,1 @@
-export type ModelName = "user" | "session";
+export type ModelName = "user" | "session" | "like" | "conversation";

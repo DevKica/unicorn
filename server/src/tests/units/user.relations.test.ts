@@ -1,15 +1,25 @@
-import seedUsersRelations from "../../prisma/seed/users.relations.seed";
+import seedRelationsData from "../../prisma/seed/users.relations.seed";
 import { removeGlobals } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
-import { afterFullUpdateUserData, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
-import { NotFoundInstance, apiVersion, InvalidUpdateUserGeneralInfoInstance, InvalidUpdateUserMatchingInfoInstance, UnauthorizedInstance } from "../data/config";
+import { afterFullUpdateUserData, createLikeBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
+import {
+    NotFoundInstance,
+    apiVersion,
+    InvalidUpdateUserGeneralInfoInstance,
+    InvalidUpdateUserMatchingInfoInstance,
+    UnauthorizedInstance,
+    InvalidCreateLikeInstance,
+    UpgradeYourAccountInstance,
+    ForbiddenInstance,
+} from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { allShowMeGenderFemalesUnder24, opositeShowMeGenderFemalesUnder24 } from "../../prisma/seed/data/users";
+import { SuccessResponse } from "../../utils/responses/main";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
-        await seedUsersRelations();
+        await seedRelationsData();
         await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
     });
     afterAll(async () => {
@@ -42,9 +52,28 @@ describe("RELATIONS", () => {
         });
     });
     describe("MATCHING", () => {
+        const { valid, invalid } = createLikeBody;
+
         test("User should be able to get properly filtered users to match", async () => {
             await testGETRequest("/users", formatMatchedUsers([...opositeShowMeGenderFemalesUnder24, ...allShowMeGenderFemalesUnder24]), 200);
-            // await testGETRequest("/users", formatMatchedUsers(opositeShowMeGenderFemalesUnder24), 200);
+        });
+        test(`User should NOT be able to pass createLikeSchema with invalid body`, async () => {
+            await testPOSTRequest("/likes", invalid.schema, InvalidCreateLikeInstance);
+        });
+        test(`User should NOT be able to like inactive user`, async () => {
+            await testPOSTRequest("/likes", invalid.inactiveUser, NotFoundInstance);
+        });
+        test(`User should NOT be able to superlike without a premium account`, async () => {
+            await testPOSTRequest("/likes", invalid.nonPremium, UpgradeYourAccountInstance);
+        });
+        test(`User should be able to like another user`, async () => {
+            await testPOSTRequest("/likes", valid, SuccessResponse);
+        });
+        test(`User should NOT be able to like already liked user`, async () => {
+            await testPOSTRequest("/likes", valid, ForbiddenInstance);
+        });
+        test(`User should NOT be able to like already liked user`, async () => {
+            await testPOSTRequest("/likes", { ...valid, judgedUserId: "5" }, getMatchedResponse, 201);
         });
     });
 });

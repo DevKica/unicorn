@@ -118,3 +118,12 @@ export class InvalidPassword extends Error {
         Object.setPrototypeOf(this, InvalidPassword.prototype);
     }
 }
+
+export class UpgradeYourAccount extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "Uprade your account to access this feature";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, UpgradeYourAccount.prototype);
+    }
+}

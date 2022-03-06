@@ -28,10 +28,12 @@ export type PasswordResetWhereUniqueInput = Prisma.PasswordResetWhereUniqueInput
 // Like
 export type LikeObjectType = Like;
 export type LikeCreateInput = Prisma.LikeCreateInput;
+export type LikeWhereInput = Prisma.LikeWhereInput;
 
 // UsersRelation
 export type UsersRelationObjectType = UsersRelation;
 export type UsersRelationCreateInput = Prisma.UsersRelationCreateInput;
+export type UsersRelationWhereInput = Prisma.UsersRelationWhereInput;
 
 // Conversation
 export type ConversationType = Conversation;

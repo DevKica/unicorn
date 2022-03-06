@@ -24,8 +24,8 @@ export const opositeShowMeGenderFemalesUnder24 = [
     },
     {
         id: "5",
-        name: "Miss",
-        surname: "Fortune",
+        name: "MissFortune",
+        surname: "Ionia",
         email: "miss@fortune.com",
         password: "MissFortune1!",
         active: true,

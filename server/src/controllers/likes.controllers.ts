@@ -1,12 +1,13 @@
 import { UsersRelation } from "@prisma/client";
 import { Request, Response } from "express";
+import { LikeModel } from "../prisma/models";
 import { createConversation } from "../services/conversation.services";
 import { createLike, deleteLike, findLike } from "../services/like.services";
 import { checkIfActiveUserExists } from "../services/user/auth.services";
 import { findUniqueUser } from "../services/user/user.services";
 import { createUsersRelations } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { Forbidden } from "../utils/errors/main";
+import { Forbidden, UpgradeYourAccount } from "../utils/errors/main";
 
 export async function createLikeHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -14,7 +15,7 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         const { userId, accountType } = res.locals.user;
 
         // throw Forbidden if the user doesn't have enough permissions to give super likes
-        if (typeOfLike === "super" && accountType === "default") throw new Forbidden();
+        if (typeOfLike === "super" && accountType === "default") throw new UpgradeYourAccount();
 
         // check if the liked user exists and have verified email
         const judgedUser = await checkIfActiveUserExists({ id: judgedUserId }, { name: true });
@@ -23,18 +24,18 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         const user = await findUniqueUser({ id: userId }, { name: true });
 
         // check if the user has already made such a request
-        const alreadyLiked = await findLike({ id: userId, userId: judgedUserId });
+        const alreadyLiked = await findLike({ userId, judgedUserId });
 
         // if the user doesn't exists (hopefully it never does) or has already made this request
         if (!user || alreadyLiked) throw new Forbidden();
 
         // check if the judged user likes the user
-        const likeObject = await findLike({ id: judgedUserId, userId });
+        const likeObject = await findLike({ userId: judgedUserId, judgedUserId: userId });
 
         // if yes
         if (likeObject) {
             // delete currently stored likeObject
-            await deleteLike({ id: judgedUserId, userId });
+            await deleteLike({ id: likeObject.id });
 
             // relationType depends on typeOfLike
             let relationType: UsersRelation["relationType"];
@@ -46,9 +47,10 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                 const conversation = await createConversation({
                     name: `${user.name} and ${judgedUser.name}`,
                     members: {
-                        connect: [userId, judgedUserId],
+                        connect: [{ id: userId }, { id: judgedUserId }],
                     },
                 });
+                console.log(conversation);
                 applyToResponse(res, 201, conversation);
             }
             // negative
