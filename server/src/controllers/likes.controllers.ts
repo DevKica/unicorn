@@ -1,11 +1,10 @@
 import { UsersRelation } from "@prisma/client";
 import { Request, Response } from "express";
-import { LikeModel } from "../prisma/models";
 import { createConversation } from "../services/conversation.services";
 import { createLike, deleteLike, findLike } from "../services/like.services";
 import { checkIfActiveUserExists } from "../services/user/auth.services";
 import { findUniqueUser } from "../services/user/user.services";
-import { createUsersRelations } from "../services/usersRelation.services";
+import { createUsersRelations, findUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { Forbidden, UpgradeYourAccount } from "../utils/errors/main";
 
@@ -19,6 +18,12 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
 
         // check if the liked user exists and have verified email
         const judgedUser = await checkIfActiveUserExists({ id: judgedUserId }, { name: true });
+
+        // check if users aren't in relation already
+        const first = await findUsersRelation({ firstUserId: userId, secondUserId: judgedUserId });
+        const second = await findUsersRelation({ firstUserId: judgedUserId, secondUserId: userId });
+
+        if (first || second) throw new Forbidden();
 
         // get user local object
         const user = await findUniqueUser({ id: userId }, { name: true });
@@ -41,7 +46,7 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
             let relationType: UsersRelation["relationType"];
 
             // positive
-            if (likeObject.typeOfLike !== "notInterested") {
+            if (likeObject.typeOfLike !== "notInterested" && typeOfLike !== "notInterested") {
                 relationType = "accepted";
                 // create conversation between users
                 const conversation = await createConversation({
@@ -51,9 +56,8 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                     },
                 });
                 applyToResponse(res, 201, conversation);
-            }
-            // negative
-            else {
+            } else {
+                // rejected
                 relationType = "rejected";
                 applySuccessToResponse(res);
             }

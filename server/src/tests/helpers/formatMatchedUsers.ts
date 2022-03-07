@@ -11,10 +11,7 @@ function formatMatchedUsers(data: matchedUser[]) {
     let index = 0;
 
     data.forEach((e: matchedUser) => {
-        const { id, name, surname, gender, city, description, birthday, sexualOrientation, superlike } = e;
-        if (id in superlikeUsersIds) {
-            result[String(index)]["superlike"] = true;
-        }
+        const { id, name, surname, gender, city, description, birthday, sexualOrientation } = e;
 
         result[String(index)] = {
             id,
@@ -25,8 +22,11 @@ function formatMatchedUsers(data: matchedUser[]) {
             description,
             birthday: JSON.stringify(birthday).slice(1, -1),
             sexualOrientation,
-            superlike,
         };
+
+        if (superlikeUsersIds.includes(id)) {
+            result[String(index)]["superlike"] = true;
+        }
 
         index += 1;
     });

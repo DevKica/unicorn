@@ -6,4 +6,5 @@ declare global {
     var testRefreshToken: string;
     var counter: number;
     var testUserId: string;
+    var testConversationId: string;
 }

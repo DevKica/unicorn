@@ -5,3 +5,4 @@ global.request = supertest(server);
 global.testAccessToken = "";
 global.testRefreshToken = "";
 global.testUserId = "";
+global.testConversationId = "";

@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import { uploadMainPath } from "../../config/upload.config";
 import { logError, logInfo } from "../../utils/logger";
 import testGmailInbox from "../../tests/helpers/testInbox";
-import { removeUserTable } from "./cleanUpDev";
+import { removeTables } from "./cleanUpDev";
 
 export async function deleteCurrentImages() {
     const foldersToRefresh = ["usersPhotos"];
@@ -18,7 +18,7 @@ export async function deleteCurrentImages() {
 
 async function cleanUpAfterTests() {
     if (process.env.NODE_ENV === "test") {
-        await removeUserTable();
+        await removeTables();
         await deleteCurrentImages();
         await testGmailInbox();
     } else {

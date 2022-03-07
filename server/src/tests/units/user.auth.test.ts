@@ -34,12 +34,12 @@ import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/spe
 import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidFileFormat, validFileFormat } from "../data/files";
-import { removeUserTable } from "../../prisma/cleanup/cleanUpDev";
+import { removeTables } from "../../prisma/cleanup/cleanUpDev";
 import { SuccessResponse } from "../../utils/responses/main";
 
 describe("AUTHENTICATION", () => {
     beforeAll(async () => {
-        await removeUserTable();
+        await removeTables();
     });
     afterAll(() => {
         removeGlobals();

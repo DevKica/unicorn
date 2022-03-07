@@ -34,8 +34,18 @@ export const afterFullUpdateUserData = {
 
 export const createLikeBody = {
     valid: {
-        judgedUserId: "4",
-        typeOfLike: "default",
+        success: {
+            judgedUserId: "6",
+            typeOfLike: "default",
+        },
+        newPair: {
+            judgedUserId: "5",
+            typeOfLike: "default",
+        },
+        reject: {
+            judgedUserId: "4",
+            typeOfLike: "notInterested",
+        },
     },
     invalid: {
         schema: {
@@ -43,7 +53,7 @@ export const createLikeBody = {
             typeOfLike: "superr",
         },
         inactiveUser: {
-            judgedUserId: "2",
+            judgedUserId: "-1",
             typeOfLike: "default",
         },
         nonPremium: {
@@ -54,5 +64,5 @@ export const createLikeBody = {
 };
 
 export const getMatchedResponse = {
-    name: "Dani and MissFortune",
+    name: "Dani and Doda",
 };

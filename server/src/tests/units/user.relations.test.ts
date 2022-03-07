@@ -1,5 +1,5 @@
 import seedRelationsData from "../../prisma/seed/users.relations.seed";
-import { removeGlobals, setUserId } from "../helpers/globalHelpers";
+import { removeGlobals, setConversationId, setUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, createLikeBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
@@ -13,9 +13,10 @@ import {
     ForbiddenInstance,
 } from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
-import { femalesUnder24showMale } from "../../prisma/seed/data/users";
+import { femalesUnder24ShowFemale, femalesUnder24showMale } from "../../prisma/seed/data/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import { femalesUnder24ShowAll } from "./../../prisma/seed/data/users";
+import { exit } from "process";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -25,6 +26,7 @@ describe("RELATIONS", () => {
     });
     afterAll(async () => {
         removeGlobals();
+        // exit(1);
     });
     describe("PROFILE", () => {
         const { valid, invalid } = updateUserProfileBody;
@@ -67,14 +69,27 @@ describe("RELATIONS", () => {
         test(`User should NOT be able to superlike without a premium account`, async () => {
             await testPOSTRequest("/likes", invalid.nonPremium, UpgradeYourAccountInstance);
         });
+        test(`User should be able to reject another user`, async () => {
+            await testPOSTRequest("/likes", valid.reject, SuccessResponse);
+        });
+        test(`User should NOT be able to reject already rejected user`, async () => {
+            await testPOSTRequest("/likes", valid.reject, ForbiddenInstance);
+        });
         test(`User should be able to like another user`, async () => {
-            await testPOSTRequest("/likes", valid, SuccessResponse);
+            await testPOSTRequest("/likes", valid.success, SuccessResponse);
         });
         test(`User should NOT be able to like already liked user`, async () => {
-            await testPOSTRequest("/likes", valid, ForbiddenInstance);
+            await testPOSTRequest("/likes", valid.success, ForbiddenInstance);
         });
-        test(`User should NOT be able to like already liked user`, async () => {
-            await testPOSTRequest("/likes", { ...valid, judgedUserId: "5" }, getMatchedResponse, 201);
+        test(`User should be able to match with user who liked him`, async () => {
+            const res = await testPOSTRequest("/likes", valid.newPair, getMatchedResponse, 201);
+            setConversationId(res);
+        });
+        test(`User should NOT be able to like already matched user`, async () => {
+            await testPOSTRequest("/likes", valid.newPair, ForbiddenInstance);
+        });
+        test(`User should NOT be able get properly filtered users after some operations`, async () => {
+            await testGETRequest("/users", formatMatchedUsers([femalesUnder24showMale[0]]), 200);
         });
     });
 });

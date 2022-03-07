@@ -167,7 +167,7 @@ export const femalesUnder24ShowMaleRejected = [
 
 export const femalesUnder24ShowMaleNotInRange = [
     {
-        id: "9",
+        id: "10",
         name: "Selena",
         surname: "Gomez",
         email: "selena@gomez.com",
@@ -192,7 +192,7 @@ export const femalesUnder24ShowMaleNotInRange = [
 const users = [
     // not active
     {
-        id: "0",
+        id: "-1",
         name: "Kacper",
         surname: "Ksiazek",
         email: "kacper@ksiazek.com",
