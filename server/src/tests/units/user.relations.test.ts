@@ -1,5 +1,5 @@
 import seedRelationsData from "../../prisma/seed/users.relations.seed";
-import { removeGlobals } from "../helpers/globalHelpers";
+import { removeGlobals, setUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, createLikeBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
@@ -8,19 +8,20 @@ import {
     apiVersion,
     InvalidUpdateUserGeneralInfoInstance,
     InvalidUpdateUserMatchingInfoInstance,
-    UnauthorizedInstance,
     InvalidCreateLikeInstance,
     UpgradeYourAccountInstance,
     ForbiddenInstance,
 } from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
-import { allShowMeGenderFemalesUnder24, opositeShowMeGenderFemalesUnder24 } from "../../prisma/seed/data/users";
+import { femalesUnder24showMale } from "../../prisma/seed/data/users";
 import { SuccessResponse } from "../../utils/responses/main";
+import { femalesUnder24ShowAll } from "./../../prisma/seed/data/users";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
         await seedRelationsData();
-        await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
+        const res = await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
+        setUserId(res);
     });
     afterAll(async () => {
         removeGlobals();
@@ -55,7 +56,7 @@ describe("RELATIONS", () => {
         const { valid, invalid } = createLikeBody;
 
         test("User should be able to get properly filtered users to match", async () => {
-            await testGETRequest("/users", formatMatchedUsers([...opositeShowMeGenderFemalesUnder24, ...allShowMeGenderFemalesUnder24]), 200);
+            await testGETRequest("/users", formatMatchedUsers([...femalesUnder24showMale, ...femalesUnder24ShowAll]), 200);
         });
         test(`User should NOT be able to pass createLikeSchema with invalid body`, async () => {
             await testPOSTRequest("/likes", invalid.schema, InvalidCreateLikeInstance);

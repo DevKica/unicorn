@@ -1,15 +1,18 @@
 import argon2 from "argon2";
 
-export const opositeShowMeGenderFemalesUnder24 = [
+// settings in the moment of testing getUsersToMatchHandler
+// user id = 1
+
+export const femalesUnder24showMale = [
     {
-        id: "4",
+        id: "3",
         name: "Madison",
         surname: "Beer",
         email: "madison@beer.com",
         password: "MadisonBeer1!",
         active: true,
         accountType: "default",
-        birthday: new Date("2002-01-01T00:00:00.000Z"),
+        birthday: new Date("2002-03-03T00:00:00.000Z"),
         city: "New York",
         description: "I am a part time singer, I was born in Jericho, currently I am looking for someone to go out for a drink",
         gender: "Female",
@@ -23,14 +26,14 @@ export const opositeShowMeGenderFemalesUnder24 = [
         photos: ["madisonBeer1"],
     },
     {
-        id: "5",
+        id: "4",
         name: "MissFortune",
         surname: "Ionia",
         email: "miss@fortune.com",
         password: "MissFortune1!",
         active: true,
         accountType: "gold",
-        birthday: new Date("2001-01-01T00:00:00.000Z"),
+        birthday: new Date("2001-03-03T00:00:00.000Z"),
         city: "Aram",
         description: "For demacia",
         gender: "Female",
@@ -45,9 +48,54 @@ export const opositeShowMeGenderFemalesUnder24 = [
     },
 ];
 
-export const opositeShowMeGenderFemalesAbove24 = [
+export const femalesUnder24ShowAll = [
+    {
+        id: "5",
+        name: "Doda",
+        surname: "Dorota",
+        email: "doda@dorota.com",
+        password: "DodaDorota1!",
+        active: true,
+        accountType: "default",
+        birthday: new Date("2000-03-03T00:00:00.000Z"),
+        city: "Krakow",
+        description: "Fake love",
+        gender: "Female",
+        showMeGender: "All",
+        sexualOrientation: ["Heterosexual"],
+        showMeDistance: 40,
+        showMeAgeLowerLimit: 18,
+        showMeAgeUpperLimit: 30,
+        latitude: 50.05,
+        longitude: 100.01,
+        photos: ["dodaDorota1"],
+    },
     {
         id: "6",
+        name: "Harley",
+        surname: "Quinn",
+        email: "harley@quinn.com",
+        password: "HarleyQuinn1!",
+        active: true,
+        accountType: "default",
+        birthday: new Date("2000-02-02T00:00:00.000Z"),
+        city: "Krakow",
+        description: "Joker is overparty",
+        gender: "Female",
+        showMeGender: "All",
+        sexualOrientation: ["Heterosexual"],
+        showMeDistance: 40,
+        showMeAgeLowerLimit: 18,
+        showMeAgeUpperLimit: 30,
+        latitude: 50.05,
+        longitude: 100.01,
+        photos: ["harleyQuinn1"],
+    },
+];
+
+export const femalesAbove24ShowMale = [
+    {
+        id: "7",
         name: "Jennifer",
         surname: "Lopez",
         email: "jennifer@lopez.com",
@@ -69,9 +117,9 @@ export const opositeShowMeGenderFemalesAbove24 = [
     },
 ];
 
-export const sameShowMeGenderFemalesUnder24 = [
+export const femalesUnder24ShowFemale = [
     {
-        id: "7",
+        id: "8",
         name: "Borys",
         surname: "Przybylski",
         email: "borys@przybylski.com",
@@ -93,31 +141,78 @@ export const sameShowMeGenderFemalesUnder24 = [
     },
 ];
 
-export const allShowMeGenderFemalesUnder24 = [
+export const femalesUnder24ShowMaleRejected = [
     {
-        id: "8",
-        name: "Doda",
-        surname: "Dorota",
-        email: "doda@dorota.com",
-        password: "DodaDorota1!",
+        id: "9",
+        name: "Natalia",
+        surname: "Szroeder",
+        email: "natalia@szroeder.com",
+        password: "NataliaSzroeder1!",
         active: true,
         accountType: "default",
         birthday: new Date("2000-01-01T00:00:00.000Z"),
-        city: "Krakow",
-        description: "Fake love",
+        city: "Egzotyka",
+        description: "4001020 to drogi zestaw",
         gender: "Female",
-        showMeGender: "All",
+        showMeGender: "Male",
         sexualOrientation: ["Heterosexual"],
         showMeDistance: 40,
         showMeAgeLowerLimit: 18,
         showMeAgeUpperLimit: 30,
         latitude: 50.05,
         longitude: 100.01,
-        photos: ["dodaDorota1"],
+        photos: ["nataliaSzroeder1"],
+    },
+];
+
+export const femalesUnder24ShowMaleNotInRange = [
+    {
+        id: "9",
+        name: "Selena",
+        surname: "Gomez",
+        email: "selena@gomez.com",
+        password: "SelenaGomez1!",
+        active: true,
+        accountType: "default",
+        birthday: new Date("2000-01-01T00:00:00.000Z"),
+        city: "Idk",
+        description: "do you know alex russo?",
+        gender: "Female",
+        showMeGender: "Male",
+        sexualOrientation: ["Heterosexual"],
+        showMeDistance: 40,
+        showMeAgeLowerLimit: 18,
+        showMeAgeUpperLimit: 30,
+        latitude: 51.05,
+        longitude: 100.01,
+        photos: ["selenaGomez1"],
     },
 ];
 
 const users = [
+    // not active
+    {
+        id: "0",
+        name: "Kacper",
+        surname: "Ksiazek",
+        email: "kacper@ksiazek.com",
+        password: "KacperKsiazek1!",
+        active: false,
+        accountType: "default",
+        birthday: new Date("2002-01-01T00:00:00.000Z"),
+        city: "Gorzen",
+        description: "I'm the greatest fighter of this fucking institution of all time",
+        gender: "The warrior of gorzen",
+        showMeGender: "Female",
+        sexualOrientation: ["Heterosexual"],
+        showMeDistance: 2115,
+        showMeAgeLowerLimit: 18,
+        showMeAgeUpperLimit: 30,
+        latitude: 50.05,
+        longitude: 100.01,
+        photos: ["kacperKsiazek1", "kacperKsiazek2"],
+    },
+    // me
     {
         id: "1",
         name: "Pawel",
@@ -139,31 +234,9 @@ const users = [
         longitude: 100.01,
         photos: ["pawelKica1", "pawelKica2"],
     },
-    // not active
-    {
-        id: "2",
-        name: "Kacper",
-        surname: "Ksiazek",
-        email: "kacper@ksiazek.com",
-        password: "KacperKsiazek1!",
-        active: false,
-        accountType: "default",
-        birthday: new Date("2002-01-01T00:00:00.000Z"),
-        city: "Gorzen",
-        description: "I'm the greatest fighter of this fucking institution of all time",
-        gender: "The warrior of gorzen",
-        showMeGender: "Female",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 2115,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["kacperKsiazek1", "kacperKsiazek2"],
-    },
     // active
     {
-        id: "3",
+        id: "2",
         name: "Elon",
         surname: "Musk",
         email: "elon@musk.com",
@@ -183,10 +256,11 @@ const users = [
         longitude: 100.01,
         photos: ["elonMusk1"],
     },
-    ...opositeShowMeGenderFemalesUnder24,
-    ...opositeShowMeGenderFemalesAbove24,
-    ...sameShowMeGenderFemalesUnder24,
-    ...allShowMeGenderFemalesUnder24,
+    ...femalesUnder24showMale,
+    ...femalesAbove24ShowMale,
+    ...femalesUnder24ShowAll,
+    ...femalesUnder24ShowFemale,
+    ...femalesUnder24ShowMaleNotInRange,
 ];
 
 users.forEach(async (e) => {

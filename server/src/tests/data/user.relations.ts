@@ -5,6 +5,7 @@ export const updateUserProfileBody = {
         general: {
             name: "Dani",
             surname: "Crabgame",
+            description: "steam goes brra",
         },
         matching: {
             showMeGender: "Female",
