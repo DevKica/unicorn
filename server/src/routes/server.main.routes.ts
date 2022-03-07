@@ -12,9 +12,10 @@ import likesMainRoutes from "./likes/main.routes";
 const serverMainRoutes = Router();
 
 // its one big playground route, just for testing
-serverMainRoutes.post("/", async (req: Request, res: Response) => {
+serverMainRoutes.get("/", async (req: Request, res: Response) => {
     let result = {};
     try {
+        console.log(req.cookies);
         console.log(req.body);
 
         applyToResponse(res, 200, result);

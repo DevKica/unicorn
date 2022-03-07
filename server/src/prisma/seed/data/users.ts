@@ -29,7 +29,7 @@ export const opositeShowMeGenderFemalesUnder24 = [
         email: "miss@fortune.com",
         password: "MissFortune1!",
         active: true,
-        accountType: "default",
+        accountType: "gold",
         birthday: new Date("2001-01-01T00:00:00.000Z"),
         city: "Aram",
         description: "For demacia",

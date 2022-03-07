@@ -1,6 +1,6 @@
-import { UserType } from "./static.types";
+import { LikeObjectType, UserType } from "./static.types";
 
-interface userMatchPropertiesTemplate {
+interface matchedUserTemplate {
     id: UserType["id"];
     name: UserType["name"];
     surname: UserType["surname"];
@@ -9,18 +9,28 @@ interface userMatchPropertiesTemplate {
     city: UserType["city"];
     sexualOrientation: string[];
 }
-export interface userMatchPropertiesJson extends userMatchPropertiesTemplate {
-    birthday: string;
-}
-export interface userMatchProperties extends userMatchPropertiesTemplate {
-    birthday: UserType["birthday"];
-}
 
-export interface userMatchSelectProperties extends userMatchPropertiesTemplate, userMatchProperties {
+export interface matchedUserToPrepareTemplate extends matchedUserTemplate {
     showMeGender: UserType["showMeGender"];
     latitude: UserType["latitude"];
     longitude: UserType["longitude"];
+    user?: { typeOfLike: LikeObjectType["typeOfLike"] }[];
 }
+
+export interface matchedUser extends matchedUserTemplate {
+    birthday: UserType["birthday"];
+    superlike?: boolean;
+}
+
+export interface matchedUserJson extends matchedUserTemplate {
+    birthday: string;
+    superlike?: boolean;
+}
+export interface matchedUserToPrepare extends matchedUserToPrepareTemplate {
+    birthday: UserType["birthday"];
+    superlike?: boolean;
+}
+
 export interface UserFilterToMatch {
     id: UserType["id"];
     gender: UserType["gender"];

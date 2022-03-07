@@ -50,7 +50,6 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                         connect: [{ id: userId }, { id: judgedUserId }],
                     },
                 });
-                console.log(conversation);
                 applyToResponse(res, 201, conversation);
             }
             // negative

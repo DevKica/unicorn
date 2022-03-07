@@ -69,6 +69,7 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
 
         applyToResponse(res, 200, users);
     } catch (e) {
+        console.log(e);
         applyToResponseCustom(res, e);
     }
 }
