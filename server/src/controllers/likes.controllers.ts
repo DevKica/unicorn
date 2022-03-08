@@ -1,6 +1,6 @@
 import { UsersRelation } from "@prisma/client";
 import { Request, Response } from "express";
-import { createConversation } from "../services/conversation.services";
+import { createConversation } from "../services/conversations.services";
 import { createLike, deleteLike, findLike } from "../services/like.services";
 import { checkIfActiveUserExists } from "../services/user/auth.services";
 import { findUniqueUser } from "../services/user/user.services";

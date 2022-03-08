@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import type { Conversation, UsersRelation, Like, PasswordReset, User, Session, EmailVerification } from "@prisma/client";
+import type { Message, Conversation, UsersRelation, Like, PasswordReset, User, Session, EmailVerification } from "@prisma/client";
 
 // User
 export type UserType = User;
@@ -40,3 +40,10 @@ export type ConversationType = Conversation;
 export type ConversationCreateInput = Prisma.ConversationCreateInput;
 export type ConversationWhereUniqueInput = Prisma.ConversationWhereUniqueInput;
 export type ConversationUpdateInput = Prisma.ConversationUpdateInput;
+
+// Messages
+export type MessageType = Message;
+export type MessageCreateInput = Prisma.MessageCreateInput;
+export type MessageWhereUniqueInput = Prisma.MessageWhereUniqueInput;
+export type MessageWhereInput = Prisma.MessageWhereInput;
+export type MessageUpdateInput = Prisma.MessageUpdateInput;

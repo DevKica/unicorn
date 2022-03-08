@@ -126,7 +126,7 @@ model Conversation {
   members   User[]
   createdAt DateTime  @default(now())
   // relations
-  messages   Message[]
+  messages  Message[]
 }
 
 model Message {
@@ -135,6 +135,7 @@ model Message {
   userId         String
   conversationId String
   type           MessageType
+  pathToFile     String       @default("")
   isDeleted      Boolean
   createdAt      DateTime     @default(now())
   // relations
