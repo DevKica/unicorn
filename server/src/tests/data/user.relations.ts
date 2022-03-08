@@ -65,4 +65,5 @@ export const createLikeBody = {
 
 export const getMatchedResponse = {
     name: "Dani and Doda",
+    messages: [],
 };

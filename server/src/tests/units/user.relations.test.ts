@@ -88,8 +88,16 @@ describe("RELATIONS", () => {
         test(`User should NOT be able to like already matched user`, async () => {
             await testPOSTRequest("/likes", valid.newPair, ForbiddenInstance);
         });
-        test(`User should NOT be able get properly filtered users after some operations`, async () => {
+        test(`User should be able get properly filtered users after some operations`, async () => {
             await testGETRequest("/users", formatMatchedUsers([femalesUnder24showMale[0]]), 200);
         });
+    });
+    describe("CONVERSATIONS AND MESSAGES", () => {
+        test(`User should NOT be able to send message to a conversation that doesnt exists or is not a member of`, async () => {});
+        test(`User should NOT be able to send image to a conversation with invalid format`, async () => {});
+        test(`User should NOT be able to send image to a conversation with invalid format`, async () => {});
+        test(`User should NOT be able to send video to a conversation with invalid format`, async () => {});
+        test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {});
+        test(`User should NOT be able to send message to a conversation with invalid body`, async () => {});
     });
 });
