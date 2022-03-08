@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createUserHandler, deleteUserHandler, loginUserHandler, returnSuccess } from "../../controllers/auth/auth.controllers";
+import { createUserHandler, deleteUserHandler, loginUserHandler, returnSuccess } from "../../controllers/user/auth.controllers";
 import { changeEmailHandler, resendVerificationEmailHandler, verifyEmailHandler } from "../../controllers/email.controllers";
 import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../controllers/password.controllers";
-import { getUsersToMatchHandler } from "../../controllers/user.profile.controllers";
+import { getUsersToMatchHandler } from "../../controllers/user/user.profile.controllers";
 import { requireActiveUser, requireUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProfilePhotoHandler, getUserPrivateInfoHandler, updateUniqueUserHandler } from "../../controllers/user.profile.controllers";
+import { getProfilePhotoHandler, getUserPrivateInfoHandler, updateUniqueUserHandler } from "../../controllers/user/user.profile.controllers";
 import { requireActiveUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";

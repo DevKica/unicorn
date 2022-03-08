@@ -49,7 +49,6 @@ export const createLikeBody = {
     },
     invalid: {
         schema: {
-            judgedUserId: "1",
             typeOfLike: "superr",
         },
         inactiveUser: {
@@ -66,4 +65,29 @@ export const createLikeBody = {
 export const getMatchedResponse = {
     name: "Dani and Doda",
     messages: [],
+};
+
+export const createTextMessageBody = {
+    valid: {
+        content: "hello",
+        // conversation id = global.testConversationId
+    },
+    invalid: {
+        schema: {
+            content: "",
+            conversationId: ["1", "3232"],
+        },
+        notFoundConversation: {
+            content: "hello",
+            conversationId: "12345",
+        },
+        notInConversaionMembers: {},
+    },
+};
+
+export const createTextMessageResponse = {
+    content: "hello",
+    isDeleted: false,
+    type: "default",
+    userId: "1",
 };

@@ -7,7 +7,7 @@ import { InvalidFileFormat, PhotoRequired } from "../../errors/main";
 import { userPhotosResolutions, usersPhotosDirname } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
 
-export async function uploadSingleFile(file: any, dirPath: string): Promise<string> {
+export async function uploadSinglePhoto(file: any, dirPath: string): Promise<string> {
     const ext = file.name.split(".").slice(-1)[0];
 
     if (!["jpg", "jpeg", "png"].includes(ext)) throw new InvalidFileFormat();
@@ -36,7 +36,7 @@ export async function uploadUserPhotosFromReq(req: Request) {
         const uploadPhotos = [];
 
         for (const [_key, value] of Object.entries(req.files)) {
-            uploadPhotos.push(await uploadSingleFile(value, usersPhotosDirname));
+            uploadPhotos.push(await uploadSinglePhoto(value, usersPhotosDirname));
         }
 
         return uploadPhotos;

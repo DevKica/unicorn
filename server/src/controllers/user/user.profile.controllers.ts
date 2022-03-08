@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { existsSync } from "fs";
 import path from "path";
-import { usersPhotosDirname } from "../config/upload.config";
-import { userProfileProperties } from "../prisma/validator";
-import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../services/user/user.services";
-import { applyToResponseCustom, applyToResponse, applySuccessToResponse } from "../utils/errors/applyToResponse";
-import { NotFound } from "../utils/errors/main";
+import { usersPhotosDirname } from "../../config/upload.config";
+import { userProfileProperties } from "../../prisma/validator";
+import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../services/user/user.services";
+import { applyToResponseCustom, applyToResponse, applySuccessToResponse } from "../../utils/errors/applyToResponse";
+import { NotFound } from "../../utils/errors/main";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {

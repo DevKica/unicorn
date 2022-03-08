@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { returnSuccess } from "../../controllers/auth/auth.controllers";
+import { returnSuccess } from "../../controllers/user/auth.controllers";
 import { requireUser, requireActiveUser } from "../../middleware/requireUser";
 
 const authMainRoutes = Router();

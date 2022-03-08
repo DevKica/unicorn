@@ -122,7 +122,7 @@ enum UsersRelationStatus {
 
 model Conversation {
   id        String    @id @default(cuid())
-  name      String
+  name      String    @db.VarChar(50)
   members   User[]
   createdAt DateTime  @default(now())
   // relations
@@ -131,12 +131,11 @@ model Conversation {
 
 model Message {
   id             String       @id @default(cuid())
-  content        String
+  content        String       
   userId         String
   conversationId String
-  type           MessageType
-  pathToFile     String       @default("")
-  isDeleted      Boolean
+  type           MessageType 
+  isDeleted      Boolean      @default(false)
   createdAt      DateTime     @default(now())
   // relations
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)

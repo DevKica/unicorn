@@ -1,7 +1,7 @@
 import { Router } from "express";
 // middlewares
 import { requireActiveUser } from "../../middleware/requireUser";
-import { getProfilePhotoHandler } from "../../controllers/user.profile.controllers";
+import { getProfilePhotoHandler } from "../../controllers/user/user.profile.controllers";
 // routes
 import userProfileRoutes from "./profile.routes";
 import userRoutes from "./user.routes";

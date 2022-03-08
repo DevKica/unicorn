@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { deleteAllSessionHandler, deleteSingleSessionHandler } from "../../controllers/auth/auth.controllers";
+import { deleteAllSessionHandler, deleteSingleSessionHandler } from "../../controllers/user/auth.controllers";
 import { requireUser } from "../../middleware/requireUser";
 
 const sessionsMainRoutes = Router();

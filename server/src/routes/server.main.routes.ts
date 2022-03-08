@@ -4,6 +4,7 @@ import sessionsMainRoutes from "./sessions/main.routes";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import authMainRoutes from "./auth/main.routes";
 import likesMainRoutes from "./likes/main.routes";
+import messagesMainRoutes from "./messages/main.routes";
 
 const serverMainRoutes = Router();
 
@@ -28,5 +29,7 @@ serverMainRoutes.use("/users", usersMainRoutes);
 serverMainRoutes.use("/sessions", sessionsMainRoutes);
 
 serverMainRoutes.use("/likes", likesMainRoutes);
+
+serverMainRoutes.use("/messages", messagesMainRoutes);
 
 export default serverMainRoutes;

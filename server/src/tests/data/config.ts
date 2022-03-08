@@ -17,9 +17,9 @@ import {
 } from "../../utils/errors/main";
 import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
-import { createLikeBody, updateUserProfileBody } from "./user.relations";
+import { createLikeBody, createTextMessageBody, updateUserProfileBody } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
-import { createLikeSchema } from "./../../validation/user.matching.schema";
+import { createLikeSchema, createTextMessageSchema } from "./../../validation/user.matching.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -42,5 +42,6 @@ export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(val
 export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingInfoSchema, updateUserProfileBody.invalid.matching).error);
 export const InvalidPasswordSchemaInstance = new InvalidRequestedBody(validate(singlePasswordSchema, { password: invalidPasswordSchema }).error);
 export const InvalidCreateLikeInstance = new InvalidRequestedBody(validate(createLikeSchema, createLikeBody.invalid.schema).error);
+export const InvalidCreateTextMessageInstance = new InvalidRequestedBody(validate(createTextMessageSchema, createTextMessageBody.invalid.schema).error);
 
 export const apiVersion = "v1";

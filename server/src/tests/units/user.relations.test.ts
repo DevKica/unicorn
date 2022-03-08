@@ -2,15 +2,16 @@ import seedRelationsData from "../../prisma/seed/users.relations.seed";
 import { removeGlobals, setConversationId, setUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
-import { afterFullUpdateUserData, createLikeBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
+import { afterFullUpdateUserData, createLikeBody, createTextMessageBody, createTextMessageResponse, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
 import {
-    NotFoundInstance,
     apiVersion,
     InvalidUpdateUserGeneralInfoInstance,
     InvalidUpdateUserMatchingInfoInstance,
     InvalidCreateLikeInstance,
     UpgradeYourAccountInstance,
     ForbiddenInstance,
+    InvalidCreateTextMessageInstance,
+    NotFoundInstance,
 } from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { femalesUnder24ShowFemale, femalesUnder24showMale } from "../../prisma/seed/data/users";
@@ -93,11 +94,21 @@ describe("RELATIONS", () => {
         });
     });
     describe("CONVERSATIONS AND MESSAGES", () => {
-        test(`User should NOT be able to send message to a conversation that doesnt exists or is not a member of`, async () => {});
-        test(`User should NOT be able to send image to a conversation with invalid format`, async () => {});
-        test(`User should NOT be able to send image to a conversation with invalid format`, async () => {});
-        test(`User should NOT be able to send video to a conversation with invalid format`, async () => {});
-        test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {});
-        test(`User should NOT be able to send message to a conversation with invalid body`, async () => {});
+        const { valid: text_valid, invalid: text_invalid } = createTextMessageBody;
+
+        test(`User should NOT be able to send text message to a conversation with invalid body`, async () => {
+            await testPOSTRequest("/messages/text", text_invalid.schema, InvalidCreateTextMessageInstance);
+        });
+        test(`User should NOT be able to send text message to a conversation that doesn't exist`, async () => {
+            await testPOSTRequest("/messages/text", text_invalid.notFoundConversation, NotFoundInstance);
+        });
+        test(`User should be able to send text message to a conversation with invalid body`, async () => {
+            await testPOSTRequest("/messages/text", { ...text_valid, conversationId: global.testConversationId }, { ...createTextMessageResponse, conversationId: global.testConversationId }, 201);
+        });
+        // files
+        // test(`User should NOT be able to send photo to a conversation with invalid format`, async () => {});
+        // test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {});
+        // test(`User should NOT be able to send video to a conversation with invalid format`, async () => {});
+        // test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {});
     });
 });
