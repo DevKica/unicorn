@@ -2,18 +2,30 @@ import { ConversationCreateInput, ConversationUpdateInput, ConversationWhereUniq
 import { ConversationModel } from "../prisma/models";
 
 export async function createConversation(data: ConversationCreateInput) {
-    return await ConversationModel.create({
+    const conversation = await ConversationModel.create({
         data,
         include: {
             messages: true,
         },
     });
+    return conversation;
 }
 
-export async function findUniqueConversation(where: ConversationWhereUniqueInput) {
-    return await ConversationModel.findUnique({ where });
+export async function findUserConversation(conversationId: string, userId: string) {
+    const conversation = await ConversationModel.findFirst({
+        where: {
+            id: conversationId,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+    });
+    return conversation;
 }
 
 export async function updateUniqueConversation(where: ConversationWhereUniqueInput, data: ConversationUpdateInput) {
-    return await ConversationModel.update({ where, data });
+    const conversation = await ConversationModel.update({ where, data });
+    return conversation;
 }

@@ -2,13 +2,15 @@ import { PasswordResetModel } from "../prisma/models";
 import { PasswordResetCreateInput, PasswordResetWhereUniqueInput } from "../@types/prisma/static.types";
 
 export async function createPasswordReset(input: PasswordResetCreateInput) {
-    return await PasswordResetModel.create({
+    const passwordReset = await PasswordResetModel.create({
         data: input,
     });
+    return passwordReset;
 }
 
 export async function findPasswordReset(input: PasswordResetWhereUniqueInput) {
-    return await PasswordResetModel.findUnique({ where: input });
+    const passwordReset = await PasswordResetModel.findUnique({ where: input });
+    return passwordReset;
 }
 
 export async function deletePasswordReset(input: PasswordResetWhereUniqueInput) {

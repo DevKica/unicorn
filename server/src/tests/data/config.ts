@@ -4,6 +4,7 @@ import { validate } from "./../../middleware/schemaValidation";
 import {
     EmailAlreadyExists,
     EmailNotVerified,
+    FileRequired,
     Forbidden,
     InvalidCredentials,
     InvalidFileFormat,
@@ -19,7 +20,7 @@ import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, inva
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
 import { createLikeBody, createTextMessageBody, updateUserProfileBody } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
-import { createLikeSchema, createTextMessageSchema } from "./../../validation/user.matching.schema";
+import { createFileMessageSchema, createLikeSchema, createTextMessageSchema } from "./../../validation/user.matching.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -32,6 +33,7 @@ export const InvalidCredentialsInstance = new InvalidCredentials();
 export const InvalidPasswordInstance = new InvalidPassword();
 export const NotFoundInstance = new NotFound();
 export const UpgradeYourAccountInstance = new UpgradeYourAccount();
+export const FileRequiredInstance = new FileRequired();
 
 export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
@@ -43,5 +45,6 @@ export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(va
 export const InvalidPasswordSchemaInstance = new InvalidRequestedBody(validate(singlePasswordSchema, { password: invalidPasswordSchema }).error);
 export const InvalidCreateLikeInstance = new InvalidRequestedBody(validate(createLikeSchema, createLikeBody.invalid.schema).error);
 export const InvalidCreateTextMessageInstance = new InvalidRequestedBody(validate(createTextMessageSchema, createTextMessageBody.invalid.schema).error);
+export const InvalidCreateFileMessageInstance = new InvalidRequestedBody(validate(createFileMessageSchema, { conversationId: "12", type: "invalidPhoto123heh" }).error);
 
 export const apiVersion = "v1";

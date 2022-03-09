@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUserHandler, deleteUserHandler, loginUserHandler, returnSuccess } from "../../controllers/user/auth.controllers";
+import { createUserHandler, deleteUserHandler, loginUserHandler } from "../../controllers/user/auth.controllers";
 import { changeEmailHandler, resendVerificationEmailHandler, verifyEmailHandler } from "../../controllers/email.controllers";
 import { changePasswordHandler, sendPasswordResetEmailHandler, setNewPasswordHandler, verifySetNewPasswordLinkHandler } from "../../controllers/password.controllers";
 import { getUsersToMatchHandler } from "../../controllers/user/user.profile.controllers";

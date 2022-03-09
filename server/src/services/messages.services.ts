@@ -2,17 +2,21 @@ import { MessageModel } from "../prisma/models";
 import { MessageCreateInput, MessageUpdateInput, MessageWhereInput, MessageWhereUniqueInput } from "../@types/prisma/static.types";
 
 export async function createMessage(data: MessageCreateInput) {
-    return await MessageModel.create({ data });
+    const message = await MessageModel.create({ data });
+    return message;
 }
 
 export async function findUniqueMessage(where: MessageWhereUniqueInput) {
-    return await MessageModel.findUnique({ where });
+    const message = await MessageModel.findUnique({ where });
+    return message;
 }
 
 export async function findManyMessages(where: MessageWhereInput) {
-    return await MessageModel.findMany({ where });
+    const message = await MessageModel.findMany({ where });
+    return message;
 }
 
 export async function updateUniqueMessage(where: MessageWhereUniqueInput, data: MessageUpdateInput) {
-    return await MessageModel.update({ where, data });
+    const message = await MessageModel.update({ where, data });
+    return message;
 }

@@ -81,7 +81,10 @@ export const createTextMessageBody = {
             content: "hello",
             conversationId: "12345",
         },
-        notInConversaionMembers: {},
+        notInConversaionMembers: {
+            content: "hallo",
+            conversationId: "conversation1",
+        },
     },
 };
 

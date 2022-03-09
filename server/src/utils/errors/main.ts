@@ -127,3 +127,11 @@ export class UpgradeYourAccount extends Error {
         Object.setPrototypeOf(this, UpgradeYourAccount.prototype);
     }
 }
+export class FileRequired extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "File is required";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, FileRequired.prototype);
+    }
+}

@@ -1,6 +1,5 @@
 import { Response } from "express";
 import { omit } from "lodash";
-import { logError } from "../logger";
 import { SuccessResponse } from "../responses/main";
 import { ServerError } from "./main";
 

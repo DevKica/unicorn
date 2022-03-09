@@ -70,7 +70,7 @@ export async function changeEmailHandler(req: LoginUserRequest, res: MainRespons
     }
 }
 
-export async function resendVerificationEmailHandler(req: Request, res: Response): Promise<void> {
+export async function resendVerificationEmailHandler(_req: Request, res: Response): Promise<void> {
     try {
         const { userId, active } = res.locals.user;
 

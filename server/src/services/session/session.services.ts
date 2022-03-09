@@ -16,15 +16,18 @@ export async function signNewSession(input: SignNewSessionInput): Promise<void> 
 }
 
 export async function createSession(input: SessionCreateInput): Promise<SessionType> {
-    return await SessionModel.create({ data: input });
+    const session = await SessionModel.create({ data: input });
+    return session;
 }
 
 export async function findSingleSession(input: SessionWhereUniqueInput): Promise<SessionType | null> {
-    return await SessionModel.findUnique({ where: input });
+    const session = await SessionModel.findUnique({ where: input });
+    return session;
 }
 
 export async function findManySessions(input: SessionWhereInput): Promise<Session[]> {
-    return await SessionModel.findMany({ where: input });
+    const session = await SessionModel.findMany({ where: input });
+    return session;
 }
 
 export async function deleteSingleSession(input: SessionWhereUniqueInput, res: Response): Promise<void> {

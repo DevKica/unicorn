@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
+import { logError } from "../utils/logger";
 import { MailOptions } from "nodemailer/lib/json-transport";
-import { emailTokenFormat, jwtEnumFormat } from "../@types/utils/jwt.config.types";
-import { SUPPORT_EMAIL_PASSWORD, ORIGIN, EMAIL_TOKEN_TTL, EMAIL_SECRET_TOKEN, SUPPORT_EMAIL_USERNAME } from "./env.config";
-import { signEmailTokenJWT, signJWT } from "./jwt.config";
-import { logError, logInfo } from "../utils/logger";
+import { signEmailTokenJWT } from "./jwt.config";
+import { emailTokenFormat } from "../@types/utils/jwt.config.types";
+import { SUPPORT_EMAIL_PASSWORD, ORIGIN, SUPPORT_EMAIL_USERNAME } from "./env.config";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",

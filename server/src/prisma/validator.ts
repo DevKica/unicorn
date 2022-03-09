@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { UserType } from "../@types/prisma/static.types";
 
 export const PrismaValidator = Prisma.validator;
 

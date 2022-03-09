@@ -1,4 +1,4 @@
-import Joi, { custom } from "Joi";
+import Joi from "Joi";
 import { regexBasicAlphabet } from "./helpers/regexes";
 import { joiGeneralInfo, joiShowMeGender } from "./user.auth.schema";
 

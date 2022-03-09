@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
-import { findUniqueConversation } from "../services/conversations.services";
+import { findUserConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
+import { uploadFileMessage } from "../utils/user/upload/uploadToDir";
 
 export async function createTextMessageHandler(req: Request, res: Response): Promise<void> {
     try {
         const { userId } = res.locals.user;
         const { content, conversationId } = req.body;
 
-        const conversation = await findUniqueConversation({ id: conversationId });
+        const conversation = await findUserConversation(conversationId, userId);
 
         if (!conversation) throw new NotFound();
-
-        console.log(conversation);
 
         const message = await createMessage({
             content,
@@ -36,8 +35,18 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
     try {
         const { userId } = res.locals.user;
         const { type, conversationId } = req.body;
+
+        const conversation = await findUserConversation(conversationId, userId);
+
+        if (!conversation) throw new NotFound();
+
+        const fileName = await uploadFileMessage(req, type);
+
+        console.log(fileName);
+
         applySuccessToResponse(res);
     } catch (e) {
+        console.log(e);
         applyToResponseCustom(res, e);
     }
 }

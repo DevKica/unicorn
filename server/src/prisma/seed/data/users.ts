@@ -141,7 +141,7 @@ export const femalesUnder24ShowFemale = [
     },
 ];
 
-export const femalesUnder24ShowMaleRejected = [
+export const femalesUnder24ShowMaleNotInRange = [
     {
         id: "9",
         name: "Natalia",
@@ -159,13 +159,10 @@ export const femalesUnder24ShowMaleRejected = [
         showMeDistance: 40,
         showMeAgeLowerLimit: 18,
         showMeAgeUpperLimit: 30,
-        latitude: 50.05,
+        latitude: 52.05,
         longitude: 100.01,
         photos: ["nataliaSzroeder1"],
     },
-];
-
-export const femalesUnder24ShowMaleNotInRange = [
     {
         id: "10",
         name: "Selena",

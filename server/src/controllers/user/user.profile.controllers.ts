@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { existsSync } from "fs";
 import path from "path";
-import { usersPhotosDirname } from "../../config/upload.config";
+import { usersPhotosPath } from "../../config/upload.config";
 import { userProfileProperties } from "../../prisma/validator";
 import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../services/user/user.services";
-import { applyToResponseCustom, applyToResponse, applySuccessToResponse } from "../../utils/errors/applyToResponse";
+import { applyToResponseCustom, applyToResponse } from "../../utils/errors/applyToResponse";
 import { NotFound } from "../../utils/errors/main";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {
         const { size, photoName } = req.params;
 
-        const photoPath = path.join(usersPhotosDirname, `${size}.${photoName}.jpg`);
+        const photoPath = path.join(usersPhotosPath, `${size}.${photoName}.jpg`);
 
         if (!existsSync(photoPath)) throw new NotFound();
 
@@ -21,7 +21,7 @@ export async function getProfilePhotoHandler(req: Request, res: Response): Promi
     }
 }
 
-export async function getUserPrivateInfoHandler(req: Request, res: Response): Promise<void> {
+export async function getUserPrivateInfoHandler(_req: Request, res: Response): Promise<void> {
     try {
         const { userId } = res.locals.user;
 

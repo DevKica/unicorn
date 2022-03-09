@@ -33,7 +33,7 @@ import { expectUploadFilesToExists } from "../helpers/customExceptions";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
-import { invalidFileFormat, validFileFormat } from "../data/files";
+import { invalidPhotoFile, validPhotoFile } from "../data/files";
 import { removeTables } from "../../prisma/cleanup/cleanUpDev";
 import { SuccessResponse } from "../../utils/responses/main";
 
@@ -57,10 +57,10 @@ describe("AUTHENTICATION", () => {
             await testPOSTRequest("/users", valid, PhotoRequiredInstance);
         });
         test(`User should NOT be able to create account with valid body but with file in invalid format`, async () => {
-            await testPOSTRequest("/users", valid, InvalidFileFormatInstance, undefined, invalidFileFormat);
+            await testPOSTRequest("/users", valid, InvalidFileFormatInstance, undefined, invalidPhotoFile);
         });
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
-            const res = await testPOSTRequest("/users", valid, basicUserData, 201, validFileFormat);
+            const res = await testPOSTRequest("/users", valid, basicUserData, 201, validPhotoFile);
             expectUploadFilesToExists(res);
             setUserId(res);
         });

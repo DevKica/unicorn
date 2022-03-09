@@ -22,4 +22,9 @@ export const userPhotosResolutions = {
 const localDirname = __dirname;
 
 export const uploadMainPath = path.join(localDirname, "..", "..", "public");
-export const usersPhotosDirname = path.join(uploadMainPath, "usersPhotos");
+export const usersPhotosPath = path.join(uploadMainPath, "usersPhotos");
+export const mainMessagesPath = path.join(localDirname, "..", "..", "public", "messages");
+
+export const voiceMessagesPath = path.join(mainMessagesPath, "voice");
+export const photoMessagesPath = path.join(mainMessagesPath, "photo");
+export const videoMessagesPath = path.join(mainMessagesPath, "video");

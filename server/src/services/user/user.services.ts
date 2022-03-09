@@ -1,27 +1,29 @@
+import calcDistance from "../../utils/user/calcDistance";
 import { Prisma } from "@prisma/client";
-import console from "console";
 import { omit } from "lodash";
-import { UserFilterToMatch, matchedUser, matchedUserToPrepareTemplate } from "../../@types/prisma/matchedUsers.types";
-import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput, UserWhereInput } from "../../@types/prisma/static.types";
+import { UserFilterToMatch, matchedUser } from "../../@types/prisma/matchedUsers.types";
+import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
-import calcDistance from "../../utils/user/calcDistance";
 import { findLike } from "../like.services";
 import { findUsersRelation } from "../usersRelation.services";
 
 export async function createUser(data: UserCreateInput) {
-    return await UserModel.create({
+    const user = await UserModel.create({
         data,
         select: userProfileProperties,
     });
+    return user;
 }
 
 export async function findUniqueUser<S extends UserSelectType>(where: UserWhereUniqueInput, select: Prisma.Subset<S, UserSelectType>) {
-    return await UserModel.findUnique<{ select: S } & Omit<Prisma.UserFindUniqueArgs, "select" | "include">>({ where, select });
+    const user = await UserModel.findUnique<{ select: S } & Omit<Prisma.UserFindUniqueArgs, "select" | "include">>({ where, select });
+    return user;
 }
 
 export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true, active: true }) {
-    return await UserModel.update({ where, data, select });
+    const user = await UserModel.update({ where, data, select });
+    return user;
 }
 
 export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<void> {

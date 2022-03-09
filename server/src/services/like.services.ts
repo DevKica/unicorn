@@ -6,7 +6,8 @@ export async function createLike(data: LikeCreateInput): Promise<void> {
 }
 
 export async function findLike(where: any) {
-    return await LikeModel.findFirst({ where });
+    const like = await LikeModel.findFirst({ where });
+    return like;
 }
 
 export async function deleteLike(where: any) {

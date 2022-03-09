@@ -1,7 +1,7 @@
 import path from "path";
 import { omit } from "lodash";
 import checkIfFileExists from "../../utils/user/upload/checkIfFileExists";
-import { userPhotosResolutions, usersPhotosDirname } from "../../config/upload.config";
+import { userPhotosResolutions, usersPhotosPath } from "../../config/upload.config";
 
 export function expectToEqualCustom(res: any, error: any) {
     expect(res.body.msg).toEqual(error.msg);
@@ -16,7 +16,7 @@ export function expectToEqual(res: any, status: number, data: Object) {
 export function expectUploadFilesToExists(res: any) {
     res.body.photos.forEach((photo: string) => {
         for (const key in userPhotosResolutions) {
-            expect(checkIfFileExists(path.join(usersPhotosDirname, `${key}.${photo}.jpg`))).toBeTruthy();
+            expect(checkIfFileExists(path.join(usersPhotosPath, `${key}.${photo}.jpg`))).toBeTruthy();
         }
     });
 }

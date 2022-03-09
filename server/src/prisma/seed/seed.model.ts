@@ -3,7 +3,7 @@ import sharp from "sharp";
 import { prisma } from "../db";
 import { logInfo } from "../../utils/logger";
 import { ModelName } from "../../@types/prisma/seed.types";
-import { userPhotosResolutions, usersPhotosDirname } from "../../config/upload.config";
+import { userPhotosResolutions, usersPhotosPath } from "../../config/upload.config";
 
 async function seedModel(name: ModelName, dataset: any) {
     await (prisma[name] as any).deleteMany();
@@ -18,16 +18,23 @@ async function seedModel(name: ModelName, dataset: any) {
                     for (const [key, { width, height }] of Object.entries(userPhotosResolutions)) {
                         await sharp(localPath)
                             .resize(width, height)
-                            .toFile(path.join(usersPhotosDirname, `${key}.${photoName}.jpg`));
+                            .toFile(path.join(usersPhotosPath, `${key}.${photoName}.jpg`));
                     }
                 });
             }
         });
     }
-
-    await (prisma[name] as any).createMany({
-        data: dataset,
-    });
+    if (name === "conversation") {
+        for (const record of dataset) {
+            await (prisma[name] as any).create({
+                data: record,
+            });
+        }
+    } else {
+        await (prisma[name] as any).createMany({
+            data: dataset,
+        });
+    }
 
     logInfo(`${dataset.length} records have been added`);
 }

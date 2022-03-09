@@ -6,7 +6,8 @@ export async function createUsersRelations(data: UsersRelationCreateInput) {
 }
 
 export async function findUsersRelation(where: UsersRelationWhereInput) {
-    return await UsersRelationModel.findFirst({ where });
+    const usersRelation = await UsersRelationModel.findFirst({ where });
+    return usersRelation;
 }
 
 export async function deleteManyUsersRelation(where: UsersRelationWhereInput) {
