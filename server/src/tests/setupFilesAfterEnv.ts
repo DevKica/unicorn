@@ -6,3 +6,4 @@ global.testAccessToken = "";
 global.testRefreshToken = "";
 global.testUserId = "";
 global.testConversationId = "";
+global.testMessagesContent = [];

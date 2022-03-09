@@ -135,3 +135,21 @@ export class FileRequired extends Error {
         Object.setPrototypeOf(this, FileRequired.prototype);
     }
 }
+
+export class VoiceClipTooShort extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Voice clip is too short";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, VoiceClipTooShort.prototype);
+    }
+}
+
+export class VoiceClipTooLong extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Voice clip is too long";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, VoiceClipTooLong.prototype);
+    }
+}

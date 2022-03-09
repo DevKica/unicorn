@@ -2,7 +2,7 @@ import seedRelationsData from "../../prisma/seed/users.relations.seed";
 import { removeGlobals, setConversationId, setUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
-import { afterFullUpdateUserData, createLikeBody, createTextMessageBody, createTextMessageResponse, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
+import { afterFullUpdateUserData, createMessageResponse, createLikeBody, createTextMessageBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
 import {
     apiVersion,
     InvalidUpdateUserGeneralInfoInstance,
@@ -14,12 +14,14 @@ import {
     NotFoundInstance,
     InvalidCreateFileMessageInstance,
     InvalidFileFormatInstance,
+    VoiceClipTooShortInstance,
+    VoiceClipTooLongInstance,
 } from "../data/config";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { femalesUnder24showMale } from "../../prisma/seed/data/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import { femalesUnder24ShowAll } from "./../../prisma/seed/data/users";
-import { invalidPhotoFile, validPhotoFile } from "../data/files";
+import { invalidPhotoFile, invalidVoiceFormat, invalidVoiceTooLong, invalidVoiceTooShort, validPhotoFile, validVoiceFile } from "../data/files";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -29,7 +31,6 @@ describe("RELATIONS", () => {
     });
     afterAll(async () => {
         removeGlobals();
-        // exit(1);
     });
     describe("PROFILE", () => {
         const { valid, invalid } = updateUserProfileBody;
@@ -98,6 +99,7 @@ describe("RELATIONS", () => {
     describe("CONVERSATIONS AND MESSAGES", () => {
         const { valid: text_valid, invalid: text_invalid } = createTextMessageBody;
 
+        // text messages
         test(`User should NOT be able to send text message to a conversation with invalid body`, async () => {
             await testPOSTRequest("/messages/text", text_invalid.schema, InvalidCreateTextMessageInstance);
         });
@@ -108,20 +110,51 @@ describe("RELATIONS", () => {
             await testPOSTRequest("/messages/text", text_invalid.notInConversaionMembers, NotFoundInstance);
         });
         test(`User should be able to send text message to a conversation with invalid body`, async () => {
-            await testPOSTRequest("/messages/text", { ...text_valid, conversationId: global.testConversationId }, { ...createTextMessageResponse, conversationId: global.testConversationId }, 201);
+            await testPOSTRequest(
+                "/messages/text",
+                { ...text_valid, conversationId: global.testConversationId },
+                { ...createMessageResponse("default"), conversationId: global.testConversationId },
+                201
+            );
         });
         // files
+
+        // schema
         test(`User should NOT be able to send file to a conversation with invalid body`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "invalidPhoto123heh" }, InvalidCreateFileMessageInstance);
         });
+        // photos
         test(`User should NOT be able to send photo to a conversation with invalid format`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "photo" }, InvalidFileFormatInstance, undefined, invalidPhotoFile);
         });
-        test(`User should NOT be able to send photo to a conversation with valid format`, async () => {
-            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "photo" }, {}, 201, validPhotoFile);
+        test(`User should be able to send valid photo to a conversation`, async () => {
+            await testPOSTRequest(
+                "/messages/file",
+                { conversationId: global.testConversationId, type: "photo" },
+                { ...createMessageResponse("photo"), conversationId: global.testConversationId },
+                201,
+                validPhotoFile
+            );
         });
-        test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {});
-        // test(`User should NOT be able to send video to a conversation with invalid format`, async () => {});
+        // voice messages
+        test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, InvalidFileFormatInstance, undefined, invalidVoiceFormat);
+        });
+        test(`User should NOT be able to send too short voice message to a conversation`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, VoiceClipTooShortInstance, undefined, invalidVoiceTooShort);
+        });
+        test(`User should NOT be able to send too long voice message to a conversation`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, VoiceClipTooLongInstance, undefined, invalidVoiceTooLong);
+        });
+        test(`User should be able to send valid voice messages to a conversation`, async () => {
+            await testPOSTRequest(
+                "/messages/file",
+                { conversationId: global.testConversationId, type: "voice" },
+                { ...createMessageResponse("voice"), conversationId: global.testConversationId },
+                201,
+                validVoiceFile
+            );
+        });
         // test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {});
     });
 });

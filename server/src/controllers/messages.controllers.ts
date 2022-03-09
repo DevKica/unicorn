@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { findUserConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
-import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
+import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
 import { uploadFileMessage } from "../utils/user/upload/uploadToDir";
 
@@ -42,11 +42,19 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
 
         const fileName = await uploadFileMessage(req, type);
 
-        console.log(fileName);
+        const message = await createMessage({
+            content: fileName,
+            user: {
+                connect: { id: userId },
+            },
+            conversation: {
+                connect: { id: conversationId },
+            },
+            type,
+        });
 
-        applySuccessToResponse(res);
+        applyToResponse(res, 201, message);
     } catch (e) {
-        console.log(e);
         applyToResponseCustom(res, e);
     }
 }

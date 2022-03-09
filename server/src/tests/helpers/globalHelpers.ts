@@ -7,6 +7,8 @@ export function removeAuthTokens(): void {
 export function removeGlobals(): void {
     removeAuthTokens();
     global.testUserId = "";
+    global.testConversationId = "";
+    global.testMessagesContent = [];
     logInfo("Globals have been removed");
 }
 

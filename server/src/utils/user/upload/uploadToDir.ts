@@ -1,25 +1,26 @@
 import path from "path";
 import fse from "fs-extra";
-import { Request } from "express";
 import sharp from "sharp";
+import { Request } from "express";
 import { promisify } from "util";
-import { FileRequired, InvalidFileFormat, PhotoRequired } from "../../errors/main";
-import { photoMessagesPath, userPhotosResolutions, usersPhotosPath } from "../../../config/upload.config";
+import { FileRequired, InvalidFileFormat, PhotoRequired, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
+import { photoMessagesPath, userPhotosResolutions, usersPhotosPath, voiceMessagesPath } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
+const getMP3Duration = require("get-mp3-duration");
 
-export async function uploadFileMessage(req: Request, type: string) {
+export async function uploadFileMessage(req: Request, type: string): Promise<string> {
     if (req.files) {
         const file = Object.values(req.files)[0];
         switch (type) {
             case "photo":
-                const fileName = await uploadSinglePhoto(file, photoMessagesPath, false);
-                return fileName;
+                const photoFileName = await uploadSinglePhoto(file, photoMessagesPath, false);
+                return photoFileName;
             case "video":
                 console.log("videooo");
-                break;
+                return "12";
             case "voice":
-                console.log("voicee");
-                break;
+                const voiceFileName = await uploadVoiceMessage(file, voiceMessagesPath);
+                return voiceFileName;
             default:
                 throw Error();
         }
@@ -28,9 +29,24 @@ export async function uploadFileMessage(req: Request, type: string) {
     }
 }
 
-// export async function uploadVoiceMessage(file: any, dirPath: string): Promise<string> {
-//     return "1";
-// }
+export async function uploadVoiceMessage(file: any, dirPath: string): Promise<string> {
+    const ext = file.name.split(".").slice(-1)[0];
+    if (!["mp3"].includes(ext)) throw new InvalidFileFormat();
+
+    const duration = getMP3Duration(file.data);
+    if (duration < 2000) throw new VoiceClipTooShort();
+    if (duration > 30000) throw new VoiceClipTooLong();
+
+    await fse.ensureDir(dirPath);
+
+    const fileName = generateRandomString();
+    const uploadFile = promisify(file.mv);
+
+    const uploadPath = path.join(dirPath, `${fileName}.mp3`);
+    await uploadFile(uploadPath);
+
+    return fileName;
+}
 
 export async function uploadSinglePhoto(file: any, dirPath: string, resize: boolean = true): Promise<string> {
     const ext = file.name.split(".").slice(-1)[0];

@@ -33,6 +33,7 @@
         "fs": "^0.0.1-security",
         "fs-extra": "^10.0.1",
         "geoip-lite": "^1.4.3",
+        "get-mp3-duration": "^1.0.0",
         "google-auth-library": "^7.14.0",
         "googleapis": "^95.0.0",
         "html-to-text": "^8.1.0",

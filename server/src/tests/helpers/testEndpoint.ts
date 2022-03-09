@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { COOKIE_TYPE } from "../../config/cookies.config";
 import { apiVersion } from "../data/config";
-import { expectToEqual, expectToEqualCustom } from "./customExceptions";
+import { expectToEqual, expectToEqualCustom } from "./customExpectations";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
@@ -28,7 +28,7 @@ export async function testGETRequest(endpoint: string, equalObject: any, equalSt
 export async function testPOSTRequest(endpoint: string, data: any, equalObject: any, equalStatus: number = 0, attachFileName: string = "") {
     let buffer: any = "";
     if (attachFileName) {
-        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", attachFileName));
+        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "files", attachFileName));
     }
     const res = await global.request
         .post(`/api/${apiVersion}${endpoint}`)

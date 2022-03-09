@@ -1,4 +1,5 @@
 import { basicActiveUserData } from "./user.auth";
+import { MessageType } from "@prisma/client";
 
 export const updateUserProfileBody = {
     valid: {
@@ -88,9 +89,13 @@ export const createTextMessageBody = {
     },
 };
 
-export const createTextMessageResponse = {
-    content: "hello",
-    isDeleted: false,
-    type: "default",
-    userId: "1",
+export const createMessageResponse = (type: MessageType) => {
+    const response = {
+        isDeleted: false,
+        userId: "1",
+        type: "",
+    };
+    response["type"] = type;
+
+    return response;
 };

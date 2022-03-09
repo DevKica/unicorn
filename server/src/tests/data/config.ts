@@ -15,6 +15,8 @@ import {
     ServerError,
     Unauthorized,
     UpgradeYourAccount,
+    VoiceClipTooLong,
+    VoiceClipTooShort,
 } from "../../utils/errors/main";
 import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
@@ -34,6 +36,8 @@ export const InvalidPasswordInstance = new InvalidPassword();
 export const NotFoundInstance = new NotFound();
 export const UpgradeYourAccountInstance = new UpgradeYourAccount();
 export const FileRequiredInstance = new FileRequired();
+export const VoiceClipTooShortInstance = new VoiceClipTooShort();
+export const VoiceClipTooLongInstance = new VoiceClipTooLong();
 
 export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
