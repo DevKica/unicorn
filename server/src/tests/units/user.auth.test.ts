@@ -31,7 +31,7 @@ import {
 } from "../data/user.auth";
 import { expectUserPhotosToExists } from "../helpers/customExpectations";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
-import { removeAuthTokens, removeGlobals, setUserId } from "../helpers/globalHelpers";
+import { removeAuthTokens, removeGlobals, setTestUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { invalidPhotoFile, validPhotoFile } from "../data/files";
 import { removeTables } from "../../prisma/cleanup/cleanUpDev";
@@ -62,7 +62,7 @@ describe("AUTHENTICATION", () => {
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
             const res = await testPOSTRequest("/users", valid, basicUserData, 201, validPhotoFile);
             expectUserPhotosToExists(res);
-            setUserId(res);
+            setTestUserId(res);
         });
         test(`User should NOT be able to create account with email that already exists in database`, async () => {
             await testPOSTRequest("/users", valid, EmailAlreadyExistsInstance);

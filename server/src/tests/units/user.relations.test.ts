@@ -1,5 +1,5 @@
 import seedRelationsData from "../../prisma/seed/users.relations.seed";
-import { removeGlobals, setConversationId, setUserId } from "../helpers/globalHelpers";
+import { removeGlobals, setTestConversationId, setTestUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import { afterFullUpdateUserData, createMessageResponse, createLikeBody, createTextMessageBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
@@ -21,13 +21,14 @@ import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { femalesUnder24showMale } from "../../prisma/seed/data/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import { femalesUnder24ShowAll } from "./../../prisma/seed/data/users";
-import { invalidPhotoFile, invalidVoiceFormat, invalidVoiceTooLong, invalidVoiceTooShort, validPhotoFile, validVoiceFile } from "../data/files";
+import { invalidFileTooLarge, invalidPhotoFile, invalidVoiceFormat, invalidVoiceTooLong, invalidVoiceTooShort, validPhotoFile, validVoiceFile } from "../data/files";
+import { TooLargeFileInstance } from "./../data/config";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
         await seedRelationsData();
         const res = await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
-        setUserId(res);
+        setTestUserId(res);
     });
     afterAll(async () => {
         removeGlobals();
@@ -87,7 +88,7 @@ describe("RELATIONS", () => {
         });
         test(`User should be able to match with user who liked him`, async () => {
             const res = await testPOSTRequest("/likes", valid.newPair, getMatchedResponse, 201);
-            setConversationId(res);
+            setTestConversationId(res);
         });
         test(`User should NOT be able to like already matched user`, async () => {
             await testPOSTRequest("/likes", valid.newPair, ForbiddenInstance);
@@ -137,6 +138,7 @@ describe("RELATIONS", () => {
             );
         });
         // voice messages
+
         test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, InvalidFileFormatInstance, undefined, invalidVoiceFormat);
         });
@@ -155,6 +157,9 @@ describe("RELATIONS", () => {
                 validVoiceFile
             );
         });
-        // test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {});
+        // videos
+        test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, TooLargeFileInstance, undefined, invalidFileTooLarge);
+        });
     });
 });

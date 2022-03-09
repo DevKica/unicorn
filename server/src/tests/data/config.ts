@@ -13,6 +13,7 @@ import {
     NotFound,
     PhotoRequired,
     ServerError,
+    TooLargeFile,
     Unauthorized,
     UpgradeYourAccount,
     VoiceClipTooLong,
@@ -38,6 +39,7 @@ export const UpgradeYourAccountInstance = new UpgradeYourAccount();
 export const FileRequiredInstance = new FileRequired();
 export const VoiceClipTooShortInstance = new VoiceClipTooShort();
 export const VoiceClipTooLongInstance = new VoiceClipTooLong();
+export const TooLargeFileInstance = new TooLargeFile();
 
 export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
 export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);

@@ -21,11 +21,7 @@ server.use(express.json());
 
 server.use(cookieParser());
 
-server.use(
-    fileUpload({
-        limits: { fileSize: 50 * 1024 * 1024 },
-    })
-);
+server.use(fileUpload());
 
 server.use(trimmer);
 

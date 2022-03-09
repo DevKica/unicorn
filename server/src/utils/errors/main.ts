@@ -153,3 +153,12 @@ export class VoiceClipTooLong extends Error {
         Object.setPrototypeOf(this, VoiceClipTooLong.prototype);
     }
 }
+
+export class TooLargeFile extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Too Large File";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, TooLargeFile.prototype);
+    }
+}

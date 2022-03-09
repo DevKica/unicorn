@@ -12,10 +12,10 @@ export function removeGlobals(): void {
     logInfo("Globals have been removed");
 }
 
-export function setUserId(res: any): void {
+export function setTestUserId(res: any): void {
     global.testUserId = res.body.id;
 }
 
-export function setConversationId(res: any): void {
+export function setTestConversationId(res: any): void {
     global.testConversationId = res.body.id;
 }
