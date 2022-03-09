@@ -1,7 +1,7 @@
 import path from "path";
 import { omit } from "lodash";
 import checkIfFileExists from "../../utils/user/upload/checkIfFileExists";
-import { userPhotosResolutions, usersPhotosPath } from "../../config/upload.config";
+import { photoMessagesPath, userPhotosResolutions, usersPhotosPath, videoMessagesPath, voiceMessagesPath } from "../../config/upload.config";
 import { MessageType } from "@prisma/client";
 
 export function expectToEqualCustom(res: any, error: any) {
@@ -26,13 +26,16 @@ export function expectUserPhotosToExists(res: any) {
     });
 }
 
-export function expectFileMessagesToExists(type: MessageType) {
+export function expectFileFromMessageToExists(type: MessageType, name: string) {
     switch (type) {
         case "photo":
-            break;
-        case "video":
+            expect(checkIfFileExists(path.join(photoMessagesPath, `${name}.jpg`))).toBeTruthy();
             break;
         case "voice":
+            expect(checkIfFileExists(path.join(voiceMessagesPath, `${name}.mp3`))).toBeTruthy();
+            break;
+        case "video":
+            expect(checkIfFileExists(path.join(videoMessagesPath, `${name}.mp4`))).toBeTruthy();
             break;
     }
 }

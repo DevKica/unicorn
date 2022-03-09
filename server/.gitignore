@@ -2,7 +2,4 @@
 node_modules
 yarn-error.log
 migrations
-client_secret.json
-gmail-nodejs-quickstart.json
 test.js
-videos

@@ -21,8 +21,19 @@ import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { femalesUnder24showMale } from "../../prisma/seed/data/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import { femalesUnder24ShowAll } from "./../../prisma/seed/data/users";
-import { invalidFileTooLarge, invalidPhotoFile, invalidVoiceFormat, invalidVoiceTooLong, invalidVoiceTooShort, validPhotoFile, validVoiceFile } from "../data/files";
+import {
+    invalidFileTooLarge,
+    invalidPhotoFile,
+    invalidVideoFormat,
+    invalidVoiceFormat,
+    invalidVoiceTooLong,
+    invalidVoiceTooShort,
+    validPhotoFile,
+    validVideoFile,
+    validVoiceFile,
+} from "../data/files";
 import { TooLargeFileInstance } from "./../data/config";
+import { expectFileFromMessageToExists } from "../helpers/customExpectations";
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -118,27 +129,31 @@ describe("RELATIONS", () => {
                 201
             );
         });
-        // files
 
-        // schema
+        // files
+        test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, TooLargeFileInstance, undefined, invalidFileTooLarge);
+        });
         test(`User should NOT be able to send file to a conversation with invalid body`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "invalidPhoto123heh" }, InvalidCreateFileMessageInstance);
         });
+
         // photos
         test(`User should NOT be able to send photo to a conversation with invalid format`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "photo" }, InvalidFileFormatInstance, undefined, invalidPhotoFile);
         });
         test(`User should be able to send valid photo to a conversation`, async () => {
-            await testPOSTRequest(
+            const res = await testPOSTRequest(
                 "/messages/file",
                 { conversationId: global.testConversationId, type: "photo" },
                 { ...createMessageResponse("photo"), conversationId: global.testConversationId },
                 201,
                 validPhotoFile
             );
+            expectFileFromMessageToExists("photo", res.body.content);
         });
-        // voice messages
 
+        // voice messages
         test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, InvalidFileFormatInstance, undefined, invalidVoiceFormat);
         });
@@ -149,17 +164,31 @@ describe("RELATIONS", () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, VoiceClipTooLongInstance, undefined, invalidVoiceTooLong);
         });
         test(`User should be able to send valid voice messages to a conversation`, async () => {
-            await testPOSTRequest(
+            const res = await testPOSTRequest(
                 "/messages/file",
                 { conversationId: global.testConversationId, type: "voice" },
                 { ...createMessageResponse("voice"), conversationId: global.testConversationId },
                 201,
                 validVoiceFile
             );
+            expectFileFromMessageToExists("voice", res.body.content);
         });
+
         // videos
-        test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {
-            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "voice" }, TooLargeFileInstance, undefined, invalidFileTooLarge);
+        test(`User should NOT be able to send videos to a conversation with invalid format`, async () => {
+            await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "video" }, InvalidFileFormatInstance, undefined, invalidVideoFormat);
+        });
+
+        test(`User should be able to send valid voice messages to a conversation`, async () => {
+            const res = await testPOSTRequest(
+                "/messages/file",
+                { conversationId: global.testConversationId, type: "video" },
+                { ...createMessageResponse("video"), conversationId: global.testConversationId },
+                201,
+                validVideoFile
+            );
+
+            expectFileFromMessageToExists("video", res.body.content);
         });
     });
 });

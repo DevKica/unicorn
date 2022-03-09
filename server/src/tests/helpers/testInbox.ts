@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 import Imap from "imap";
-import { simpleParser } from "mailparser";
 import { exit } from "process";
-import { TEST_USER_EMAIL, TEST_USER_PASSWORD, SUPPORT_EMAIL_USERNAME } from "../../config/env.config";
+import { simpleParser } from "mailparser";
 import { logError, logInfo } from "../../utils/logger";
+import { TEST_USER_EMAIL, TEST_USER_PASSWORD, SUPPORT_EMAIL_USERNAME } from "../../config/env.config";
 
 const testGmailInbox = async () => {
     try {
