@@ -19,20 +19,6 @@ function checkVoiceMessageDuration(file: any) {
     if (duration > 30000) throw new VoiceClipTooLong();
 }
 
-async function uploadFile(file: any, type: string[], dirPath: string): Promise<string> {
-    checkFileFormat(file, type);
-
-    await fse.ensureDir(dirPath);
-
-    const fileName = generateRandomString();
-    const uploadFile = promisify(file.mv);
-
-    const uploadPath = path.join(dirPath, `${fileName}.${type[0]}`);
-    await uploadFile(uploadPath);
-
-    return fileName;
-}
-
 export async function uploadFileMessage(req: Request, type: string): Promise<string> {
     if (req.files) {
         const file = Object.values(req.files)[0];
@@ -58,6 +44,20 @@ export async function uploadFileMessage(req: Request, type: string): Promise<str
     } else {
         throw new FileRequired();
     }
+}
+
+async function uploadFile(file: any, type: string[], dirPath: string): Promise<string> {
+    checkFileFormat(file, type);
+
+    await fse.ensureDir(dirPath);
+
+    const fileName = generateRandomString();
+    const uploadFile = promisify(file.mv);
+
+    const uploadPath = path.join(dirPath, `${fileName}.${type[0]}`);
+    await uploadFile(uploadPath);
+
+    return fileName;
 }
 
 export async function uploadAndResizePhoto(file: any, dirPath: string): Promise<string> {

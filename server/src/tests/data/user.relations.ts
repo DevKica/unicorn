@@ -57,7 +57,7 @@ export const createLikeBody = {
             typeOfLike: "default",
         },
         nonPremium: {
-            judgedUserId: "4",
+            judgedUserId: "3",
             typeOfLike: "super",
         },
     },
@@ -71,7 +71,6 @@ export const getMatchedResponse = {
 export const createTextMessageBody = {
     valid: {
         content: "hello",
-        // conversation id = global.testConversationId
     },
     invalid: {
         schema: {
@@ -83,7 +82,7 @@ export const createTextMessageBody = {
             conversationId: "12345",
         },
         notInConversaionMembers: {
-            content: "hallo",
+            content: "hello",
             conversationId: "conversation1",
         },
     },

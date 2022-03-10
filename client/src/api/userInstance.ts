@@ -1,26 +1,24 @@
 import axios from "axios";
-import { validCreateUserBody } from "./data";
+import { loginCredentials } from "./data";
 
 axios.defaults.withCredentials = true;
 
-export const userAuthInstance = axios.create({
+export const mainAppInstance = axios.create({
   baseURL: "http://localhost:5000/api/v1",
 });
 
-userAuthInstance.interceptors.response.use(
+mainAppInstance.interceptors.response.use(
   res => {
-    console.log(res.data);
-    console.log(res.status);
     return res;
   },
   error => {
-    console.log(error.response);
-    return error;
+    return error.response;
   }
 );
 
-export const createUser = () => userAuthInstance.post(`/users`, validCreateUserBody);
+export const loginUser = async (id: number) =>
+  mainAppInstance.post("/users/login", id ? loginCredentials[1] : loginCredentials[0]);
 
-export const testRoute = () => userAuthInstance.post("/");
+export const logOut = async () => mainAppInstance.delete("/sessions/");
 
-export const uploadFile = (body: any) => userAuthInstance.post("/", body);
+export const getUserData = async () => mainAppInstance.get("/users/profile");

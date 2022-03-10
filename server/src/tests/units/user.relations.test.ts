@@ -108,7 +108,7 @@ describe("RELATIONS", () => {
             await testGETRequest("/users", formatMatchedUsers([femalesUnder24showMale[0]]), 200);
         });
     });
-    describe("CONVERSATIONS AND MESSAGES", () => {
+    describe("MESSAGES", () => {
         const { valid: text_valid, invalid: text_invalid } = createTextMessageBody;
 
         // text messages
@@ -179,7 +179,7 @@ describe("RELATIONS", () => {
             await testPOSTRequest("/messages/file", { conversationId: global.testConversationId, type: "video" }, InvalidFileFormatInstance, undefined, invalidVideoFormat);
         });
 
-        test(`User should be able to send valid voice messages to a conversation`, async () => {
+        test(`User should be able to send valid videos messages to a conversation`, async () => {
             const res = await testPOSTRequest(
                 "/messages/file",
                 { conversationId: global.testConversationId, type: "video" },
@@ -190,5 +190,8 @@ describe("RELATIONS", () => {
 
             expectFileFromMessageToExists("video", res.body.content);
         });
+    });
+    describe("CONVERSATIONS", () => {
+        test("conversations", async () => {});
     });
 });

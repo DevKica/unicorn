@@ -11,3 +11,14 @@ export const validCreateUserBody = {
   gender: "Male",
   sexualOrientation: ["Gay", "Lesbian", "Heterosexual"],
 };
+
+export const loginCredentials = [
+  {
+    email: "devKica777@gmail.com",
+    password: "Password1!",
+  },
+  {
+    email: "1",
+    password: "1",
+  },
+];

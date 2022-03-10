@@ -1,42 +1,83 @@
-// @ts-nocheck
-
-import { useState } from "react";
-import { createUser, uploadFile, testRoute } from "./api/userInstance";
+import { useEffect, useState } from "react";
+import { getUserData, loginUser, logOut } from "./api/userInstance";
+import { Routes, Route, Link } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 const App = () => {
-  const [file, setFile] = useState<any>(null);
-  const handleSendFile = () => {
-    let formData = new FormData();
-    if (file) {
-      let counter = 1;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const [_key, value] of Object.entries(file)) {
-        formData.append(`avatar${counter}`, value, value.name);
-        counter += 1;
-      }
-    }
-    uploadFile(formData);
+  const [loginId, setLoginId] = useState<number>(0);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [user, setUser] = useState<any | null>(null);
+
+  const logOutHandler = async () => {
+    await logOut();
+    window.location.reload();
   };
+
+  const loginUserHandler = async (e: any) => {
+    e.preventDefault();
+    const res = await loginUser(loginId);
+    if (res.status !== 200) return alert("Something went wrong, try to seed users to database");
+    window.location.reload();
+  };
+
+  const setLoginIdHandler = (id: number) => {
+    setLoginId(id);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const res = await getUserData();
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        setUser(res.data);
+      } else {
+        localStorage.removeItem("user");
+      }
+      setLoaded(true);
+    })();
+
+    return () => {};
+  }, []);
+
   return (
-    <div>
-      <div>App</div>
-      <button onClick={createUser}>create user</button>
-      <input
-        type="file"
-        multiple
-        onChange={e => {
-          if (e.target.files) {
-            console.log(e.target.files);
-            setFile(e.target.files);
-          }
-        }}
-      />
-      <button onClick={handleSendFile}>Send file</button>
-      <div>{JSON.stringify(file)}</div>
+    <CookiesProvider>
       <div>
-        <button onClick={testRoute}>Test route</button>
+        <div>Unicorn</div>
+        {loaded ? (
+          <>
+            {user ? (
+              <>
+                <div>
+                  You are logged in as {user.name} {user.surname}
+                  <button style={{ marginLeft: "10px" }} onClick={logOutHandler}>
+                    log out
+                  </button>
+                </div>
+                <nav>
+                  <Link to="/home">Home</Link>
+                  <Link to="/conversations">Conversations</Link>
+                </nav>
+                <Routes>
+                  <Route path="/home" element={<div>Home page</div>} />
+                  <Route path="/conversations" element={<div>Conversations</div>} />
+                </Routes>
+              </>
+            ) : (
+              <div>
+                <form onSubmit={loginUserHandler}>
+                  <div>
+                    <button onClick={() => setLoginIdHandler(0)}>Login to account 1</button>
+                  </div>
+                  <div>
+                    <button onClick={() => setLoginIdHandler(1)}>Login to account 2</button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </>
+        ) : null}
       </div>
-    </div>
+    </CookiesProvider>
   );
 };
 
