@@ -25,6 +25,31 @@ export async function findUserConversation(conversationId: string, userId: strin
     return conversation;
 }
 
+export async function findAllUserConversations(userId: string) {
+    const conversations = await ConversationModel.findMany({
+        where: {
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            messages: {
+                select: {
+                    id: true,
+                    userId: true,
+                    content: true,
+                    type: true,
+                    isDeleted: true,
+                    createdAt: true,
+                },
+            },
+        },
+    });
+    return conversations;
+}
+
 export async function updateUniqueConversation(where: ConversationWhereUniqueInput, data: ConversationUpdateInput) {
     const conversation = await ConversationModel.update({ where, data });
     return conversation;

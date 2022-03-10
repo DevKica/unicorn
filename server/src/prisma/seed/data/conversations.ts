@@ -7,4 +7,11 @@ export default [
             connect: [{ id: "9" }, { id: "10" }],
         },
     },
+    {
+        id: "conversation2",
+        name: "Pawel and Jennifer",
+        members: {
+            connect: [{ id: "1" }, { id: "7" }],
+        },
+    },
 ];

@@ -1,10 +1,11 @@
 import { Request, Response, Router } from "express";
+import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import usersMainRoutes from "./users/main.routes";
 import sessionsMainRoutes from "./sessions/main.routes";
-import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import authMainRoutes from "./auth/main.routes";
 import likesMainRoutes from "./likes/main.routes";
 import messagesMainRoutes from "./messages/main.routes";
+import conversationsMainRoutes from "./conversations/main.routes";
 
 const serverMainRoutes = Router();
 
@@ -31,5 +32,7 @@ serverMainRoutes.use("/sessions", sessionsMainRoutes);
 serverMainRoutes.use("/likes", likesMainRoutes);
 
 serverMainRoutes.use("/messages", messagesMainRoutes);
+
+serverMainRoutes.use("/conversations", conversationsMainRoutes);
 
 export default serverMainRoutes;

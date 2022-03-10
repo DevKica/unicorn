@@ -98,3 +98,53 @@ export const createMessageResponse = (type: MessageType) => {
 
     return response;
 };
+
+export const getConversationsResponse = [
+    {
+        updatedAt: "2022-03-10T21:23:09.006Z",
+        createdAt: "2022-03-10T20:48:35.395Z",
+        id: "conversation2",
+        messages: [],
+        name: "Pawel and Jennifer",
+    },
+    {
+        id: "cl0gpwaz0265qou8wbbxy02f",
+        name: "Dani and Doda",
+        updatedAt: "2022-03-10T21:23:09.006Z",
+        createdAt: "2022-03-10T20:48:37.835Z",
+        messages: [
+            {
+                id: "cl0lgpwls0382qou8cew1h3cw",
+                userId: "1",
+                content: "hello",
+                isDeleted: false,
+                type: "default",
+                createdAt: "2022-03-10T20:48:38.224Z",
+            },
+            {
+                id: "cl0lgpztr0417qou80ycglbpu",
+                userId: "1",
+                content: "fbcf736e1c5d6b2faf8d25783603606f195dc0db12445e08c8932fcfcb4d7f375cd548e4dbefc9b79dc3fb59834ca76ab1859d73564581ae7207d136786702a11646945322387",
+                isDeleted: false,
+                type: "photo",
+                createdAt: "2022-03-10T20:48:42.399Z",
+            },
+            {
+                id: "cl0lgq0170470qou870q99bxs",
+                userId: "1",
+                content: "2b3a17dc5a1c0035cee0653238b64e47bb30c35cca78a2dbc8ee917c695cea25458b8310991e5af5a4ca47a8a1bbf6300a167569945396f9f2e2826fe83a3de21646945322652",
+                isDeleted: false,
+                type: "voice",
+                createdAt: "2022-03-10T20:48:42.667Z",
+            },
+            {
+                id: "cl0lgq0qs0502qou8igdgb93q",
+                userId: "1",
+                content: "9377d0d02cf7ba2949c76a8f82a7bd24919172ecc2555af6a983dd82e2c7c1808bdf79da325af327645d94bb09b17313160d323b842714476cf9c52c6cbb8f1a1646945323572",
+                isDeleted: false,
+                type: "video",
+                createdAt: "2022-03-10T20:48:43.588Z",
+            },
+        ],
+    },
+];

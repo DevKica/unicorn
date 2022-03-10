@@ -14,7 +14,7 @@ export function expectToEqual(res: any, status: number, data: Object) {
         global.testMessagesContent.push(res.body.content);
     }
 
-    expect(omit(res.body, "id", "photos", "createdAt", "subExpiration", "content")).toEqual(data);
+    expect(omit(res.body, "id", "photos", "createdAt", "subExpiration", "content", "updatedAt")).toEqual(data);
     expect(res.status).toEqual(status);
 }
 

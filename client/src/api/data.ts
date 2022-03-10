@@ -18,7 +18,7 @@ export const loginCredentials = [
     password: "Password1!",
   },
   {
-    email: "1",
-    password: "1",
+    email: "jennifer@lopez.com",
+    password: "JenniferLopez1!",
   },
 ];

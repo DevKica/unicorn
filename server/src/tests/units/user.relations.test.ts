@@ -2,7 +2,16 @@ import seedRelationsData from "../../prisma/seed/users.relations.seed";
 import { removeGlobals, setTestConversationId, setTestUserId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
-import { afterFullUpdateUserData, createMessageResponse, createLikeBody, createTextMessageBody, getMatchedResponse, newGeneralUpdateUserData, updateUserProfileBody } from "../data/user.relations";
+import {
+    afterFullUpdateUserData,
+    createMessageResponse,
+    createLikeBody,
+    createTextMessageBody,
+    getMatchedResponse,
+    newGeneralUpdateUserData,
+    updateUserProfileBody,
+    getConversationsResponse,
+} from "../data/user.relations";
 import {
     apiVersion,
     InvalidUpdateUserGeneralInfoInstance,
@@ -34,6 +43,9 @@ import {
 } from "../data/files";
 import { TooLargeFileInstance } from "./../data/config";
 import { expectFileFromMessageToExists } from "../helpers/customExpectations";
+import { COOKIE_TYPE } from "../../config/cookies.config";
+import { omit } from "lodash";
+const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
@@ -192,6 +204,18 @@ describe("RELATIONS", () => {
         });
     });
     describe("CONVERSATIONS", () => {
-        test("conversations", async () => {});
+        test("conversations", async () => {
+            const { body: conversations } = await global.request
+                .get(`/api/${apiVersion}/conversations`)
+                .set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);
+
+            conversations.forEach((conversation: any, conversationsIndex: number) => {
+                const expectedConversation = getConversationsResponse[conversationsIndex];
+                expect(omit(conversation, "id", "messages", "createdAt", "updatedAt")).toEqual(omit(expectedConversation, "id", "messages", "createdAt", "updatedAt"));
+                conversation.messages.forEach((message: any, messagesIndex: number) => {
+                    expect(omit(expectedConversation.messages[messagesIndex], "id", "content", "createdAt")).toEqual(omit(message, "id", "content", "createdAt"));
+                });
+            });
+        });
     });
 });
