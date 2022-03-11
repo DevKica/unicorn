@@ -1,5 +1,5 @@
 import seedRelationsData from "../../prisma/seed/users.relations.seed";
-import { removeGlobals, setTestConversationId, setTestUserId } from "../helpers/globalHelpers";
+import { removeGlobals, setTestConversationId } from "../helpers/globalHelpers";
 import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { activeBasicUserData, loginCredentials } from "../data/user.auth";
 import {
@@ -50,8 +50,7 @@ const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 describe("RELATIONS", () => {
     beforeAll(async () => {
         await seedRelationsData();
-        const res = await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
-        setTestUserId(res);
+        await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
     });
     afterAll(async () => {
         removeGlobals();
@@ -202,6 +201,19 @@ describe("RELATIONS", () => {
 
             expectFileFromMessageToExists("video", res.body.content);
         });
+
+        test("User should be able to view messages with photo", async () => {
+            const res = await global.request.get(`/api/${apiVersion}/messages/photo/${global.testMessagesContent[1]}`);
+            expect(res.headers["content-type"]).toEqual("image/jpeg");
+        });
+        test("User should be able to view voice messages", async () => {
+            const res = await global.request.get(`/api/${apiVersion}/messages/voice/${global.testMessagesContent[2]}`);
+            expect(res.headers["content-type"]).toEqual("audio/mpeg");
+        });
+        test("User should be able to view messages with video", async () => {
+            const res = await global.request.get(`/api/${apiVersion}/messages/video/${global.testMessagesContent[3]}`);
+            expect(res.headers["content-type"]).toEqual("video/mp4");
+        });
     });
     describe("CONVERSATIONS", () => {
         test("conversations", async () => {
@@ -214,6 +226,7 @@ describe("RELATIONS", () => {
                 expect(omit(conversation, "id", "messages", "createdAt", "updatedAt")).toEqual(omit(expectedConversation, "id", "messages", "createdAt", "updatedAt"));
                 conversation.messages.forEach((message: any, messagesIndex: number) => {
                     expect(omit(expectedConversation.messages[messagesIndex], "id", "content", "createdAt")).toEqual(omit(message, "id", "content", "createdAt"));
+                    expect(global.testMessagesContent.includes(message.content)).toBeTruthy();
                 });
             });
         });

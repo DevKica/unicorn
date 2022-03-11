@@ -1,4 +1,7 @@
 import { Request, Response } from "express";
+import { existsSync } from "fs";
+import path from "path";
+import { photoMessagesPath, videoMessagesPath, voiceMessagesPath } from "../config/upload.config";
 import { findUserConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
@@ -54,6 +57,32 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
         });
 
         applyToResponse(res, 201, message);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function getContentFromFileMessageHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { type, fileName } = req.params;
+
+        let filePath: string = "";
+
+        switch (type) {
+            case "photo":
+                filePath = path.join(photoMessagesPath, `${fileName}.jpg`);
+                break;
+            case "voice":
+                filePath = path.join(voiceMessagesPath, `${fileName}.mp3`);
+                break;
+            case "video":
+                filePath = path.join(videoMessagesPath, `${fileName}.mp4`);
+                break;
+        }
+
+        if (!existsSync(filePath)) throw new NotFound();
+
+        return res.sendFile(filePath);
     } catch (e) {
         applyToResponseCustom(res, e);
     }
