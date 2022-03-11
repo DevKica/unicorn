@@ -2,16 +2,16 @@ export default [
     // test notInConversationMembers case
     {
         id: "conversation1",
-        name: "Natalia and Selena",
+        name: "Pawel and Jennifer",
         members: {
-            connect: [{ id: "9" }, { id: "10" }],
+            connect: [{ id: "1" }, { id: "7" }],
         },
     },
     {
         id: "conversation2",
-        name: "Pawel and Jennifer",
+        name: "Natalia and Selena",
         members: {
-            connect: [{ id: "1" }, { id: "7" }],
+            connect: [{ id: "9" }, { id: "10" }],
         },
     },
 ];

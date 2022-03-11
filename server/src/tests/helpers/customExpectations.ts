@@ -11,7 +11,7 @@ export function expectToEqualCustom(res: any, error: any) {
 
 export function expectToEqual(res: any, status: number, data: Object) {
     if (res.body.content) {
-        global.testMessagesContent.push(res.body.content);
+        global.testMessagesContent.unshift(res.body.content);
     }
 
     expect(omit(res.body, "id", "photos", "createdAt", "subExpiration", "content", "updatedAt")).toEqual(data);

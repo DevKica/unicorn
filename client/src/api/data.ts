@@ -14,7 +14,7 @@ export const validCreateUserBody = {
 
 export const loginCredentials = [
   {
-    email: "devKica777@gmail.com",
+    email: "devkica777@gmail.com",
     password: "Password1!",
   },
   {

@@ -62,7 +62,7 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
     }
 }
 
-export async function getContentFromFileMessageHandler(req: Request, res: Response): Promise<void> {
+export async function getFileMessageContentHandler(req: Request, res: Response): Promise<void> {
     try {
         const { type, fileName } = req.params;
 

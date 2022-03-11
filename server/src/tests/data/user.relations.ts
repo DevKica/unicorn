@@ -83,7 +83,7 @@ export const createTextMessageBody = {
         },
         notInConversaionMembers: {
             content: "hello",
-            conversationId: "conversation1",
+            conversationId: "conversation2",
         },
     },
 };
@@ -104,7 +104,23 @@ export const getConversationsResponse = [
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:35.395Z",
         id: "conversation2",
-        messages: [],
+        messages: [
+            {
+                id: "message1",
+                content: "Hi Lopez",
+                type: "default",
+                isDeleted: false,
+                userId: "1",
+            },
+            {
+                id: "message2",
+                content: "Hi Pawel",
+                type: "default",
+                isDeleted: false,
+                userId: "7",
+            },
+        ],
+
         name: "Pawel and Jennifer",
     },
     {

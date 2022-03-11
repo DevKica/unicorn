@@ -1,8 +1,3 @@
-import argon2 from "argon2";
-
-// settings in the moment of testing getUsersToMatchHandler
-// user id = 1
-
 export const femalesUnder24showMale = [
     {
         id: "3",
@@ -259,9 +254,5 @@ const users = [
     ...femalesUnder24ShowFemale,
     ...femalesUnder24ShowMaleNotInRange,
 ];
-
-users.forEach(async (e) => {
-    e.password = await argon2.hash(e.password);
-});
 
 export default users;

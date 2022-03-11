@@ -203,20 +203,20 @@ describe("RELATIONS", () => {
         });
 
         test("User should be able to view messages with photo", async () => {
-            const res = await global.request.get(`/api/${apiVersion}/messages/photo/${global.testMessagesContent[1]}`);
+            const res = await global.request.get(`/api/${apiVersion}/messages/photo/${global.testMessagesContent[2]}`);
             expect(res.headers["content-type"]).toEqual("image/jpeg");
         });
         test("User should be able to view voice messages", async () => {
-            const res = await global.request.get(`/api/${apiVersion}/messages/voice/${global.testMessagesContent[2]}`);
+            const res = await global.request.get(`/api/${apiVersion}/messages/voice/${global.testMessagesContent[1]}`);
             expect(res.headers["content-type"]).toEqual("audio/mpeg");
         });
         test("User should be able to view messages with video", async () => {
-            const res = await global.request.get(`/api/${apiVersion}/messages/video/${global.testMessagesContent[3]}`);
+            const res = await global.request.get(`/api/${apiVersion}/messages/video/${global.testMessagesContent[0]}`);
             expect(res.headers["content-type"]).toEqual("video/mp4");
         });
     });
     describe("CONVERSATIONS", () => {
-        test("conversations", async () => {
+        test("User should be able to get properly filtered conversations", async () => {
             const { body: conversations } = await global.request
                 .get(`/api/${apiVersion}/conversations`)
                 .set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);

@@ -24,17 +24,15 @@ async function seedModel(name: ModelName, dataset: any) {
             }
         });
     }
-    if (name === "conversation") {
-        for (const record of dataset) {
-            await (prisma[name] as any).create({
-                data: record,
-            });
-        }
-    } else {
-        await (prisma[name] as any).createMany({
-            data: dataset,
+    // I couldn't use createMany because you can't use connect with it
+    for (const record of dataset) {
+        await (prisma[name] as any).create({
+            data: record,
         });
     }
+    // await (prisma[name] as any).createMany({
+    //     data: dataset,
+    // });
 
     logInfo(`${dataset.length} records have been added`);
 }

@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { createFileMessageHandler, createTextMessageHandler, getContentFromFileMessageHandler } from "../../controllers/messages.controllers";
+import { createFileMessageHandler, createTextMessageHandler, getFileMessageContentHandler } from "../../controllers/messages.controllers";
 import { requireActiveUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { createTextMessageSchema, createFileMessageSchema } from "../../validation/user.matching.schema";
 
 const messagesMainRoutes = Router();
 
-messagesMainRoutes.get("/:type/:fileName", getContentFromFileMessageHandler);
+messagesMainRoutes.get("/:type/:fileName", getFileMessageContentHandler);
 
 messagesMainRoutes.use("/", requireActiveUser);
 
