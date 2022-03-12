@@ -44,6 +44,9 @@ export async function findAllUserConversations(userId: string) {
                     isDeleted: true,
                     createdAt: true,
                 },
+                orderBy: {
+                    createdAt: "asc",
+                },
             },
         },
     });

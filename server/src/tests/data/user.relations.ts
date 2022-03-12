@@ -100,6 +100,13 @@ export const createMessageResponse = (type: MessageType) => {
 };
 
 export const getConversationsResponse = [
+    // {
+    //     id: "conversation3",
+    //     name: "Jennifer fanclub",
+    //     messages: [],
+    //     updatedAt: "2022-03-10T21:23:09.006Z",
+    //     createdAt: "2022-03-10T20:48:35.395Z",
+    // },
     {
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:35.395Z",

@@ -1,7 +1,29 @@
 import { useState } from "react";
+import { sendMessage } from "./api/mainInstance";
+import "./conversation.css";
+import socket from "./socketSetup";
 
 const SingleConversation = (data: any) => {
-  const [showMessages, setShowMessages] = useState<any>(true);
+  // sockets
+  const emitSendMessage = (message: string) => {
+    socket.emit("sendMessage", message);
+  };
+
+  // state
+  const [showMessages, setShowMessages] = useState<boolean>(true);
+  const [messageContent, setMessageContent] = useState<string>("");
+  const [messageError, setMessageError] = useState<string>("");
+
+  // handlers
+  const sendMessageHandler = async (conversationId: string) => {
+    const res = await sendMessage({ content: messageContent, conversationId });
+    setMessageContent("");
+    if (res.status !== 201) return setMessageError(JSON.stringify(res.data.msg));
+    emitSendMessage(messageContent);
+    setMessageError("");
+  };
+
+  // content
   return (
     <div>
       <div>Name: {data.name}</div>
@@ -13,32 +35,26 @@ const SingleConversation = (data: any) => {
       {showMessages && (
         <>
           <div>Messages</div>
-          <div style={{ border: "0.5px solid #777", overflowY: "scroll", maxHeight: "300px", maxWidth: "600px" }}>
-            <div style={{ padding: "0 10px 10px 10px" }}>
+          <div className="wrapper">
+            <div className="innerContent">
               <div>
                 {data.messages.length > 10 && (
-                  <div style={{ marginLeft: "auto", marginRight: "auto", width: "fit-content", marginTop: "0" }}>
-                    <button style={{ marginTop: "0", marginBottom: "10px" }}>load more</button>
+                  <div className="loadMore">
+                    <button className="loadMore">load more</button>
                   </div>
                 )}
 
                 {data.messages.map((e: any) => (
-                  <div
-                    style={
-                      e.userId === data.userLocalId
-                        ? { maxWidth: "260px", width: "fit-content", marginLeft: "auto", marginRight: 0 }
-                        : { maxWidth: "260px" }
-                    }
-                    key={e.id}
-                  >
+                  <div className={e.userId === data.userLocalId ? "userMessage" : "friendMessage"} key={e.id}>
                     {e.content}
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <input />
-          <button>send message</button>
+          <input onChange={e => setMessageContent(e.target.value)} value={messageContent} />
+          <button onClick={() => sendMessageHandler(data.id)}>send message</button>
+          <div>{messageError && messageError}</div>
         </>
       )}
     </div>
@@ -48,7 +64,7 @@ const SingleConversation = (data: any) => {
 const ConversationsPage = ({ conversations, userId }: { conversations: any; userId: string }) => {
   return (
     <div>
-      <div style={{ fontSize: "1.3rem", marginTop: "20px" }}>Conversations:</div>
+      <div className="conversationText">Conversations:</div>
       {conversations.map((e: any) => (
         <div key={e.id}>{SingleConversation({ ...e, userLocalId: userId })}</div>
       ))}

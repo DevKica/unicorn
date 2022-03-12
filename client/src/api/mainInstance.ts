@@ -24,3 +24,5 @@ export const logOut = async () => mainAppInstance.delete("/sessions/");
 export const getUserData = async () => mainAppInstance.get("/users/profile");
 
 export const getUserConversations = async () => mainAppInstance.get("/conversations");
+
+export const sendMessage = async (data: any) => mainAppInstance.post("/messages/text", data);

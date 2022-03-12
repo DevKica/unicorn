@@ -1,34 +1,37 @@
-import cookieParser from "cookie-parser";
+import http from "http";
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
+import trimmer from "./middleware/trimmer";
 import fileUpload from "express-fileupload";
 import { ORIGIN } from "./config/env.config";
 import deserializeUser from "./middleware/deserializeUser";
-import { emailToLowerCase } from "./middleware/emailToLowerCase";
-import trimmer from "./middleware/trimmer";
 import serverMainRoutes from "./routes/server.main.routes";
+import { emailToLowerCase } from "./middleware/emailToLowerCase";
 
-const server = express();
+const app = express();
 
-server.use(
+app.use(
     cors({
         origin: ORIGIN,
         credentials: true,
     })
 );
 
-server.use(express.json());
+app.use(express.json());
 
-server.use(cookieParser());
+app.use(cookieParser());
 
-server.use(fileUpload());
+app.use(fileUpload());
 
-server.use(trimmer);
+app.use(trimmer);
 
-server.use(emailToLowerCase);
+app.use(emailToLowerCase);
 
-server.use(deserializeUser);
+app.use(deserializeUser);
 
-server.use("/api/v1", serverMainRoutes);
+app.use("/api/v1", serverMainRoutes);
+
+const server = http.createServer(app);
 
 export default server;

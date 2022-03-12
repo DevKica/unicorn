@@ -221,6 +221,7 @@ describe("RELATIONS", () => {
                 .get(`/api/${apiVersion}/conversations`)
                 .set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);
 
+            console.log(conversations);
             conversations.forEach((conversation: any, conversationsIndex: number) => {
                 const expectedConversation = getConversationsResponse[conversationsIndex];
                 expect(omit(conversation, "id", "messages", "createdAt", "updatedAt")).toEqual(omit(expectedConversation, "id", "messages", "createdAt", "updatedAt"));
