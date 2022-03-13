@@ -1,19 +1,19 @@
+import io from "./io";
 import { Server } from "socket.io";
-import { io } from "./index";
 import { MessageObjectType } from "./@types/prisma/static.types";
 
-export const emitReceived = (message: MessageObjectType) => {
-    io.emit("receivedMessage", message);
+export const emitNewMessage = (message: MessageObjectType) => {
+    io.emit("newMessageServer", message);
 };
 
 function socketServer({ io }: { io: Server }) {
     io.on("connection", (socket) => {
-        // on connection message
-        console.log("connected");
+        //@ts-ignore
+        const { user } = socket.request;
 
-        // listen to disconnect
-        socket.on("disconnect", () => {
-            console.log("disconnected");
+        // listen to new messages
+        socket.on("newMessageClient", (message: MessageObjectType) => {
+            emitNewMessage(message);
         });
     });
 }

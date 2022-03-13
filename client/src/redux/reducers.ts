@@ -9,8 +9,6 @@ export const conversationsReducer = (state = [], action: any) => {
         const { conversationId } = action.payload;
 
         const scIndex = state.findIndex((o: any) => o.id === conversationId);
-        // newState[scIndex].messages.push(action.payload);
-
         const singleConversation = state.find((o: any) => o.id === conversationId);
         singleConversation.messages.push(action.payload);
         if (!singleConversation) throw Error();

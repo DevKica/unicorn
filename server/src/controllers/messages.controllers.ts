@@ -1,10 +1,9 @@
-import { Request, Response } from "express";
-import { existsSync } from "fs";
 import path from "path";
+import { existsSync } from "fs";
+import { Request, Response } from "express";
 import { photoMessagesPath, videoMessagesPath, voiceMessagesPath } from "../config/upload.config";
 import { findUserConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
-import { emitReceived } from "../socketServer";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
 import { uploadFileMessage } from "../utils/user/upload/uploadToDir";
@@ -28,11 +27,9 @@ export async function createTextMessageHandler(req: Request, res: Response): Pro
             },
             type: "default",
         });
-        emitReceived(message);
 
         applyToResponse(res, 201, message);
     } catch (e) {
-        console.log(e);
         applyToResponseCustom(res, e);
     }
 }

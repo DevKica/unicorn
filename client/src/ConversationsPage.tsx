@@ -2,8 +2,8 @@ import "./styles/conversation.css";
 import { useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { sendMessage } from "./api/mainInstance";
-import { getConversationsStore, getConvState, getUserStore } from "./redux/actions";
-import { emitSendMessage, scrollMessagesToBottom } from "./config/socketSetup";
+import { getConvState, getUserStore } from "./redux/actions";
+import { emitNewMessage, scrollMessagesToBottom } from "./config/socketSetup";
 
 const SingleConversation = (conversation: any) => {
   // state
@@ -21,8 +21,7 @@ const SingleConversation = (conversation: any) => {
     // handle error
     if (res.status !== 201) return setMessageError(JSON.stringify(res.data.msg));
 
-    emitSendMessage(res.data);
-
+    emitNewMessage(res.data);
     // clear error
     setMessageError("");
     // clear message content
@@ -40,6 +39,14 @@ const SingleConversation = (conversation: any) => {
         <>
           <div>Name: {conversation.name}</div>
           <div>Number of messages: {conversation.messages.length}</div>
+          <div>
+            Members:{" "}
+            {conversation.members.map((member: any) => (
+              <span style={{ margin: "5px" }}>
+                {member.name} {member.surname} ,
+              </span>
+            ))}
+          </div>
           <div>
             Updated at: {conversation.updatedAt.split("T")[0]} {conversation.updatedAt.split("T")[1].slice(0, 8)}
           </div>
@@ -79,7 +86,6 @@ const SingleConversation = (conversation: any) => {
 };
 
 const ConversationsPage = () => {
-  // const conversations = useSelector(() => getConversationsStore());
   const conversations = useSelector(getConvState);
 
   return (

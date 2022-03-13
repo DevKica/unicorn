@@ -100,13 +100,25 @@ export const createMessageResponse = (type: MessageType) => {
 };
 
 export const getConversationsResponse = [
-    // {
-    //     id: "conversation3",
-    //     name: "Jennifer fanclub",
-    //     messages: [],
-    //     updatedAt: "2022-03-10T21:23:09.006Z",
-    //     createdAt: "2022-03-10T20:48:35.395Z",
-    // },
+    {
+        id: "conversation3",
+        name: "Jennifer fanclub",
+        members: [
+            {
+                id: "7",
+                name: "Jennifer",
+                surname: "Lopez",
+            },
+            {
+                id: "1",
+                name: "Dani",
+                surname: "Crabgame",
+            },
+        ],
+        messages: [],
+        updatedAt: "2022-03-10T21:23:09.006Z",
+        createdAt: "2022-03-10T20:48:35.395Z",
+    },
     {
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:35.395Z",
@@ -127,7 +139,18 @@ export const getConversationsResponse = [
                 userId: "7",
             },
         ],
-
+        members: [
+            {
+                id: "7",
+                name: "Jennifer",
+                surname: "Lopez",
+            },
+            {
+                id: "1",
+                name: "Dani",
+                surname: "Crabgame",
+            },
+        ],
         name: "Pawel and Jennifer",
     },
     {
@@ -135,6 +158,18 @@ export const getConversationsResponse = [
         name: "Dani and Doda",
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:37.835Z",
+        members: [
+            {
+                id: "5",
+                name: "Doda",
+                surname: "Dorota",
+            },
+            {
+                id: "1",
+                name: "Dani",
+                surname: "Crabgame",
+            },
+        ],
         messages: [
             {
                 id: "cl0lgpwls0382qou8cew1h3cw",

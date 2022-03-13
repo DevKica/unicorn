@@ -35,6 +35,13 @@ export async function findAllUserConversations(userId: string) {
             },
         },
         include: {
+            members: {
+                select: {
+                    id: true,
+                    name: true,
+                    surname: true,
+                },
+            },
             messages: {
                 select: {
                     id: true,

@@ -1,15 +1,17 @@
 import { io } from "socket.io-client";
 import { updateSingleConversationStore } from "../redux/actions";
 
-const socket = io("ws://localhost:5000");
+const socket = io("ws://localhost:5000", {
+  withCredentials: true,
+});
 
-socket.on("receivedMessage", message => {
+socket.on("newMessageServer", message => {
   updateSingleConversationStore(message);
   scrollMessagesToBottom(message.conversationId);
 });
 
-export const emitSendMessage = (message: string) => {
-  socket.emit("sendMessage", message);
+export const emitNewMessage = (message: any) => {
+  socket.emit("newMessageClient", message);
 };
 
 export const scrollMessagesToBottom = (convId: string) => {
