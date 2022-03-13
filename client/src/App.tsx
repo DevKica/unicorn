@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUserConversations, getUserData, loginUser, logOut } from "./api/mainInstance";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ConversationsPage from "./ConversationsPage";
 
 const App = () => {
@@ -14,6 +14,11 @@ const App = () => {
     window.location.reload();
   };
 
+  const getConversations = async () => {
+    const res = await getUserConversations();
+    setConversations(res.data);
+  };
+
   const loginUserHandler = async (e: any) => {
     e.preventDefault();
     const res = await loginUser(loginId);
@@ -24,11 +29,6 @@ const App = () => {
 
   const setLoginIdHandler = (id: number) => {
     setLoginId(id);
-  };
-
-  const getConversations = async () => {
-    const res = await getUserConversations();
-    setConversations(res.data);
   };
 
   useEffect(() => {

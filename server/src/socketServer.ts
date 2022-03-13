@@ -7,7 +7,7 @@ function socketServer({ io }: { io: Server }) {
 
         // listen to send message event
         socket.on("sendMessage", (message) => {
-            console.log(message);
+            io.emit("receivedMessage", message);
         });
 
         // listen to disconnect

@@ -53,6 +53,42 @@ export async function findAllUserConversations(userId: string) {
     return conversations;
 }
 
+export async function findUniqueConversation(where: ConversationWhereUniqueInput, userId: string) {
+    const conversation = await ConversationModel.findFirst({
+        where: {
+            ...where,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            messages: {
+                select: {
+                    id: true,
+                    userId: true,
+                    content: true,
+                    type: true,
+                    isDeleted: true,
+                    createdAt: true,
+                },
+                orderBy: {
+                    createdAt: "asc",
+                },
+            },
+            members: {
+                select: {
+                    id: true,
+                    name: true,
+                    surname: true,
+                },
+            },
+        },
+    });
+    return conversation;
+}
+
 export async function updateUniqueConversation(where: ConversationWhereUniqueInput, data: ConversationUpdateInput) {
     const conversation = await ConversationModel.update({ where, data });
     return conversation;

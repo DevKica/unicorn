@@ -17,12 +17,14 @@ mainAppInstance.interceptors.response.use(
 );
 
 export const loginUser = async (id: number) =>
-  mainAppInstance.post("/users/login", id ? loginCredentials[1] : loginCredentials[0]);
+  await mainAppInstance.post("/users/login", id ? loginCredentials[1] : loginCredentials[0]);
 
-export const logOut = async () => mainAppInstance.delete("/sessions/");
+export const logOut = async () => await mainAppInstance.delete("/sessions/");
 
-export const getUserData = async () => mainAppInstance.get("/users/profile");
+export const getUserData = async () => await mainAppInstance.get("/users/profile");
 
-export const getUserConversations = async () => mainAppInstance.get("/conversations");
+export const getUserConversations = async () => await mainAppInstance.get("/conversations");
 
-export const sendMessage = async (data: any) => mainAppInstance.post("/messages/text", data);
+export const getUserSingleConversation = async (id: string) => await mainAppInstance.get(`/conversations/${id}`);
+
+export const sendMessage = async (data: any) => await mainAppInstance.post("/messages/text", data);
