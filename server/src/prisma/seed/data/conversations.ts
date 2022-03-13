@@ -1,12 +1,11 @@
 export default [
-    // test notInConversationMembers case
-    // {
-    //     id: "conversation3",
-    //     name: "Jennifer fanclub",
-    //     members: {
-    //         connect: [{ id: "1" }, { id: "7" }],
-    //     },
-    // },
+    {
+        id: "conversation3",
+        name: "Jennifer fanclub",
+        members: {
+            connect: [{ id: "1" }, { id: "7" }],
+        },
+    },
     {
         id: "conversation1",
         name: "Pawel and Jennifer",

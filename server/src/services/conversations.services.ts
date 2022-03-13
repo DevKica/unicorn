@@ -49,6 +49,9 @@ export async function findAllUserConversations(userId: string) {
                 },
             },
         },
+        orderBy: {
+            updatedAt: "asc",
+        },
     });
     return conversations;
 }

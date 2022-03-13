@@ -1,24 +1,15 @@
-import "./conversation.css";
-import socket from "./socketSetup";
-import { useEffect, useState } from "react";
-import { getUserSingleConversation, sendMessage } from "./api/mainInstance";
+import "./styles/conversation.css";
+import { useSelector } from "react-redux";
+import { useLayoutEffect, useState } from "react";
+import { sendMessage } from "./api/mainInstance";
+import { getConversationsStore, getUserStore } from "./redux/actions";
+import { emitSendMessage, scrollMessagesToBottom } from "./config/socketSetup";
 
-const receivedMessage = () => {};
-
-socket.on("receivedMessage", message => {
-  console.log("receivedMessage!!!");
-  console.log(message);
-});
-
-const SingleConversation = (convId: string, userLocalId: string) => {
-  // sockets
-  const emitSendMessage = (message: string) => {
-    socket.emit("sendMessage", message);
-  };
-
+const SingleConversation = (conversation: any) => {
   // state
-  const [conversation, setConversation] = useState<any>(null);
-  const [showMessages, setShowMessages] = useState<boolean>(true);
+  const userLocalId = useSelector(() => getUserStore().id);
+
+  const [showMessages, setShowMessages] = useState<boolean>(false);
   const [messageContent, setMessageContent] = useState<string>("");
   const [messageError, setMessageError] = useState<string>("");
 
@@ -27,25 +18,21 @@ const SingleConversation = (convId: string, userLocalId: string) => {
     // make a request
     const res = await sendMessage({ content: messageContent, conversationId });
 
+    // handle error
     if (res.status !== 201) return setMessageError(JSON.stringify(res.data.msg));
 
-    setConversation({ ...conversation, messages: conversation.messages.concat(res.data) });
-
-    emitSendMessage(messageContent);
+    emitSendMessage(res.data);
 
     // clear error
     setMessageError("");
     // clear message content
     setMessageContent("");
   };
-
-  useEffect(() => {
-    (async () => {
-      const res = await getUserSingleConversation(convId);
-      setConversation(res.data);
-    })();
-  }, [convId]);
-
+  useLayoutEffect(() => {
+    if (showMessages) {
+      scrollMessagesToBottom(conversation.id);
+    }
+  }, [conversation.id, showMessages]);
   // content
   return (
     <div>
@@ -60,10 +47,10 @@ const SingleConversation = (convId: string, userLocalId: string) => {
           {showMessages && (
             <>
               <div>Messages</div>
-              <div className="wrapper">
+              <div className="wrapper" id={conversation.id}>
                 <div className="innerContent">
                   <div>
-                    {conversation.messages.length > 10 && (
+                    {conversation.messages.length > 8 && (
                       <div className="loadMore">
                         <button className="loadMore">load more</button>
                       </div>
@@ -91,12 +78,13 @@ const SingleConversation = (convId: string, userLocalId: string) => {
   );
 };
 
-const ConversationsPage = ({ conversations, userId }: { conversations: any; userId: string }) => {
+const ConversationsPage = () => {
+  const conversations = useSelector(() => getConversationsStore());
   return (
-    <div>
+    <div style={{ marginBottom: "100px" }}>
       <div className="conversationText">Conversations:</div>
       {conversations.map((e: any) => (
-        <div key={e.id}>{SingleConversation(e.id, userId)}</div>
+        <div key={e.id}>{SingleConversation(e)}</div>
       ))}
     </div>
   );

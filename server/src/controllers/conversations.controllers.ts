@@ -18,7 +18,7 @@ export async function getConversationsHandler(_req: Request, res: Response) {
 export async function getSingleConversationHandler(req: Request, res: Response) {
     try {
         const { userId } = res.locals.user;
-        const { conversationId } = req.query;
+        const { conversationId } = req.params;
 
         const conversation = await findUniqueConversation({ id: conversationId as string }, userId);
 

@@ -1,6 +1,7 @@
 .wrapper {
   max-height: 300px;
-  width: 600px;
+  width: 90vw;
+  max-width: 600px;
   overflow-y: scroll;
   border: 0.7px solid #777;
 }
@@ -30,6 +31,6 @@ button.loadMore {
 }
 
 .conversationText {
-  font-size: "1.3rem";
-  margin-top: 20px;
+  font-size: 1.3rem;
+  margin-top: 15px;
 }

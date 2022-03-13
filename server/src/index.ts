@@ -5,7 +5,8 @@ import { logInfo } from "./utils/logger";
 import { ORIGIN, PORT } from "./config/env.config";
 import socketServer from "./socketServer";
 
-const io = new Server(server, {
+export const io = new Server(server, {
+    cookie: true,
     cors: {
         origin: ORIGIN,
         credentials: true,
