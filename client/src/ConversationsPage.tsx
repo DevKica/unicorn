@@ -2,7 +2,7 @@ import "./styles/conversation.css";
 import { useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { sendMessage } from "./api/mainInstance";
-import { getConversationsStore, getUserStore } from "./redux/actions";
+import { getConversationsStore, getConvState, getUserStore } from "./redux/actions";
 import { emitSendMessage, scrollMessagesToBottom } from "./config/socketSetup";
 
 const SingleConversation = (conversation: any) => {
@@ -79,7 +79,9 @@ const SingleConversation = (conversation: any) => {
 };
 
 const ConversationsPage = () => {
-  const conversations = useSelector(() => getConversationsStore());
+  // const conversations = useSelector(() => getConversationsStore());
+  const conversations = useSelector(getConvState);
+
   return (
     <div style={{ marginBottom: "100px" }}>
       <div className="conversationText">Conversations:</div>

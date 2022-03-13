@@ -9,3 +9,5 @@ export const updateSingleConversationStore = (element: any) => store.dispatch({ 
 export const getUserStore = () => store.getState().user;
 
 export const updateUserStore = (element: string) => store.dispatch({ type: "setUserId", payload: element });
+
+export const getConvState = (state: any) => state.conversations;
