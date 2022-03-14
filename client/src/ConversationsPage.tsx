@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { sendMessage } from "./api/mainInstance";
 import { getConvState, getUserStore } from "./redux/actions";
-import { emitNewMessage, scrollMessagesToBottom } from "./config/socketSetup";
+import { emitSendNewMessage, scrollMessagesToBottom } from "./config/socketSetup";
 
 const SingleConversation = (conversation: any) => {
   // state
@@ -21,7 +21,7 @@ const SingleConversation = (conversation: any) => {
     // handle error
     if (res.status !== 201) return setMessageError(JSON.stringify(res.data.msg));
 
-    emitNewMessage(res.data);
+    emitSendNewMessage(res.data);
     // clear error
     setMessageError("");
     // clear message content
@@ -42,7 +42,7 @@ const SingleConversation = (conversation: any) => {
           <div>
             Members:{" "}
             {conversation.members.map((member: any) => (
-              <span style={{ margin: "5px" }}>
+              <span key={member.id} style={{ margin: "5px" }}>
                 {member.name} {member.surname} ,
               </span>
             ))}

@@ -21,4 +21,8 @@ export const loginCredentials = [
     email: "jennifer@lopez.com",
     password: "JenniferLopez1!",
   },
+  {
+    email: "natalia@szroeder.com",
+    password: "NataliaSzroeder1!",
+  },
 ];

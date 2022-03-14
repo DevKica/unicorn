@@ -66,6 +66,9 @@ const App = () => {
               <div>
                 <button onClick={() => loginUserHandler(1)}>Login to account 2</button>
               </div>
+              <div>
+                <button onClick={() => loginUserHandler(2)}>Login to account 3</button>
+              </div>
             </>
           )}
         </>

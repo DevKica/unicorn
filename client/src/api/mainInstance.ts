@@ -16,8 +16,7 @@ mainAppInstance.interceptors.response.use(
   }
 );
 
-export const loginUser = async (id: number) =>
-  await mainAppInstance.post("/users/login", id ? loginCredentials[1] : loginCredentials[0]);
+export const loginUser = async (id: number) => await mainAppInstance.post("/users/login", loginCredentials[id]);
 
 export const logOut = async () => await mainAppInstance.delete("/sessions/");
 

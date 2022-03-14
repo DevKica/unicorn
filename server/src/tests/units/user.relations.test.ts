@@ -222,8 +222,13 @@ describe("RELATIONS", () => {
                 .set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);
 
             conversations.forEach((conversation: any, conversationsIndex: number) => {
+                // assign to variable specific conversation
                 const expectedConversation = getConversationsResponse[conversationsIndex];
+
+                // main - members,name,etc
                 expect(omit(conversation, "id", "messages", "createdAt", "updatedAt")).toEqual(omit(expectedConversation, "id", "messages", "createdAt", "updatedAt"));
+
+                // messages
                 conversation.messages.forEach((message: any, messagesIndex: number) => {
                     expect(omit(expectedConversation.messages[messagesIndex], "id", "content", "createdAt")).toEqual(omit(message, "id", "content", "createdAt"));
                     expect(global.testMessagesContent.includes(message.content)).toBeTruthy();
