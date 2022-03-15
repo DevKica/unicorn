@@ -19,7 +19,7 @@ import {
     VoiceClipTooLong,
     VoiceClipTooShort,
 } from "../../utils/errors/main";
-import { createUserBody, changePasswordBody, loginBody, setNewPasswordBody, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
+import { createUserData, changePasswordData, userLoginData, setNewPasswordData, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
 import { createLikeBody, createTextMessageBody, updateUserProfileBody } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
@@ -41,10 +41,10 @@ export const VoiceClipTooShortInstance = new VoiceClipTooShort();
 export const VoiceClipTooLongInstance = new VoiceClipTooLong();
 export const TooLargeFileInstance = new TooLargeFile();
 
-export const InvalidRequestedCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserBody.invalid.schema).error);
-export const InvalidRequestedLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, loginBody.invalid.schema).error);
-export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordBody.invalid.schema).error);
-export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordBody.invalid.schema).error);
+export const InvalidCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserData.body.invalid.schema).error);
+export const InvalidLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, userLoginData.body.invalid.schema).error);
+export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordData.body.invalid.schema).error);
+export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordData.body.invalid.schema).error);
 export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, { email: invalidEmailSchema }).error);
 export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(validate(generalInfoSchema, updateUserProfileBody.invalid.general).error);
 export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingInfoSchema, updateUserProfileBody.invalid.matching).error);

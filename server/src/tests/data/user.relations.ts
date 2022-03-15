@@ -1,4 +1,3 @@
-import { basicActiveUserData } from "./user.auth";
 import { MessageType } from "@prisma/client";
 
 export const updateUserProfileBody = {
@@ -23,15 +22,15 @@ export const updateUserProfileBody = {
     },
 };
 
-export const newGeneralUpdateUserData = {
-    ...basicActiveUserData,
-    ...updateUserProfileBody.valid.general,
-};
+// export const newGeneralUpdateUserData = {
+//     ...basicActiveUserData,
+//     ...updateUserProfileBody.valid.general,
+// };
 
-export const afterFullUpdateUserData = {
-    ...newGeneralUpdateUserData,
-    ...updateUserProfileBody.valid.matching,
-};
+// export const afterFullUpdateUserData = {
+//     ...newGeneralUpdateUserData,
+//     ...updateUserProfileBody.valid.matching,
+// };
 
 export const createLikeBody = {
     valid: {
@@ -67,10 +66,23 @@ export const getMatchedResponse = {
     name: "Dani and Doda",
     messages: [],
 };
+export const createMessageResponse = (type: MessageType, content = "") => {
+    const response = {
+        userId: "1",
+        conversationId: "", // conversationId is set to valid value during testing
+        content,
+        type: "",
+        isDeleted: false,
+    };
+    response["type"] = type;
+
+    return response;
+};
 
 export const createTextMessageBody = {
     valid: {
         content: "hello",
+        conversationId: "", // conversationId is set to valid value during testing
     },
     invalid: {
         schema: {
@@ -81,22 +93,19 @@ export const createTextMessageBody = {
             content: "hello",
             conversationId: "12345",
         },
-        notInConversaionMembers: {
+        notInConversationMembers: {
             content: "hello",
             conversationId: "conversation2",
         },
     },
 };
 
-export const createMessageResponse = (type: MessageType) => {
-    const response = {
-        isDeleted: false,
-        userId: "1",
-        type: "",
-    };
-    response["type"] = type;
-
-    return response;
+export const createTextMessageResponse = {
+    body: {
+        data: createMessageResponse("default", createTextMessageBody.valid.content),
+        status: 201,
+    },
+    omit: ["id", "createdAt"],
 };
 
 export const getConversationsResponse = [
