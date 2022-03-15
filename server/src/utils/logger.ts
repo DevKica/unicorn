@@ -10,7 +10,9 @@ function color(s: string, c: string) {
 const deepGrey = "30;1";
 
 export const logInfo = (mess: string) => {
-    console.log(`[${chalk.cyan("INFO")}] ${color(dayjs().format("HH:mm:ss"), deepGrey)} ${chalk.green(mess)}`);
+    if (process.env.NODE_ENV !== "test" || process.env.FORCE_LOG === "true") {
+        console.log(`[${chalk.cyan("INFO")}] ${color(dayjs().format("HH:mm:ss"), deepGrey)} ${chalk.green(mess)}`);
+    }
 };
 
 export const logError = (mess: unknown) => {

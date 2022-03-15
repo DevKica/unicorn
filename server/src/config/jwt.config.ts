@@ -7,7 +7,7 @@ export function signJWT(data: jwtEnumFormat, secret: string, expiredTime: string
     return jwt.sign(data, secret, { expiresIn: expiredTime });
 }
 
-export function verifyJWT(token: string, secret: string): { expired: boolean; decoded: any | emailTokenFormat | null } {
+export function verifyJWT(token: string, secret: string): { expired: boolean; decoded: any | emailTokenFormat } {
     try {
         const decoded = <emailTokenFormat | userTokenFormat | null>jwt.verify(token, secret);
         return {

@@ -44,7 +44,7 @@ export type ConversationWhereInput = Prisma.ConversationWhereInput;
 export type ConversationUpdateInput = Prisma.ConversationUpdateInput;
 
 // Messages
-export type MessageObjectType = Message;
+export type MessageType = Message;
 export type MessageCreateInput = Prisma.MessageCreateInput;
 export type MessageWhereUniqueInput = Prisma.MessageWhereUniqueInput;
 export type MessageWhereInput = Prisma.MessageWhereInput;

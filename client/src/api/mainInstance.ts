@@ -24,4 +24,5 @@ export const getUserData = async () => await mainAppInstance.get("/users/profile
 
 export const getUserConversations = async () => await mainAppInstance.get("/conversations");
 
-export const sendMessage = async (data: any) => await mainAppInstance.post("/messages/text", data);
+export const sendMessage = async (data: { content: string; conversationId: string }) =>
+  await mainAppInstance.post("/messages/text", data);

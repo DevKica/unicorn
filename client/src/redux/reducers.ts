@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-export const conversationsReducer = (state = [], action: any) => {
+export const conversationsReducer = (state = [], action: { payload: any; type: "set" | "newMessage" }) => {
   switch (action.type) {
     case "set":
       return action.payload;
@@ -24,7 +24,7 @@ export const conversationsReducer = (state = [], action: any) => {
   }
 };
 
-export const userReducer = (state = { id: "" }, action: any) => {
+export const userReducer = (state = { id: "" }, action: { payload: any; type: "setUserId" }) => {
   switch (action.type) {
     case "setUserId":
       return { ...state, id: action.payload };

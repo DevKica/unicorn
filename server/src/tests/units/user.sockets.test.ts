@@ -1,27 +1,25 @@
 import cookie from "cookie";
 import { Socket } from "socket.io";
+
 import { NextFunction } from "express";
-// import { verifyUserTokenJWT } from "../../config/jwt.config";
 import { socketServerOptions } from "../../io";
 import { removeGlobals } from "../helpers/globalHelpers";
 import { verifyUserTokenJWT } from "../../config/jwt.config";
-import console from "console";
-// import { EVENTS } from "../../socketServer";
+import { EVENTS } from "../../socketServer";
+import { MessageType } from "../../@types/prisma/static.types";
+import seedRelationsData from "../../prisma/seed/users.relations.seed";
+import { loginCredentials, activeBasicUserData } from "../data/user.auth";
+import { testPOSTRequest } from "../helpers/testEndpoint";
+import { findSingleSession } from "../../services/session/session.services";
 
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const Client = require("socket.io-client");
 
 describe("SOCKETS", () => {
-    let io: any, port: any, serverSocket: any, clientSocket: any;
+    let port: number, serverSocket: Socket, clientSocket: any, io: any;
 
     beforeAll((done) => {
-        // seed data
-        // seedRelationsData();
-
-        // get tokesn
-        // testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
-
         // create server
         const httpServer = createServer();
 
@@ -29,42 +27,36 @@ describe("SOCKETS", () => {
         io = new Server(httpServer, socketServerOptions);
 
         // apply middleware
-        io.use((socket: Socket, next: NextFunction) => {
+        io.use(async (socket: Socket, next: NextFunction) => {
             try {
-                console.log("handshake", socket.handshake.headers);
-
                 const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+
                 const { decoded } = verifyUserTokenJWT(cookies.accessToken);
 
-                console.log("decoded", decoded);
-                if (!decoded) throw Error();
+                if (!decoded) throw Error;
 
-                // const session = await findSingleSession({ id: decoded.sessionId });
-                // if (!session || !session.valid) throw Error();
+                const session = await findSingleSession({ id: decoded.sessionId });
+                if (!session || !session.valid) throw Error;
 
-                // // @ts-ignore
-                // socket.request.user = decoded;
+                // @ts-ignore
+                socket.request.user = decoded;
 
                 next();
             } catch (e) {
-                next(new Error("forbidden"));
+                next(new Error("Unauthorized"));
             }
         });
 
-        httpServer.listen(() => {
+        httpServer.listen(async () => {
             port = httpServer.address().port;
 
-            io.on("connection", (socket: any) => {
-                console.log("handshake", socket.handshake);
-
+            io.on("connection", async (socket: any) => {
                 serverSocket = socket;
             });
 
-            // clientSocket.on("connect_error", (err: any) => {
-            //     console.log("essa");
-            //     console.log(err.message); // prints the message associated with the error
-            //     clientSocket.close();
-            // });
+            await seedRelationsData();
+
+            await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
 
             done();
         });
@@ -79,52 +71,47 @@ describe("SOCKETS", () => {
         beforeAll((done) => {
             clientSocket = new Client(`http://localhost:${port}`);
 
-            console.log(clientSocket);
-
             clientSocket.on("connect_error", (error: any) => {
-                console.log(error);
+                expect(error.message).toEqual("Unauthorized");
                 done();
             });
-
-            clientSocket.on("connect", done);
         });
 
         test("test", () => {
+            console.log("should not run or will it run");
             expect(true).toBeTruthy();
-            serverSocket;
         });
         afterAll(() => {
             clientSocket.close();
         });
     });
 
-    // describe("AUTHORIZED", () => {
-    //     beforeAll((done) => {
-    //         clientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { Authorization: "123" } });
-    //         clientSocket.on("connect", done);
-    //     });
-    //     afterAll(() => {
-    //         clientSocket.close();
-    //     });
+    describe("AUTHORIZED", () => {
+        beforeAll((done) => {
+            clientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testAccessToken}` } });
 
-    //     test("should work", (done) => {
-    //         clientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: any) => {
-    //             console.log("in TEST", message);
+            clientSocket.on("connect", done);
+        });
+        afterAll(() => {
+            clientSocket.close();
+        });
 
-    //             clientSocket.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE, "123");
-    //             done();
-    //         });
+        test("should work", (done) => {
+            clientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
+                console.log("in TEST", message);
+                done();
+            });
 
-    //         serverSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, "eluwina");
-    //     });
+            serverSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, "hallo");
+        });
 
-    //     test("idk", (done) => {
-    //         serverSocket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: any) => {
-    //             console.log("TUU", message);
-    //             done();
-    //         });
+        // test("idk", (done) => {
+        //     serverSocket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
+        //         console.log("TUU", message);
+        //         done();
+        //     });
 
-    //         clientSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, "message");
-    //     });
-    // });
+        //     clientSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, "message");
+        // });
+    });
 });

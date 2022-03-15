@@ -9,7 +9,7 @@ export const checkTheAlphabeticality = (word: string) => {
     return result.length === word.length;
 };
 
-export const joiValidateAlphabeticality = (value: any, helpers: CustomHelpers) => {
+export const joiValidateAlphabeticality = (value: string, helpers: CustomHelpers) => {
     // Return error if value cotains non-alphabetical characters
     if (!checkTheAlphabeticality(value)) return helpers.error("any.invalid");
 
@@ -18,7 +18,7 @@ export const joiValidateAlphabeticality = (value: any, helpers: CustomHelpers) =
 };
 
 export const joiValidateEnums = (enums: string[]) => {
-    const joiValidateElement = (value: any, helpers: CustomHelpers) => {
+    const joiValidateElement = (value: string, helpers: CustomHelpers) => {
         if (!enums.includes(value)) return helpers.error("any.invalid");
 
         return value;

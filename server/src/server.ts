@@ -1,12 +1,12 @@
 import cors from "cors";
 import express from "express";
+import { createServer } from "http";
 import cookieParser from "cookie-parser";
 import trimmer from "./middleware/trimmer";
 import fileUpload from "express-fileupload";
 import deserializeUser from "./middleware/deserializeUser";
 import serverMainRoutes from "./routes/server.main.routes";
 import { ORIGIN } from "./config/env.config";
-import { createServer } from "http";
 import { emailToLowerCase } from "./middleware/emailToLowerCase";
 
 const app = express();

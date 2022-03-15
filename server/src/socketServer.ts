@@ -1,6 +1,5 @@
 import { Server } from "socket.io";
-import { MessageObjectType } from "./@types/prisma/static.types";
-import { ConversationModel } from "./prisma/models";
+import { MessageType } from "./@types/prisma/static.types";
 import { findAllUserConversations } from "./services/conversations.services";
 
 export const EVENTS = {
@@ -12,24 +11,7 @@ export const EVENTS = {
     },
 };
 
-// export const emitNewMessage = (message: MessageObjectType) => {
-//     io.emit("newMessageServer", message);
-// };
-
-interface socketRoom {
-    groupName: string;
-    conversationId: string;
-}
-
 async function socketServer({ io }: { io: Server }) {
-    const conversations: socketRoom[] = [];
-
-    const allConversations = await ConversationModel.findMany({});
-
-    allConversations.forEach((e: any) => {
-        conversations.push({ conversationId: e.id, groupName: e.name });
-    });
-
     io.on("connection", async (socket) => {
         //@ts-ignore
         const { user } = socket.request;
@@ -41,7 +23,7 @@ async function socketServer({ io }: { io: Server }) {
         });
 
         // listen to new messages
-        socket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageObjectType) => {
+        socket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
             io.to(message.conversationId).emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, message);
         });
     });

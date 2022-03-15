@@ -15,11 +15,12 @@ const joiBirthday = {
 };
 
 export const joiLocation = {
-    longitude: Joi.custom((value: any, helpers: CustomHelpers) => {
+    longitude: Joi.custom((value: string, helpers: CustomHelpers) => {
         if (!regexLongitude.test(value)) return helpers.error("any.invalid");
         return value;
     }),
-    latitude: Joi.custom((value: any, helpers: CustomHelpers) => {
+
+    latitude: Joi.custom((value: string, helpers: CustomHelpers) => {
         if (!regexLatitude.test(value)) return helpers.error("any.invalid");
         return value;
     }),
