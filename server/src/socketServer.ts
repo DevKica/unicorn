@@ -24,6 +24,7 @@ async function socketServer({ io }: { io: Server }) {
 
         // listen to new messages
         socket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
+            console.log(io.sockets.adapter.rooms);
             io.to(message.conversationId).emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, message);
         });
     });

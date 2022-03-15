@@ -129,7 +129,7 @@ export const newEmailAndPasswordLoginCredentials = { email: newEmail, password: 
 // after setting new password to old password
 export const newEmailLoginCredentials = { email: newEmail, password };
 // another user
-export const anotherUserLoginCredentials = { email: "jennifer@lopez.com", password: "JenniferLopez1!" };
+export const secondUserLoginCredentials = { email: "jennifer@lopez.com", password: "JenniferLopez1!" };
 
 export const changePasswordData = {
     body: {

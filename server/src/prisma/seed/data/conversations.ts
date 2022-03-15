@@ -17,7 +17,7 @@ export default [
         id: "conversation2",
         name: "Natalia and Selena",
         members: {
-            connect: [{ id: "9" }, { id: "10" }],
+            connect: [{ id: "9" }, { id: "10" }, { id: "7" }],
         },
     },
 ];

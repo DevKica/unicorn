@@ -6,6 +6,7 @@ export function removeGlobals(): void {
     removeAuthTokens();
     global.testUserId = "";
     global.testConversationId = "";
+    global.testSecondAccessToken = "";
     global.testMessagesContent = [];
 }
 
