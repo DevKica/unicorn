@@ -20,59 +20,46 @@ export const basicUserData = {
     latitude: 50.05,
 };
 
+const email = "devKica777@gmail.com";
+const newEmail = TEST_USER_EMAIL;
+const nonExistentEmail = "example@gmail.com";
 export const invalidEmailSchema = "@devKica@.com";
 
-const email = "devKica777@gmail.com";
-
-const nonExistentEmail = "example@gmail.com";
-
 const password = "Password1!";
-
+const newPassword = `new${password}`;
+const invalidPassword = "invalidPassword1!";
 export const invalidPasswordSchema = "invalidPassword1";
 
-const invalidPassword = "invalidPassword1!";
+export const basicActiveUserData = { ...basicUserData, active: true };
 
-const newEmail = TEST_USER_EMAIL;
+export const basicNewUserData = { ...basicUserData, email: newEmail };
 
-const newPassword = `new${password}`;
+export const basicActiveNewUserData = { ...basicNewUserData, active: true };
 
-const basicActiveUserData = {
-    ...basicUserData,
-    active: true,
-};
-
-const basicNewUserData = {
-    ...basicUserData,
-    email: newEmail,
-};
-
-const basicActiveNewUserData = {
-    ...basicNewUserData,
-    active: true,
-};
+export const userOmitProperties = ["id", "createdAt", "subExpiration", "photos"];
 
 export const basicUserDataResponse = {
     data: basicUserData,
     status: 200,
-    omit: ["id", "createdAt", "subExpiration", "photos"],
+    omit: userOmitProperties,
 };
 
 export const basicNewUserResponse = {
     data: basicNewUserData,
     status: 200,
-    omit: ["id", "createdAt", "subExpiration", "photos"],
+    omit: userOmitProperties,
 };
 
 export const basicActiveUserDataResponse = {
     data: basicActiveUserData,
     status: 200,
-    omit: ["id", "createdAt", "subExpiration", "photos"],
+    omit: userOmitProperties,
 };
 
 export const basicActiveNewUserDataResponse = {
     data: basicActiveNewUserData,
     status: 200,
-    omit: ["id", "createdAt", "subExpiration", "photos"],
+    omit: userOmitProperties,
 };
 
 export const invalidSchemaCreateUserBody = {
@@ -133,20 +120,16 @@ export const userLoginData = {
     response: basicUserDataResponse,
 };
 
+// basic login credentials
 export const loginCredentials = userLoginData.body.valid;
-
-export const newEmailLoginCredentials = {
-    email: newEmail,
-    password,
-};
-export const newPasswordLoginCredentials = {
-    email,
-    password: newPassword,
-};
-export const newEmailAndPasswordLoginCredentials = {
-    email: newEmail,
-    password: newPassword,
-};
+// after changing password
+export const newPasswordLoginCredentials = { email, password: newPassword };
+// after changing email
+export const newEmailAndPasswordLoginCredentials = { email: newEmail, password: newPassword };
+// after setting new password to old password
+export const newEmailLoginCredentials = { email: newEmail, password };
+// another user
+export const anotherUserLoginCredentials = { email: "jennifer@lopez.com", password: "JenniferLopez1!" };
 
 export const changePasswordData = {
     body: {
@@ -215,7 +198,7 @@ export const passwordResetData = {
 
 export const setNewPasswordData = {
     token: {
-        valid: "",
+        valid: "", // valid token is set during testing
         invalid: "invalid123",
     },
     body: {

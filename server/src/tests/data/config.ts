@@ -21,7 +21,7 @@ import {
 } from "../../utils/errors/main";
 import { createUserData, changePasswordData, userLoginData, setNewPasswordData, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
-import { createLikeBody, createTextMessageBody, updateUserProfileBody } from "./user.relations";
+import { createFileMessageData, createLikeData, createTextMessageData, updateUserProfileData } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
 import { createFileMessageSchema, createLikeSchema, createTextMessageSchema } from "./../../validation/user.matching.schema";
 
@@ -46,11 +46,11 @@ export const InvalidLoginBodyInstance = new InvalidRequestedBody(validate(logInS
 export const InvalidChangePasswordBodyInstance = new InvalidRequestedBody(validate(changePasswordSchema, changePasswordData.body.invalid.schema).error);
 export const InvalidSetNewPasswordBodyInstance = new InvalidRequestedBody(validate(passwordWithRepetitionSchema, setNewPasswordData.body.invalid.schema).error);
 export const InvalidEmailBodyInstance = new InvalidRequestedBody(validate(emailSchema, { email: invalidEmailSchema }).error);
-export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(validate(generalInfoSchema, updateUserProfileBody.invalid.general).error);
-export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingInfoSchema, updateUserProfileBody.invalid.matching).error);
+export const InvalidUpdateUserGeneralInfoInstance = new InvalidRequestedBody(validate(generalInfoSchema, updateUserProfileData.body.invalid.general).error);
+export const InvalidUpdateUserMatchingInfoInstance = new InvalidRequestedBody(validate(matchingInfoSchema, updateUserProfileData.body.invalid.matching).error);
 export const InvalidPasswordSchemaInstance = new InvalidRequestedBody(validate(singlePasswordSchema, { password: invalidPasswordSchema }).error);
-export const InvalidCreateLikeInstance = new InvalidRequestedBody(validate(createLikeSchema, createLikeBody.invalid.schema).error);
-export const InvalidCreateTextMessageInstance = new InvalidRequestedBody(validate(createTextMessageSchema, createTextMessageBody.invalid.schema).error);
-export const InvalidCreateFileMessageInstance = new InvalidRequestedBody(validate(createFileMessageSchema, { conversationId: "12", type: "invalidPhoto123heh" }).error);
+export const InvalidCreateLikeInstance = new InvalidRequestedBody(validate(createLikeSchema, createLikeData.body.invalid.schema).error);
+export const InvalidCreateTextMessageInstance = new InvalidRequestedBody(validate(createTextMessageSchema, createTextMessageData.body.invalid.schema).error);
+export const InvalidCreateFileMessageInstance = new InvalidRequestedBody(validate(createFileMessageSchema, createFileMessageData.body.general.invalid.schema).error);
 
 export const apiVersion = "v1";

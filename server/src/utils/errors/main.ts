@@ -162,3 +162,12 @@ export class TooLargeFile extends Error {
         Object.setPrototypeOf(this, TooLargeFile.prototype);
     }
 }
+
+export class TooManyPhotos extends Error {
+    public readonly code: number = 400;
+    public readonly msg: string = "Too Many Photos";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, TooManyPhotos.prototype);
+    }
+}

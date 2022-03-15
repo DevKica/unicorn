@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import sharp from "sharp";
 import { Request } from "express";
 import { promisify } from "util";
-import { FileRequired, InvalidFileFormat, PhotoRequired, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
+import { FileRequired, InvalidFileFormat, PhotoRequired, TooManyPhotos, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
 import { photoMessagesPath, userPhotosResolutions, usersPhotosPath, videoMessagesPath, voiceMessagesPath } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
 const getMP3Duration = require("get-mp3-duration");
@@ -80,6 +80,8 @@ export async function uploadAndResizePhoto(file: any, dirPath: string): Promise<
 export async function uploadUserPhotosFromReq(req: Request) {
     if (req.files) {
         const uploadPhotos = [];
+
+        if (Object.entries(req.files).length > 9) throw new TooManyPhotos();
 
         for (const [_key, value] of Object.entries(req.files)) {
             uploadPhotos.push(await uploadAndResizePhoto(value, usersPhotosPath));

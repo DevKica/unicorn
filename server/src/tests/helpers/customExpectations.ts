@@ -31,15 +31,6 @@ export function expectToEqualCustom(res: any, error: any) {
     expect(res.status).toEqual(error.code);
 }
 
-// export function expectToEqualRes(res: any, status: number, data: object) {
-//     if (res.body.content) {
-//         global.testMessagesContent.unshift(res.body.content);
-//     }
-
-//     expect(omit(res.body, "id", "photos", "createdAt", "subExpiration", "updatedAt")).toEqual(data);
-//     expect(res.status).toEqual(status);
-// }
-
 export function expectUserPhotosToExists(res: any) {
     res.body.photos.forEach((photo: string) => {
         for (const key in userPhotosResolutions) {

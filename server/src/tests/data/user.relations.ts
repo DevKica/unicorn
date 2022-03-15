@@ -1,117 +1,236 @@
 import { MessageType } from "@prisma/client";
+import { femalesUnder24showMale, femalesUnder24ShowAll } from "../../prisma/seed/data/users";
+import { SuccessResponse } from "../../utils/responses/main";
+import formatMatchedUsers from "../helpers/formatMatchedUsers";
+import { basicActiveUserData, userOmitProperties } from "./user.auth";
 
-export const updateUserProfileBody = {
-    valid: {
-        general: {
-            name: "Dani",
-            surname: "Crabgame",
-            description: "steam goes brra",
+const updateGeneralUserData = {
+    name: "Dani",
+    surname: "Crabgame",
+    description: "steam goes brra",
+};
+
+const updateMatchingUserData = {
+    showMeGender: "Female",
+};
+
+const newGeneralUserData = { ...basicActiveUserData, ...updateGeneralUserData };
+
+const newMatchingUserData = { ...newGeneralUserData, ...updateMatchingUserData };
+
+export const generalUpdateUserDataResponse = {
+    data: newGeneralUserData,
+    status: 200,
+    omit: userOmitProperties,
+};
+
+export const matchingUpdateUserDataResponse = {
+    data: newMatchingUserData,
+    status: 200,
+    omit: userOmitProperties,
+};
+
+export const updateUserProfileData = {
+    body: {
+        valid: {
+            general: updateGeneralUserData,
+            matching: updateMatchingUserData,
         },
-        matching: {
-            showMeGender: "Female",
+        invalid: {
+            general: {
+                name: "1Dani!",
+                surname: "!Crabgame1",
+            },
+            matching: {
+                showMeGender: "Invalid value",
+            },
         },
     },
-    invalid: {
-        general: {
-            name: "1Dani!",
-            surname: "!Crabgame1",
-        },
-        matching: {
-            showMeGender: "Invalid value",
+    response: {
+        general: generalUpdateUserDataResponse,
+        matching: matchingUpdateUserDataResponse,
+    },
+};
+
+export const getUserPhotoData = {
+    photoName: {
+        valid: "large/pawelKica1",
+        invalid: {
+            size: "largeeeeee/pawelKica1",
+            name: "large/invalidName",
         },
     },
 };
 
-// export const newGeneralUpdateUserData = {
-//     ...basicActiveUserData,
-//     ...updateUserProfileBody.valid.general,
-// };
+export const getUsersToMatchResponse = {
+    beforeOperations: {
+        data: formatMatchedUsers([...femalesUnder24showMale, ...femalesUnder24ShowAll]),
+        status: 200,
+        omit: [],
+    },
+    afterOperations: {
+        data: formatMatchedUsers([femalesUnder24showMale[0]]),
+        status: 200,
+        omit: [],
+    },
+};
 
-// export const afterFullUpdateUserData = {
-//     ...newGeneralUpdateUserData,
-//     ...updateUserProfileBody.valid.matching,
-// };
-
-export const createLikeBody = {
-    valid: {
-        success: {
-            judgedUserId: "6",
-            typeOfLike: "default",
+export const createLikeData = {
+    body: {
+        valid: {
+            basic: {
+                judgedUserId: "6",
+                typeOfLike: "default",
+            },
+            newPair: {
+                judgedUserId: "5",
+                typeOfLike: "default",
+            },
+            reject: {
+                judgedUserId: "4",
+                typeOfLike: "notInterested",
+            },
         },
+        invalid: {
+            schema: {
+                typeOfLike: "superr",
+            },
+            inactiveUser: {
+                judgedUserId: "-1",
+                typeOfLike: "default",
+            },
+            nonPremium: {
+                judgedUserId: "3",
+                typeOfLike: "super",
+            },
+        },
+    },
+    response: {
+        basic: SuccessResponse,
         newPair: {
-            judgedUserId: "5",
-            typeOfLike: "default",
+            data: {
+                name: "Dani and Doda",
+                messages: [],
+            },
+            status: 201,
+            omit: ["id", "createdAt", "updatedAt"],
         },
-        reject: {
-            judgedUserId: "4",
-            typeOfLike: "notInterested",
-        },
-    },
-    invalid: {
-        schema: {
-            typeOfLike: "superr",
-        },
-        inactiveUser: {
-            judgedUserId: "-1",
-            typeOfLike: "default",
-        },
-        nonPremium: {
-            judgedUserId: "3",
-            typeOfLike: "super",
-        },
+        reject: SuccessResponse,
     },
 };
 
-export const getMatchedResponse = {
-    name: "Dani and Doda",
-    messages: [],
-};
 export const createMessageResponse = (type: MessageType, content = "") => {
-    const response = {
+    const response: { [key: string]: string | boolean } = {
         userId: "1",
         conversationId: "", // conversationId is set to valid value during testing
-        content,
-        type: "",
+        type,
         isDeleted: false,
     };
-    response["type"] = type;
+    if (content) {
+        response.content = content;
+    }
 
     return response;
 };
 
-export const createTextMessageBody = {
-    valid: {
-        content: "hello",
-        conversationId: "", // conversationId is set to valid value during testing
-    },
-    invalid: {
-        schema: {
-            content: "",
-            conversationId: ["1", "3232"],
-        },
-        notFoundConversation: {
-            content: "hello",
-            conversationId: "12345",
-        },
-        notInConversationMembers: {
-            content: "hello",
-            conversationId: "conversation2",
-        },
-    },
+const textMessageContent = "hello";
+
+export const messageOmitProperties = ["id", "content", "createdAt"];
+
+const createTextMessageResponse = {
+    data: createMessageResponse("default", textMessageContent),
+    status: 201,
+    omit: ["id", "createdAt"],
 };
 
-export const createTextMessageResponse = {
+const createPhotoMessageResponse = {
+    data: createMessageResponse("photo"),
+    status: 201,
+    omit: messageOmitProperties,
+};
+
+const createVoiceMessageResponse = {
+    data: createMessageResponse("voice"),
+    status: 201,
+    omit: messageOmitProperties,
+};
+
+const createVideoMessageResponse = {
+    data: createMessageResponse("video"),
+    status: 201,
+    omit: messageOmitProperties,
+};
+
+export const createTextMessageData = {
     body: {
-        data: createMessageResponse("default", createTextMessageBody.valid.content),
-        status: 201,
+        valid: {
+            content: textMessageContent,
+            conversationId: "", // conversationId is set to valid value during testing
+        },
+        invalid: {
+            schema: {
+                content: "",
+                conversationId: ["1", "3232"],
+            },
+            notFoundConversation: {
+                content: "hello",
+                conversationId: "12345",
+            },
+            notInConversationMembers: {
+                content: "hello",
+                conversationId: "conversation2",
+            },
+        },
     },
-    omit: ["id", "createdAt"],
+    response: createTextMessageResponse,
+};
+
+export const createFileMessageData = {
+    body: {
+        general: {
+            invalid: {
+                tooLargeFile: {
+                    conversationdId: "",
+                    type: "voice",
+                },
+                schema: {
+                    conversationdId: "",
+                    type: "invalidTypeSchema  123",
+                },
+            },
+        },
+        photo: {
+            valid: {
+                conversationId: "",
+                type: "photo",
+            },
+        },
+        voice: {
+            valid: {
+                conversationId: "",
+                type: "voice",
+            },
+        },
+        video: {
+            valid: {
+                conversationId: "",
+                type: "video",
+            },
+        },
+    },
+    response: {
+        photo: createPhotoMessageResponse,
+        voice: createVoiceMessageResponse,
+        video: createVideoMessageResponse,
+    },
 };
 
 export const getConversationsResponse = [
     {
         id: "conversation3",
         name: "Jennifer fanclub",
+        updatedAt: "2022-03-10T21:23:09.006Z",
+        createdAt: "2022-03-10T20:48:35.395Z",
         members: [
             {
                 id: "7",
@@ -125,29 +244,12 @@ export const getConversationsResponse = [
             },
         ],
         messages: [],
-        updatedAt: "2022-03-10T21:23:09.006Z",
-        createdAt: "2022-03-10T20:48:35.395Z",
     },
     {
+        id: "conversation2",
+        name: "Pawel and Jennifer",
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:35.395Z",
-        id: "conversation2",
-        messages: [
-            {
-                id: "message1",
-                content: "Hi Lopez",
-                type: "default",
-                isDeleted: false,
-                userId: "1",
-            },
-            {
-                id: "message2",
-                content: "Hi Pawel",
-                type: "default",
-                isDeleted: false,
-                userId: "7",
-            },
-        ],
         members: [
             {
                 id: "7",
@@ -160,7 +262,22 @@ export const getConversationsResponse = [
                 surname: "Crabgame",
             },
         ],
-        name: "Pawel and Jennifer",
+        messages: [
+            {
+                id: "message1",
+                userId: "1",
+                content: "Hi Lopez",
+                type: "default",
+                isDeleted: false,
+            },
+            {
+                id: "message2",
+                userId: "7",
+                content: "Hi Pawel",
+                type: "default",
+                isDeleted: false,
+            },
+        ],
     },
     {
         id: "cl0gpwaz0265qou8wbbxy02f",
@@ -183,33 +300,33 @@ export const getConversationsResponse = [
             {
                 id: "cl0lgpwls0382qou8cew1h3cw",
                 userId: "1",
-                content: "hello",
-                isDeleted: false,
+                content: textMessageContent,
                 type: "default",
+                isDeleted: false,
                 createdAt: "2022-03-10T20:48:38.224Z",
             },
             {
                 id: "cl0lgpztr0417qou80ycglbpu",
                 userId: "1",
-                content: "fbcf736e1c5d6b2faf8d25783603606f195dc0db12445e08c8932fcfcb4d7f375cd548e4dbefc9b79dc3fb59834ca76ab1859d73564581ae7207d136786702a11646945322387",
-                isDeleted: false,
+                content: "photoFileName",
                 type: "photo",
+                isDeleted: false,
                 createdAt: "2022-03-10T20:48:42.399Z",
             },
             {
                 id: "cl0lgq0170470qou870q99bxs",
                 userId: "1",
-                content: "2b3a17dc5a1c0035cee0653238b64e47bb30c35cca78a2dbc8ee917c695cea25458b8310991e5af5a4ca47a8a1bbf6300a167569945396f9f2e2826fe83a3de21646945322652",
-                isDeleted: false,
+                content: "voiceFileName",
                 type: "voice",
+                isDeleted: false,
                 createdAt: "2022-03-10T20:48:42.667Z",
             },
             {
                 id: "cl0lgq0qs0502qou8igdgb93q",
                 userId: "1",
-                content: "9377d0d02cf7ba2949c76a8f82a7bd24919172ecc2555af6a983dd82e2c7c1808bdf79da325af327645d94bb09b17313160d323b842714476cf9c52c6cbb8f1a1646945323572",
-                isDeleted: false,
+                content: "videoFileName",
                 type: "video",
+                isDeleted: false,
                 createdAt: "2022-03-10T20:48:43.588Z",
             },
         ],

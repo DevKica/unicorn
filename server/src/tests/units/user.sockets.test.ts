@@ -1,133 +1,144 @@
-// import cookie from "cookie";
-// import { Socket, Server } from "socket.io";
-// import { NextFunction } from "express";
-// import { socketServerOptions } from "../../io";
-// import { removeGlobals } from "../helpers/globalHelpers";
-// import { verifyUserTokenJWT } from "../../config/jwt.config";
-// import { EVENTS } from "../../socketServer";
-// import { MessageType } from "../../@types/prisma/static.types";
-// import { loginCredentials, activeBasicUserData } from "../data/user.auth";
-// import { testPOSTRequest } from "../helpers/testEndpoint";
-// import { findSingleSession } from "../../services/session/session.services";
-// import seedRelationsData from "../../prisma/seed/users.relations.seed";
-// import { createTextMessageBody, createTextMessageResponse } from "../data/user.relations";
-// import { expectToEqualObject } from "../helpers/customExpectations";
+import cookie from "cookie";
+import { Socket, Server } from "socket.io";
+import { NextFunction } from "express";
+import { socketServerOptions } from "../../io";
+import { removeGlobals } from "../helpers/globalHelpers";
+import { verifyUserTokenJWT } from "../../config/jwt.config";
+import { EVENTS } from "../../socketServer";
+import { MessageType } from "../../@types/prisma/static.types";
+import { basicActiveUserDataResponse, loginCredentials } from "../data/user.auth";
+import { testPOSTRequest } from "../helpers/testEndpoint";
+import { findSingleSession } from "../../services/session/session.services";
+import seedRelationsData from "../../prisma/seed/users.relations.seed";
+import { expectToEqualObject } from "../helpers/customExpectations";
+import { createTextMessageData } from "../data/user.relations";
+import { findAllUserConversations } from "../../services/conversations.services";
 
-// const { createServer } = require("http");
-// const Client = require("socket.io-client");
+const { createServer } = require("http");
+const Client = require("socket.io-client");
 
-// describe("SOCKETS", () => {
-//     let port: number, serverSocket: Socket, clientSocket: any, io: any;
+describe("SOCKETS", () => {
+    let port: number, serverSocket: Socket, clientSocket: any, io: any;
 
-//     beforeAll((done) => {
-//         // create server
-//         const httpServer = createServer();
+    beforeAll((done) => {
+        // create server
+        const httpServer = createServer();
 
-//         // init io instance
-//         io = new Server(httpServer, socketServerOptions);
+        // init io instance
+        io = new Server(httpServer, socketServerOptions);
 
-//         // apply middleware
-//         io.use(async (socket: Socket, next: NextFunction) => {
-//             try {
-//                 const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+        // apply middleware
+        io.use(async (socket: Socket, next: NextFunction) => {
+            try {
+                const cookies = cookie.parse(socket.handshake.headers.cookie || "");
 
-//                 const { decoded } = verifyUserTokenJWT(cookies.accessToken);
+                const { decoded } = verifyUserTokenJWT(cookies.accessToken);
 
-//                 if (!decoded) throw Error;
+                if (!decoded) throw Error;
 
-//                 const session = await findSingleSession({ id: decoded.sessionId });
-//                 if (!session || !session.valid) throw Error;
+                const session = await findSingleSession({ id: decoded.sessionId });
+                if (!session || !session.valid) throw Error;
 
-//                 // @ts-ignore
-//                 socket.request.user = decoded;
+                //@ts-ignore
+                socket.request.user = decoded;
 
-//                 next();
-//             } catch (e) {
-//                 next(new Error("Unauthorized"));
-//             }
-//         });
+                next();
+            } catch (e) {
+                next(new Error("Unauthorized"));
+            }
+        });
 
-//         httpServer.listen(async () => {
-//             port = httpServer.address().port;
+        httpServer.listen(async () => {
+            port = httpServer.address().port;
 
-//             io.on("connection", async (socket: any) => {
-//                 serverSocket = socket;
-//             });
+            io.on("connection", async (socket: Socket) => {
+                serverSocket = socket;
 
-//             await seedRelationsData();
+                //@ts-ignore
+                const { user } = socket.request;
 
-//             await testPOSTRequest("/users/login", loginCredentials, activeBasicUserData, 200);
+                const userConversations = await findAllUserConversations(user.userId);
 
-//             done();
-//         });
-//     });
+                userConversations.forEach((e) => {
+                    socket.join(e.id);
+                });
+            });
 
-//     afterAll(() => {
-//         io.close();
-//         removeGlobals();
-//     });
+            await seedRelationsData();
 
-//     describe("UNAUTHORIZED", () => {
-//         let errorMessage: string;
-//         beforeAll((done) => {
-//             clientSocket = new Client(`http://localhost:${port}`);
+            await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
 
-//             clientSocket.on("connect_error", (error: any) => {
-//                 errorMessage = error.message;
-//                 done();
-//             });
-//         });
-//         test("Error message should be equal to unauthorized", () => {
-//             expect(errorMessage).toEqual("Unauthorized");
-//         });
-//         afterAll(() => {
-//             clientSocket.close();
-//         });
-//     });
+            done();
+        });
+    });
 
-//     describe("AUTHORIZED", () => {
-//         // let testMesssage: MessageType;
+    afterAll(() => {
+        io.close();
+        removeGlobals();
+    });
 
-//         const { valid: text_valid } = createTextMessageBody;
+    describe("UNAUTHORIZED", () => {
+        let errorMessage: string;
+        beforeAll((done) => {
+            clientSocket = new Client(`http://localhost:${port}`);
 
-//         beforeAll((done) => {
-//             global.testConversationId = "conversation1";
+            clientSocket.on("connect_error", (error: any) => {
+                errorMessage = error.message;
+                done();
+            });
+        });
+        test("Error message should be equal to unauthorized", () => {
+            expect(errorMessage).toEqual("Unauthorized");
+        });
+        afterAll(() => {
+            clientSocket.close();
+        });
+    });
 
-//             text_valid.conversationId = global.testConversationId;
+    describe("AUTHORIZED", () => {
+        const { body, response } = createTextMessageData;
 
-//             createTextMessageResponse.data.conversationId = global.testConversationId;
+        beforeAll((done) => {
+            global.testConversationId = "conversation1";
 
-//             clientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testAccessToken}` } });
+            body.valid.conversationId = global.testConversationId;
 
-//             clientSocket.on("connect", done);
-//         });
-//         afterAll(() => {
-//             clientSocket.close();
-//         });
+            response.data.conversationId = global.testConversationId;
 
-//         test("The server should receive a notification of a new message from the client", (done) => {
-//             serverSocket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
-//                 console.log("server on", message);
-//                 console.log(message);
-//                 done();
-//             });
+            clientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testAccessToken}` } });
 
-//             clientSocket.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE);
-//         });
+            clientSocket.on("connect", done);
+        });
+        afterAll(() => {
+            clientSocket.close();
+        });
 
-//         test("The client should receive new message from the server", (done) => {
-//             clientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
-//                 const { data, omit } = createTextMessageResponse;
+        test("The server should receive a notification of a new message from the client", (done) => {
+            serverSocket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
+                const { data, omit } = response;
 
-//                 expectToEqualObject(message, data, omit);
+                expectToEqualObject(message, data, omit);
+                done();
+            });
+            (async () => {
+                const res = await testPOSTRequest("/messages/text", body.valid, response);
+                clientSocket.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE, res.body);
+            })();
+        });
 
-//                 done();
-//             });
+        test("The client should receive new message from the server", (done) => {
+            clientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
+                const { data, omit } = response;
 
-//             (async () => {
-//                 const res = await testPOSTRequest("/messages/text", text_valid, createTextMessageResponse.data, 201);
-//                 serverSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, res.body);
-//             })();
-//         });
-//     });
-// });
+                expectToEqualObject(message, data, omit);
+
+                done();
+            });
+
+            (async () => {
+                const res = await testPOSTRequest("/messages/text", body.valid, response);
+                serverSocket.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, res.body);
+            })();
+        });
+    });
+});

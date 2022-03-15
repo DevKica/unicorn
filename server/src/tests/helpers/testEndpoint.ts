@@ -20,7 +20,7 @@ export const afterTest = (res: any, equalObject: equalObjectType) => {
     }
 };
 
-export async function testGETRequest(endpoint: string, equalObject: equalObjectType) {
+export async function testGETRequest(endpoint: string, equalObject: equalObjectType | any) {
     const res = await global.request.get(`/api/${apiVersion}${endpoint}`).set("Cookie", [`${ACCESS_TOKEN}=${global.testAccessToken}`, `${REFRESH_TOKEN}=${global.testRefreshToken}`]);
 
     afterTest(res, equalObject);
