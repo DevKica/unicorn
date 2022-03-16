@@ -1,11 +1,12 @@
+import path from "path";
 import { Request, Response } from "express";
 import { existsSync } from "fs";
-import path from "path";
 import { usersPhotosPath } from "../../config/upload.config";
 import { userProfileProperties } from "../../prisma/validator";
 import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../services/user/user.services";
 import { applyToResponseCustom, applyToResponse } from "../../utils/errors/applyToResponse";
 import { NotFound } from "../../utils/errors/main";
+import { removeUserPhotos, uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -16,6 +17,22 @@ export async function getProfilePhotoHandler(req: Request, res: Response): Promi
         if (!existsSync(photoPath)) throw new NotFound();
 
         return res.sendFile(photoPath);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function updateUserPhotosHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { userId } = res.locals.user;
+
+        const uploadedPhotos = await uploadUserPhotosFromReq(req);
+
+        await removeUserPhotos(userId);
+
+        const updatedUser = await updateUniqueUser({ id: userId }, { photos: uploadedPhotos }, userProfileProperties);
+
+        applyToResponse(res, 200, updatedUser);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

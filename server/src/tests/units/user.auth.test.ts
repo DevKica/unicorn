@@ -32,7 +32,7 @@ import {
     setNewPasswordData,
     deleteAccountData,
 } from "../data/user.auth";
-import { expectUserPhotosToExists } from "../helpers/customExpectations";
+import { checkTheExistenceOfUserPhotos } from "../helpers/customExpectations";
 import { removeAuthTokens, removeGlobals, setTestUserId } from "../helpers/globalHelpers";
 import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
@@ -62,7 +62,7 @@ describe("AUTHENTICATION", () => {
         });
         test(`User should be able to create account with valid body, images should be saved correctly`, async () => {
             const res = await testPOSTRequest("/users", body.valid, response, validPhotoFile);
-            expectUserPhotosToExists(res);
+            checkTheExistenceOfUserPhotos(res.body.photos, true);
             setTestUserId(res);
         });
         test(`User should NOT be able to create account with email that already exists in database`, async () => {

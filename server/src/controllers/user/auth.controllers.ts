@@ -19,7 +19,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
     try {
         await checkEmailAvailability(req.body.email);
 
-        const uploadPhotos = await uploadUserPhotosFromReq(req);
+        const uploadedPhotos = await uploadUserPhotosFromReq(req);
 
         const preparedUser = prepareCreateUserInput(req.body);
 
@@ -33,7 +33,7 @@ export async function createUserHandler(req: CreateUserRequest, res: Response): 
 
         await signNewSession({ req, res, id: createdUser.id, active: createdUser.active, accountType: createdUser.accountType, subExpiration: createdUser.subExpiration });
 
-        applyToResponse(res, 201, { ...createdUser, photos: uploadPhotos });
+        applyToResponse(res, 201, { ...createdUser, photos: uploadedPhotos });
     } catch (e) {
         applyToResponseCustom(res, e);
     }

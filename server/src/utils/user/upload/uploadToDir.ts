@@ -3,9 +3,10 @@ import fse from "fs-extra";
 import sharp from "sharp";
 import { Request } from "express";
 import { promisify } from "util";
-import { FileRequired, InvalidFileFormat, PhotoRequired, TooManyPhotos, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
+import { FileRequired, Forbidden, InvalidFileFormat, PhotoRequired, TooManyPhotos, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
 import { photoMessagesPath, userPhotosResolutions, usersPhotosPath, videoMessagesPath, voiceMessagesPath } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
+import { findUniqueUser } from "../../../services/user/user.services";
 const getMP3Duration = require("get-mp3-duration");
 
 function checkFileFormat(file: any, exts: string[]) {
@@ -90,5 +91,16 @@ export async function uploadUserPhotosFromReq(req: Request) {
         return uploadPhotos;
     } else {
         throw new PhotoRequired();
+    }
+}
+
+export async function removeUserPhotos(userId: string) {
+    const user = await findUniqueUser({ id: userId }, { photos: true });
+    if (!user) throw new Forbidden();
+
+    for (const fileName of user.photos) {
+        for (const key in userPhotosResolutions) {
+            await fse.remove(path.join(usersPhotosPath, `${key}.${fileName}.jpg`));
+        }
     }
 }

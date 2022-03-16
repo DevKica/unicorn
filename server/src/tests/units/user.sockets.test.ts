@@ -19,9 +19,19 @@ const { createServer } = require("http");
 const Client = require("socket.io-client");
 
 describe("SOCKETS", () => {
-    let port: number, userServerSocket: Socket, secondServerSocket: Socket, userClientSocket: any, secondClientSocket: any, io: any;
+    let port: number, serverSocketOne: Socket, serverSocketTwo: Socket, clientSocketOne: any, clientSocketTwo: any, io: any;
+
+    const { body, response } = createTextMessageData;
+
+    const { data, omit } = response;
 
     beforeAll((done) => {
+        global.testConversationId = "conversation1";
+
+        body.valid.conversationId = global.testConversationId;
+
+        response.data.conversationId = global.testConversationId;
+
         // create server
         const httpServer = createServer();
 
@@ -57,9 +67,9 @@ describe("SOCKETS", () => {
                 const { user } = socket.request;
 
                 if (user.userId === "1") {
-                    userServerSocket = socket;
+                    serverSocketOne = socket;
                 } else {
-                    secondServerSocket = socket;
+                    serverSocketTwo = socket;
                 }
 
                 const userConversations = await findAllUserConversations(user.userId);
@@ -86,108 +96,103 @@ describe("SOCKETS", () => {
 
     describe("UNAUTHORIZED", () => {
         let errorMessage: string;
-        beforeAll((done) => {
-            userClientSocket = new Client(`http://localhost:${port}`);
 
-            userClientSocket.on("connect_error", (error: any) => {
+        beforeAll((done) => {
+            clientSocketOne = new Client(`http://localhost:${port}`);
+
+            clientSocketOne.on("connect_error", (error: any) => {
                 errorMessage = error.message;
                 done();
             });
         });
+
+        afterAll(() => {
+            clientSocketOne.close();
+        });
+
         test("Error message should be equal to unauthorized", () => {
             expect(errorMessage).toEqual("Unauthorized");
-        });
-        afterAll(() => {
-            userClientSocket.close();
         });
     });
 
     describe("AUTHORIZED", () => {
-        const { body, response } = createTextMessageData;
+        beforeEach((done) => {
+            clientSocketOne = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testAccessToken}` } });
+            clientSocketTwo = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testSecondAccessToken}` } });
 
-        beforeAll((done) => {
-            global.testConversationId = "conversation1";
-
-            body.valid.conversationId = global.testConversationId;
-
-            response.data.conversationId = global.testConversationId;
-
-            secondClientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testSecondAccessToken}` } });
-
-            userClientSocket = new Client(`http://localhost:${port}`, { extraHeaders: { cookie: `accessToken=${testAccessToken}` } });
-
-            secondClientSocket.on("connect", done);
-
-            userClientSocket.on("connect", done);
+            clientSocketOne.on("connect", done);
+            clientSocketTwo.on("connect", done);
         });
-        afterAll(() => {
-            secondClientSocket.close();
-            userClientSocket.close();
+
+        afterEach(() => {
+            clientSocketOne.close();
+            clientSocketTwo.close();
         });
 
         test("The server should receive a notification of a new message from the client", (done) => {
-            userServerSocket.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
-                const { data, omit } = response;
+            serverSocketOne.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
                 expectToEqualObject(message, data, omit);
                 done();
             });
             (async () => {
                 const res = await testPOSTRequest("/messages/text", body.valid, response);
-                userClientSocket.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE, res.body);
+                clientSocketOne.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE, res.body);
             })();
         });
-
-        secondServerSocket;
 
         test("The clients should receive new message from the server emitted to everyone", (done) => {
-            userClientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
-                const { data, omit } = response;
-                expectToEqualObject(message, data, omit);
+            clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 done();
             });
 
-            secondClientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
-                const { data, omit } = response;
-                expectToEqualObject(message, data, omit);
-                done();
-            });
-
-            (async () => {
-                const res = await testPOSTRequest("/messages/text", body.valid, response);
-                io.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, res.body);
-            })();
+            io.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
 
-        test("The client should receive a new message from a server to the private room of which he is a member", (done) => {
-            userClientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
-                const { data, omit } = response;
-                expectToEqualObject(message, data, omit);
-                done();
-            });
-
-            (async () => {
-                const res = await testPOSTRequest("/messages/text", body.valid, response);
-                io.to(global.testConversationId).emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, res.body);
-            })();
-        });
-
-        test("The client should NOT receive a new message from a server to the private room of which he is not a member", (done) => {
-            userClientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
-                // throw error if client receive message from another room
+        test("The client whose serverSocket sent the new message should NOT receive it, others should NOT", (done) => {
+            clientSocketTwo.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 expect(false).toEqual(true);
                 done();
             });
 
-            secondClientSocket.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, (message: MessageType) => {
-                const { data, omit } = response;
-                expectToEqualObject({ ...message, userId: "7" }, { ...data, userId: "7" }, omit);
+            clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 done();
             });
 
-            (async () => {
-                const res = await testPOSTRequest("/messages/text", body.valid, response);
-                io.to("conversation2").emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, res.body);
-            })();
+            serverSocketOne.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
+        });
+
+        test("The client whose serverSocket sent the new message should receive it, others should NOT", (done) => {
+            clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
+                expect(false).toEqual(true);
+                done();
+            });
+            clientSocketTwo.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
+                done();
+            });
+
+            serverSocketTwo.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
+        });
+
+        test("The client should receive a new message from a server to the private room of which he is a member", (done) => {
+            clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
+                done();
+            });
+
+            io.to(global.testConversationId).emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
+        });
+
+        test("Client ONE should NOT receive a new message from the server to a private room of which he is not a member, client TWO should receive it (because he is a member of it)", (done) => {
+            clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
+                // throw error if client ONE receives message
+                expect(false).toEqual(true);
+                done();
+            });
+
+            clientSocketTwo.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
+                done();
+            });
+
+            io.to("conversation2").emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
     });
 });

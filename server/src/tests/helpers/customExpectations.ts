@@ -31,10 +31,10 @@ export function expectToEqualCustom(res: any, error: any) {
     expect(res.status).toEqual(error.code);
 }
 
-export function expectUserPhotosToExists(res: any) {
-    res.body.photos.forEach((photo: string) => {
+export function checkTheExistenceOfUserPhotos(photos: string[], result: boolean) {
+    photos.forEach((photo: string) => {
         for (const key in userPhotosResolutions) {
-            expect(checkIfFileExists(path.join(usersPhotosPath, `${key}.${photo}.jpg`))).toBeTruthy();
+            expect(checkIfFileExists(path.join(usersPhotosPath, `${key}.${photo}.jpg`))).toEqual(result);
         }
     });
 }

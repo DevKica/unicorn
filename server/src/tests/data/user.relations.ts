@@ -24,7 +24,7 @@ export const generalUpdateUserDataResponse = {
     omit: userOmitProperties,
 };
 
-export const matchingUpdateUserDataResponse = {
+export const afterUpdatesUserDataResponse = {
     data: newMatchingUserData,
     status: 200,
     omit: userOmitProperties,
@@ -48,13 +48,13 @@ export const updateUserProfileData = {
     },
     response: {
         general: generalUpdateUserDataResponse,
-        matching: matchingUpdateUserDataResponse,
+        matching: afterUpdatesUserDataResponse,
     },
 };
 
 export const getUserPhotoData = {
     photoName: {
-        valid: "large/pawelKica1",
+        valid: "pawelKica1",
         invalid: {
             size: "largeeeeee/pawelKica1",
             name: "large/invalidName",

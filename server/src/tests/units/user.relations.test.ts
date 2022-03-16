@@ -18,6 +18,7 @@ import {
     VoiceClipTooShortInstance,
 } from "../data/config";
 import {
+    afterUpdatesUserDataResponse,
     createFileMessageData,
     createLikeData,
     createTextMessageData,
@@ -38,9 +39,10 @@ import {
     validVideoFile,
     validVoiceFile,
 } from "../data/files";
-import { expectFileFromMessageToExists, expectToEqualObject } from "../helpers/customExpectations";
+import { checkTheExistenceOfUserPhotos, expectFileFromMessageToExists, expectToEqualObject } from "../helpers/customExpectations";
 import { COOKIE_TYPE } from "../../config/cookies.config";
 import pureOmit from "../../utils/responses/omit";
+import { userPhotosResolutions } from "../../config/upload.config";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
@@ -55,11 +57,29 @@ describe("RELATIONS", () => {
     });
 
     describe("PROFILE", () => {
+        describe("VIEWING PHOTOS", () => {
+            const { photoName } = getUserPhotoData;
+
+            test(`The server should return "not found" in case the photo does not exist`, async () => {
+                await testGETRequest(`/users/profile/photo/${photoName.invalid.name}`, NotFoundInstance);
+            });
+            test(`The server should return "not found" in case the photo does exist,but size is invalid`, async () => {
+                await testGETRequest(`/users/profile/photo/${photoName.invalid.size}`, NotFoundInstance);
+            });
+            test.each(Object.keys(userPhotosResolutions))(`The server should return image/jpeg content-type on request for USER photo of various sizes and valid name `, async (size) => {
+                const res = await global.request.get(`/api/${apiVersion}/users/profile/photo/${size}/${photoName.valid}`);
+                expect(res.headers["content-type"]).toEqual("image/jpeg");
+            });
+        });
+
         describe("UPDATE", () => {
+            let oldPhotos: string[], newPhotoName: string;
+
             const { body, response } = updateUserProfileData;
 
             test(`User should be able get private profile info`, async () => {
-                await testGETRequest("/users/profile/", basicActiveUserDataResponse);
+                const res = await testGETRequest("/users/profile/", basicActiveUserDataResponse);
+                oldPhotos = res.body.photos;
             });
             test(`User should NOT be able to update his general settings with invalid body`, async () => {
                 await testPATCHRequest("/users/profile/general", body.invalid.general, InvalidUpdateUserGeneralInfoInstance);
@@ -73,18 +93,18 @@ describe("RELATIONS", () => {
             test(`User should be able to update his matching profile settings with valid body`, async () => {
                 await testPATCHRequest("/users/profile/matching", body.valid.matching, response.matching);
             });
-        });
-        describe("VIEWING PHOTOS", () => {
-            const { photoName } = getUserPhotoData;
+            test(`User should be able to update his profile photos`, async () => {
+                const res = await testPATCHRequest("/users/profile/photos", {}, afterUpdatesUserDataResponse, validPhotoFile);
+                newPhotoName = res.body.photos[0];
+                checkTheExistenceOfUserPhotos(oldPhotos, false);
+                checkTheExistenceOfUserPhotos(res.body.photos, true);
+            });
+            test.each(Object.keys(userPhotosResolutions))(`The server should return "not found" on request for USER photo of various sizes with OLD name`, async (size) => {
+                await testGETRequest(`/users/profile/photo/${size}/${oldPhotos[0]}`, NotFoundInstance);
+            });
 
-            test(`The server should return not found in case the image does not exist`, async () => {
-                await testGETRequest(`/users/profile/photo/${photoName.invalid.name}`, NotFoundInstance);
-            });
-            test(`The server should return not found in case the image does exist,but size is invalid`, async () => {
-                await testGETRequest(`/users/profile/photo/${photoName.invalid.size}`, NotFoundInstance);
-            });
-            test(`Everyone should be able to access user photos with secret name and size `, async () => {
-                const res = await global.request.get(`/api/${apiVersion}/users/profile/photo/${photoName.valid}`);
+            test.each(Object.keys(userPhotosResolutions))(`The server should return image/jpeg content-type on request for USER photo of various sizes with NEW name`, async (size) => {
+                const res = await global.request.get(`/api/${apiVersion}/users/profile/photo/${size}/${newPhotoName}`);
                 expect(res.headers["content-type"]).toEqual("image/jpeg");
             });
         });
@@ -145,7 +165,7 @@ describe("RELATIONS", () => {
             test(`User should NOT be able to send text message to a conversation in which he is not a member`, async () => {
                 await testPOSTRequest("/messages/text", body.invalid.notInConversationMembers, NotFoundInstance);
             });
-            test(`User should be able to send text message to a conversation with invalid body`, async () => {
+            test(`User should be able to send text message to a conversation with valid body`, async () => {
                 await testPOSTRequest("/messages/text", body.valid, response);
             });
         });

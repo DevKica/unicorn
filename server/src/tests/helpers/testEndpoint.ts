@@ -48,7 +48,7 @@ export async function testPATCHRequest(endpoint: string, data: object, equalObje
     let buffer: any = "";
 
     if (attachFileName) {
-        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "images", attachFileName));
+        buffer = fs.readFileSync(path.join(__dirname, "..", "data", "files", attachFileName));
     }
     const res = await global.request
         .patch(`/api/${apiVersion}${endpoint}`)
