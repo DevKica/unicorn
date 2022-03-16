@@ -64,19 +64,19 @@ describe("SOCKETS", () => {
 
             io.on("connection", async (socket: Socket) => {
                 //@ts-ignore
-                const { user } = socket.request;
+                const { userId } = socket.request.user;
 
-                if (user.userId === "1") {
-                    serverSocketOne = socket;
-                } else {
-                    serverSocketTwo = socket;
-                }
-
-                const userConversations = await findAllUserConversations(user.userId);
+                const userConversations = await findAllUserConversations(userId);
 
                 userConversations.forEach((e) => {
                     socket.join(e.id);
                 });
+
+                if (userId === "1") {
+                    serverSocketOne = socket;
+                } else {
+                    serverSocketTwo = socket;
+                }
             });
 
             await seedRelationsData();
@@ -130,10 +130,14 @@ describe("SOCKETS", () => {
         });
 
         test("The server should receive a notification of a new message from the client", (done) => {
-            serverSocketOne.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
-                expectToEqualObject(message, data, omit);
+            if (serverSocketOne) {
+                serverSocketOne.on(EVENTS.CLIENT.SEND_NEW_MESSAGE, (message: MessageType) => {
+                    expectToEqualObject(message, data, omit);
+                    done();
+                });
+            } else {
                 done();
-            });
+            }
             (async () => {
                 const res = await testPOSTRequest("/messages/text", body.valid, response);
                 clientSocketOne.emit(EVENTS.CLIENT.SEND_NEW_MESSAGE, res.body);
@@ -148,7 +152,7 @@ describe("SOCKETS", () => {
             io.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
 
-        test("The client whose serverSocket sent the new message should NOT receive it, others should NOT", (done) => {
+        test("Client ONE whose serverSocket sent the new message should NOT receive it, others should NOT", (done) => {
             clientSocketTwo.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 expect(false).toEqual(true);
                 done();
@@ -161,7 +165,7 @@ describe("SOCKETS", () => {
             serverSocketOne.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
 
-        test("The client whose serverSocket sent the new message should receive it, others should NOT", (done) => {
+        test("Client TWO whose serverSocket sent the new message should receive it, others should NOT", (done) => {
             clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 expect(false).toEqual(true);
                 done();
@@ -173,7 +177,7 @@ describe("SOCKETS", () => {
             serverSocketTwo.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
 
-        test("The client should receive a new message from a server to the private room of which he is a member", (done) => {
+        test("Client ONE should receive a new message from a server to the private room of which he is a member", (done) => {
             clientSocketOne.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 done();
             });
