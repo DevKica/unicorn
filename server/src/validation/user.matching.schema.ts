@@ -8,7 +8,9 @@ export const createLikeSchema = Joi.object({
 }).options({ presence: "required" });
 
 export const joiCreateFileMessage = {
-    type: Joi.string().custom(joiValidateEnums(Object.keys(MessageType))),
+    type: Joi.string()
+        .custom(joiValidateEnums(Object.keys(MessageType)))
+        .invalid("info", "default"),
     conversationId: Joi.string(),
 };
 
@@ -19,7 +21,7 @@ export const createTextMessageSchema = Joi.object({
     conversationId: Joi.string(),
 }).options({ presence: "required" });
 
-export const changeConversationNameSchema = Joi.object({
+export const renameConversationSchema = Joi.object({
     conversationId: Joi.string(),
-    name: Joi.string().min(1).max(50),
+    name: Joi.string().min(1).max(70),
 }).options({ presence: "required" });

@@ -16,9 +16,11 @@ import {
     InvalidFileFormatInstance,
     VoiceClipTooLongInstance,
     VoiceClipTooShortInstance,
+    InvalidRenameConversationInstance,
 } from "../data/config";
 import {
     afterUpdatesUserDataResponse,
+    renameConversationData,
     createFileMessageData,
     createLikeData,
     createTextMessageData,
@@ -173,8 +175,8 @@ describe("RELATIONS", () => {
             const { body, response } = createFileMessageData;
 
             beforeAll(() => {
-                body.general.invalid.tooLargeFile.conversationdId = global.testConversationId;
-                body.general.invalid.schema.conversationdId = global.testConversationId;
+                body.general.invalid.tooLargeFile.conversationId = global.testConversationId;
+                body.general.invalid.schema.conversationId = global.testConversationId;
                 body.photo.valid.conversationId = global.testConversationId;
                 body.voice.valid.conversationId = global.testConversationId;
                 body.video.valid.conversationId = global.testConversationId;
@@ -201,6 +203,7 @@ describe("RELATIONS", () => {
                 const res = await testPOSTRequest("/messages/file", body.photo.valid, response.photo, validPhotoFile);
                 expectFileFromMessageToExists("photo", res.body.content);
             });
+
             // voice messages
             test(`User should NOT be able to send voice message to a conversation with invalid format`, async () => {
                 await testPOSTRequest("/messages/file", body.voice.valid, InvalidFileFormatInstance, invalidVoiceFormat);
@@ -241,6 +244,21 @@ describe("RELATIONS", () => {
         });
     });
     describe("CONVERSATIONS", () => {
+        const { body, response } = renameConversationData;
+
+        test("User should NOT be able to rename a conversation that he is not a member of", async () => {
+            await testPATCHRequest("/conversations/name", body.invalid.notInConversationMembers, NotFoundInstance);
+        });
+        test("User should NOT be able to rename a conversation with invalid body", async () => {
+            await testPATCHRequest("/conversations/name", body.invalid.schema, InvalidRenameConversationInstance);
+        });
+        test("User should NOT be able to rename a conversation with invalid converastionId", async () => {
+            await testPATCHRequest("/conversations/name", body.invalid.conversationId, NotFoundInstance);
+        });
+        test("User should be able to rename a conversation that he is a member of", async () => {
+            await testPATCHRequest("/conversations/name", body.valid, response);
+        });
+
         test("User should be able to get properly filtered conversations", async () => {
             const conversationOmitProperties = ["id", "messages", "createdAt", "updatedAt"];
 
@@ -258,7 +276,6 @@ describe("RELATIONS", () => {
                 // messages
                 conversation.messages.forEach((message: any, messagesIndex: number) => {
                     expectToEqualObject(message, pureOmit(expectedConversation.messages[messagesIndex], messageOmitProperties), messageOmitProperties);
-
                     expect(global.testMessagesContent.includes(message.content)).toBeTruthy();
                 });
             });

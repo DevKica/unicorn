@@ -27,9 +27,9 @@ export const joiLocation = {
 };
 
 export const joiGeneralInfo = {
-    name: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
-    surname: Joi.string().trim().min(2).max(128).pattern(regexBasicAlphabet),
-    gender: Joi.string().trim().min(2).max(128),
+    name: Joi.string().trim().min(2).max(32).pattern(regexBasicAlphabet),
+    surname: Joi.string().trim().min(2).max(32).pattern(regexBasicAlphabet),
+    gender: Joi.string().trim().min(2).max(32),
     sexualOrientation: Joi.array()
         .unique()
         .max(3)

@@ -178,7 +178,7 @@ export const createTextMessageData = {
             },
             notInConversationMembers: {
                 content: "hello",
-                conversationId: "conversation2",
+                conversationId: "conversation3",
             },
         },
     },
@@ -190,12 +190,12 @@ export const createFileMessageData = {
         general: {
             invalid: {
                 tooLargeFile: {
-                    conversationdId: "",
+                    conversationId: "",
                     type: "voice",
                 },
                 schema: {
-                    conversationdId: "",
-                    type: "invalidTypeSchema  123",
+                    conversationId: "123",
+                    type: "info",
                 },
             },
         },
@@ -225,29 +225,35 @@ export const createFileMessageData = {
     },
 };
 
+export const renameConversationData = {
+    body: {
+        valid: {
+            conversationId: "conversation1",
+            name: "typescript enjoyers",
+        },
+        invalid: {
+            schema: {
+                conversationId: "conversation1",
+                name: "over 70 characters over 70 characters over 70 characters over 70 charactersover 70 charactersover 70 charactersover 70 characters",
+            },
+            conversationId: {
+                conversationId: "invalid123",
+                name: "typescript enjoyers",
+            },
+            notInConversationMembers: {
+                conversationId: "conversation3",
+                name: "typescript enjoyers",
+            },
+        },
+    },
+    response: SuccessResponse,
+};
+
 export const getConversationsResponse = [
     {
-        id: "conversation3",
-        name: "Jennifer fanclub",
-        updatedAt: "2022-03-10T21:23:09.006Z",
-        createdAt: "2022-03-10T20:48:35.395Z",
-        members: [
-            {
-                id: "7",
-                name: "Jennifer",
-                surname: "Lopez",
-            },
-            {
-                id: "1",
-                name: "Dani",
-                surname: "Crabgame",
-            },
-        ],
-        messages: [],
-    },
-    {
-        id: "conversation2",
-        name: "Pawel and Jennifer",
+        id: "conversation1",
+        // before rename - name: "Pawel and Jennifer"
+        name: "typescript enjoyers",
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:35.395Z",
         members: [
@@ -280,7 +286,7 @@ export const getConversationsResponse = [
         ],
     },
     {
-        id: "cl0gpwaz0265qou8wbbxy02f",
+        id: "12345",
         name: "Dani and Doda",
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:37.835Z",
@@ -298,7 +304,7 @@ export const getConversationsResponse = [
         ],
         messages: [
             {
-                id: "cl0lgpwls0382qou8cew1h3cw",
+                id: "12345",
                 userId: "1",
                 content: textMessageContent,
                 type: "default",
@@ -306,7 +312,7 @@ export const getConversationsResponse = [
                 createdAt: "2022-03-10T20:48:38.224Z",
             },
             {
-                id: "cl0lgpztr0417qou80ycglbpu",
+                id: "12345",
                 userId: "1",
                 content: "photoFileName",
                 type: "photo",
@@ -314,7 +320,7 @@ export const getConversationsResponse = [
                 createdAt: "2022-03-10T20:48:42.399Z",
             },
             {
-                id: "cl0lgq0170470qou870q99bxs",
+                id: "12345",
                 userId: "1",
                 content: "voiceFileName",
                 type: "voice",
@@ -322,7 +328,7 @@ export const getConversationsResponse = [
                 createdAt: "2022-03-10T20:48:42.667Z",
             },
             {
-                id: "cl0lgq0qs0502qou8igdgb93q",
+                id: "12345",
                 userId: "1",
                 content: "videoFileName",
                 type: "video",
@@ -330,5 +336,24 @@ export const getConversationsResponse = [
                 createdAt: "2022-03-10T20:48:43.588Z",
             },
         ],
+    },
+    {
+        id: "conversation2",
+        name: "Jennifer fanclub",
+        updatedAt: "2022-03-10T21:23:09.006Z",
+        createdAt: "2022-03-10T20:48:35.395Z",
+        members: [
+            {
+                id: "7",
+                name: "Jennifer",
+                surname: "Lopez",
+            },
+            {
+                id: "1",
+                name: "Dani",
+                surname: "Crabgame",
+            },
+        ],
+        messages: [],
     },
 ];

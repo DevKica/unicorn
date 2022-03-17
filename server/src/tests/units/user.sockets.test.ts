@@ -196,7 +196,7 @@ describe("SOCKETS", () => {
                 done();
             });
 
-            io.to("conversation2").emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
+            io.to("conversation3").emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
     });
 });

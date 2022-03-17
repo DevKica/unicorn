@@ -57,7 +57,7 @@ export async function findAllUserConversations(userId: string) {
             },
         },
         orderBy: {
-            updatedAt: "asc",
+            updatedAt: "desc",
         },
     });
     return conversations;
@@ -74,6 +74,13 @@ export async function findUniqueConversation(where: ConversationWhereUniqueInput
             },
         },
         include: {
+            members: {
+                select: {
+                    id: true,
+                    name: true,
+                    surname: true,
+                },
+            },
             messages: {
                 select: {
                     id: true,
@@ -87,19 +94,22 @@ export async function findUniqueConversation(where: ConversationWhereUniqueInput
                     createdAt: "asc",
                 },
             },
-            members: {
-                select: {
-                    id: true,
-                    name: true,
-                    surname: true,
-                },
-            },
         },
     });
     return conversation;
 }
 
-export async function updateUniqueConversation(where: ConversationWhereUniqueInput, data: ConversationUpdateInput) {
-    const conversation = await ConversationModel.update({ where, data });
+export async function updateConversation({ conversationId, userId }: { conversationId: string; userId: string }, data: ConversationUpdateInput) {
+    const conversation = await ConversationModel.updateMany({
+        where: {
+            id: conversationId,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        data,
+    });
     return conversation;
 }
