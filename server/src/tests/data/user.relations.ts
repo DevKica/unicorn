@@ -225,6 +225,36 @@ export const createFileMessageData = {
     },
 };
 
+export const deleteMessageData = {
+    body: {
+        valid: {
+            messageId: "message1",
+        },
+        invalid: {
+            schema: {
+                messageId: [1, 5, 2],
+            },
+            id: {
+                messageId: "invalidId",
+            },
+            someones: {
+                messageId: "message2",
+            },
+        },
+    },
+    response: {
+        data: {
+            userId: "1",
+            conversationId: "conversation1",
+            content: "",
+            type: "default",
+            isDeleted: true,
+        },
+        status: 200,
+        omit: ["id", "createdAt"],
+    },
+};
+
 export const renameConversationData = {
     body: {
         valid: {
@@ -282,9 +312,9 @@ export const getConversationsResponse = [
             {
                 id: "message1",
                 userId: "1",
-                content: "Hi Lopez",
+                content: "",
                 type: "default",
-                isDeleted: false,
+                isDeleted: true,
                 createdAt: "2022-03-10T20:48:42.399Z",
             },
             {

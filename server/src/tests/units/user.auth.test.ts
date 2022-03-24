@@ -14,7 +14,7 @@ import {
     InvalidSetNewPasswordBodyInstance,
     UnauthorizedInstance,
     InvalidPasswordSchemaInstance,
-} from "../data/config";
+} from "../data/errors";
 import { invalidPhotoFile, validPhotoFile } from "../data/files";
 import {
     basicUserDataResponse,

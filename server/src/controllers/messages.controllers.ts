@@ -78,7 +78,8 @@ export async function deleteMessageHandler(req: Request, res: Response): Promise
         const { userId } = res.locals.user;
 
         const message = await findUniqueMessage({ id: messageId });
-        if (!message || message.userId !== userId || !message.isDeleted || message.type === "info") throw new Forbidden();
+
+        if (!message || message.userId !== userId || message.isDeleted || message.type === "info") throw new Forbidden();
 
         if (message.type !== "default") {
             const filePath = getFileMessagePath(message.type, message.content);

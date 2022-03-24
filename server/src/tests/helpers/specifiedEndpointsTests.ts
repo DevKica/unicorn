@@ -1,6 +1,6 @@
 import { testPOSTRequest } from "./testEndpoint";
 import { SuccessResponse } from "../../utils/responses/main";
-import { UnauthorizedInstance, EmailNotVerifiedInstance, apiVersion } from "../data/config";
+import { UnauthorizedInstance, EmailNotVerifiedInstance, apiVersion } from "../data/errors";
 
 export async function testUserAuthEndpoint(success: boolean): Promise<void> {
     if (success) {

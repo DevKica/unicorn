@@ -1,6 +1,6 @@
 import seedRelationsData from "../../prisma/seed/users.relations.seed";
 import { removeGlobals, setTestConversationId } from "../helpers/globalHelpers";
-import { testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
+import { testDELETERequest, testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { basicActiveUserDataResponse, loginCredentials } from "../data/user.auth";
 import {
     NotFoundInstance,
@@ -17,7 +17,8 @@ import {
     VoiceClipTooLongInstance,
     VoiceClipTooShortInstance,
     InvalidRenameConversationInstance,
-} from "../data/config";
+    InvalidDeleteMessageBodyInstnace,
+} from "../data/errors";
 import {
     afterUpdatesUserDataResponse,
     renameConversationData,
@@ -29,6 +30,7 @@ import {
     getUsersToMatchResponse,
     messageOmitProperties,
     updateUserProfileData,
+    deleteMessageData,
 } from "../data/user.relations";
 import {
     invalidFileTooLarge,
@@ -228,8 +230,29 @@ describe("RELATIONS", () => {
                 expect(res.headers["content-type"]).toEqual("video/mp4");
             });
         });
+        describe("DELETE MESSAGE", () => {
+            const { body, response } = deleteMessageData;
+
+            test("User should NOT be able to delete message with invalid body", async () => {
+                await testDELETERequest("/messages", body.invalid.schema, InvalidDeleteMessageBodyInstnace);
+            });
+            test("User should NOT be able to delete message with id that does not exist", async () => {
+                await testDELETERequest("/messages", body.invalid.id, ForbiddenInstance);
+            });
+            test("User should NOT be able to delete someone's message", async () => {
+                await testDELETERequest("/messages", body.invalid.someones, ForbiddenInstance);
+            });
+            test("User should be able to delete HIS message", async () => {
+                await testDELETERequest("/messages", body.valid, response);
+            });
+            test("User should NOT be able to delete already deleted message", async () => {
+                await testDELETERequest("/messages", body.valid, ForbiddenInstance);
+            });
+        });
     });
     describe("CONVERSATIONS", () => {
+        let infoMessageId = "";
+
         const { body, response } = renameConversationData;
 
         test("User should NOT be able to rename a conversation that he is not a member of", async () => {
@@ -242,7 +265,11 @@ describe("RELATIONS", () => {
             await testPATCHRequest("/conversations/name", body.invalid.conversationId, NotFoundInstance);
         });
         test("User should be able to rename a conversation that he is a member of", async () => {
-            await testPATCHRequest("/conversations/name", body.valid, response);
+            const res = await testPATCHRequest("/conversations/name", body.valid, response);
+            infoMessageId = res.body.id;
+        });
+        test("User should NOT be able to delete info message", async () => {
+            await testDELETERequest("/messages", { messageId: infoMessageId }, ForbiddenInstance);
         });
 
         test("User should be able to get properly filtered conversations", async () => {

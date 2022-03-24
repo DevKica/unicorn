@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { equalObjectType } from "../../@types/tests/requestObjectFormat";
 import { COOKIE_TYPE } from "../../config/cookies.config";
-import { apiVersion } from "../data/config";
+import { apiVersion } from "../data/errors";
 import { expectToEqualRes, expectToEqualCustom } from "./customExpectations";
 
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;

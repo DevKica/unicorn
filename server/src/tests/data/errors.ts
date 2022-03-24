@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { validate } from "./../../middleware/schemaValidation";
+import { validate } from "../../middleware/schemaValidation";
 import {
     EmailAlreadyExists,
     EmailNotVerified,
@@ -21,9 +21,9 @@ import {
 } from "../../utils/errors/main";
 import { createUserData, changePasswordData, userLoginData, setNewPasswordData, invalidEmailSchema, invalidPasswordSchema } from "./user.auth";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
-import { createFileMessageData, createLikeData, createTextMessageData, renameConversationData, updateUserProfileData } from "./user.relations";
+import { createFileMessageData, createLikeData, createTextMessageData, deleteMessageData, renameConversationData, updateUserProfileData } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
-import { createFileMessageSchema, createLikeSchema, createTextMessageSchema, renameConversationSchema } from "./../../validation/user.matching.schema";
+import { createFileMessageSchema, createLikeSchema, createTextMessageSchema, deleteMessageSchema, renameConversationSchema } from "../../validation/user.matching.schema";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -53,5 +53,6 @@ export const InvalidCreateLikeInstance = new InvalidRequestedBody(validate(creat
 export const InvalidCreateTextMessageInstance = new InvalidRequestedBody(validate(createTextMessageSchema, createTextMessageData.body.invalid.schema).error);
 export const InvalidCreateFileMessageInstance = new InvalidRequestedBody(validate(createFileMessageSchema, createFileMessageData.body.general.invalid.schema).error);
 export const InvalidRenameConversationInstance = new InvalidRequestedBody(validate(renameConversationSchema, renameConversationData.body.invalid.schema).error);
+export const InvalidDeleteMessageBodyInstnace = new InvalidRequestedBody(validate(deleteMessageSchema, deleteMessageData.body.invalid.schema).error);
 
 export const apiVersion = "v1";
