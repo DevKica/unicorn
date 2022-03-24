@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import argon2 from "argon2";
+import { PrismaClient } from "@prisma/client";
 declare global {
     var prisma: PrismaClient | undefined;
 }
@@ -17,8 +17,11 @@ export const prisma =
         datasources: { db: { url: databaseUrl } },
     });
 
-// hash password before saving in database
+// hash password or token
 prisma.$use(async (params, next) => {
+    if (params.model === "PremiumAccountToken" && params.action === "create") {
+        params.args.data.token = await argon2.hash(params.args.data.token);
+    }
     if (params.model === "User" && (params.action === "create" || params.action === "update")) {
         if (params.args.data.password) {
             params.args.data.password = await argon2.hash(params.args.data.password);

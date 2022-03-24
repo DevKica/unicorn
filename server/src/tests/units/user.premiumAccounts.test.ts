@@ -1,11 +1,11 @@
-import seedRelationsData from "../../prisma/seed/users.relations.seed";
+import mainSeed from "../../prisma/seed/main.seed";
 import { UpgradeYourAccountInstance } from "../data/errors";
 import { loginCredentials, basicActiveUserDataResponse } from "../data/user.auth";
 import { testPOSTRequest } from "../helpers/testEndpoint";
 
 describe("PREMIUM ACCOUNTS", () => {
     beforeAll(async () => {
-        await seedRelationsData();
+        await mainSeed();
         // authenticate user( set valid tokens )
         await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
     });

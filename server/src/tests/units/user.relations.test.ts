@@ -1,4 +1,4 @@
-import seedRelationsData from "../../prisma/seed/users.relations.seed";
+import mainSeed from "../../prisma/seed/main.seed";
 import { removeGlobals, setTestConversationId } from "../helpers/globalHelpers";
 import { testDELETERequest, testGETRequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { basicActiveUserDataResponse, loginCredentials } from "../data/user.auth";
@@ -51,7 +51,7 @@ const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
-        await seedRelationsData();
+        await mainSeed();
         // authenticate user( set valid tokens )
         await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
     });

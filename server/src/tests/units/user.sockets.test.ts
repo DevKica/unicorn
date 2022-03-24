@@ -9,7 +9,7 @@ import { MessageType } from "../../@types/prisma/static.types";
 import { basicActiveUserDataResponse, loginCredentials, secondUserLoginCredentials } from "../data/user.auth";
 import { testPOSTRequest } from "../helpers/testEndpoint";
 import { findSingleSession } from "../../services/session/session.services";
-import seedRelationsData from "../../prisma/seed/users.relations.seed";
+import mainSeed from "../../prisma/seed/main.seed";
 import { expectToEqualObject } from "../helpers/customExpectations";
 import { createTextMessageData } from "../data/user.relations";
 import { findAllUserConversations } from "../../services/conversations.services";
@@ -79,7 +79,7 @@ describe("SOCKETS", () => {
                 }
             });
 
-            await seedRelationsData();
+            await mainSeed();
 
             await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
 

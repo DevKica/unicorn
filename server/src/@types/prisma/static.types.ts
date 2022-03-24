@@ -49,3 +49,7 @@ export type MessageCreateInput = Prisma.MessageCreateInput;
 export type MessageWhereUniqueInput = Prisma.MessageWhereUniqueInput;
 export type MessageWhereInput = Prisma.MessageWhereInput;
 export type MessageUpdateInput = Prisma.MessageUpdateInput;
+
+// premiumAccount
+
+// export type PremiumAccountTokenType = Prisma.PremiumAccountTokenType;

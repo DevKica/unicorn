@@ -1,1 +1,1 @@
-export type ModelName = "user" | "session" | "like" | "conversation" | "message";
+export type ModelName = "user" | "session" | "like" | "conversation" | "message" | "premiumAccountToken";

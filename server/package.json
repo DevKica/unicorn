@@ -14,7 +14,7 @@
         "test": "NODE_ENV=test jest --detectOpenHandles --runInBand && NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
         "cleanup": "NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
         "cleanupdev": "NODE_ENV=development ts-node src/prisma/cleanup/cleanUpDev.ts",
-        "seeddev": "NODE_ENV=development ts-node src/prisma/seed/users.relations.seed.ts"
+        "seeddev": "NODE_ENV=development ts-node src/prisma/seed/main.seed.ts"
     },
     "dependencies": {
         "@joi/date": "^2.1.0",

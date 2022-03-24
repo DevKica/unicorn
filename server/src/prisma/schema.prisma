@@ -168,3 +168,10 @@ model PasswordReset {
   // relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model PremiumAccountToken {
+  id String   @id @default(cuid())
+  token String @unique
+  accountType AccountType
+  createdAt DateTime @default(now())
+}
