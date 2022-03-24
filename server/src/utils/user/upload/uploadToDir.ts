@@ -1,9 +1,9 @@
 import path from "path";
-import fse from "fs-extra";
+import fse, { existsSync } from "fs-extra";
 import sharp from "sharp";
 import { Request } from "express";
 import { promisify } from "util";
-import { FileRequired, Forbidden, InvalidFileFormat, PhotoRequired, TooManyPhotos, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
+import { FileRequired, Forbidden, InvalidFileFormat, NotFound, PhotoRequired, TooManyPhotos, VoiceClipTooLong, VoiceClipTooShort } from "../../errors/main";
 import { photoMessagesPath, userPhotosResolutions, usersPhotosPath, videoMessagesPath, voiceMessagesPath } from "../../../config/upload.config";
 import generateRandomString from "./generateRandomString";
 import { findUniqueUser } from "../../../services/user/user.services";
@@ -103,4 +103,23 @@ export async function removeUserPhotos(userId: string) {
             await fse.remove(path.join(usersPhotosPath, `${key}.${fileName}.jpg`));
         }
     }
+}
+
+export function getFileMessagePath(type: string, content: string): string {
+    let filePath = "";
+    switch (type) {
+        case "photo":
+            filePath = path.join(photoMessagesPath, `${content}.jpg`);
+            break;
+        case "voice":
+            filePath = path.join(voiceMessagesPath, `${content}.mp3`);
+            break;
+        case "video":
+            filePath = path.join(videoMessagesPath, `${content}.mp4`);
+            break;
+    }
+
+    if (!existsSync(filePath)) throw new NotFound();
+
+    return filePath;
 }

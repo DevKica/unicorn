@@ -101,7 +101,6 @@ enum TypeOfLike {
   default
   super
   notInterested
-  info
 }
 
 model UsersRelation {
@@ -149,6 +148,7 @@ enum MessageType {
   photo
   video
   default
+  info
 }
 
 model EmailVerification {

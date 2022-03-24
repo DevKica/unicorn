@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { findAllUserConversations, findUniqueConversation, updateConversation } from "../services/conversations.services";
+import { createMessage } from "../services/messages.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
-import { SuccessResponse } from "../utils/responses/main";
 
 export async function getConversationsHandler(_req: Request, res: Response) {
     try {
@@ -40,7 +40,18 @@ export async function changeConversationNameHandler(req: Request, res: Response)
 
         if (!count) throw new NotFound();
 
-        applyToResponse(res, 200, SuccessResponse);
+        const message = await createMessage({
+            content: `Conversation name set to "${name}"`,
+            user: {
+                connect: { id: userId },
+            },
+            conversation: {
+                connect: { id: conversationId },
+            },
+            type: "info",
+        });
+
+        applyToResponse(res, 201, message);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

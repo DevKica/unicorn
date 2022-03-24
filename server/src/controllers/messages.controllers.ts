@@ -1,12 +1,10 @@
-import path from "path";
-import { existsSync } from "fs";
+import fse from "fs-extra";
 import { Request, Response } from "express";
-import { photoMessagesPath, videoMessagesPath, voiceMessagesPath } from "../config/upload.config";
 import { findUserConversation } from "../services/conversations.services";
-import { createMessage } from "../services/messages.services";
+import { createMessage, findUniqueMessage, updateUniqueMessage } from "../services/messages.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { NotFound } from "../utils/errors/main";
-import { uploadFileMessage } from "../utils/user/upload/uploadToDir";
+import { getFileMessagePath, uploadFileMessage } from "../utils/user/upload/uploadToDir";
+import { NotFound, Forbidden } from "../utils/errors/main";
 
 export async function createTextMessageHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -66,23 +64,30 @@ export async function getFileMessageContentHandler(req: Request, res: Response):
     try {
         const { type, fileName } = req.params;
 
-        let filePath: string = "";
-
-        switch (type) {
-            case "photo":
-                filePath = path.join(photoMessagesPath, `${fileName}.jpg`);
-                break;
-            case "voice":
-                filePath = path.join(voiceMessagesPath, `${fileName}.mp3`);
-                break;
-            case "video":
-                filePath = path.join(videoMessagesPath, `${fileName}.mp4`);
-                break;
-        }
-
-        if (!existsSync(filePath)) throw new NotFound();
+        const filePath = getFileMessagePath(type, fileName);
 
         return res.sendFile(filePath);
+    } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function deleteMessageHandler(req: Request, res: Response): Promise<void> {
+    try {
+        const { messageId } = req.body;
+        const { userId } = res.locals.user;
+
+        const message = await findUniqueMessage({ id: messageId });
+        if (!message || message.userId !== userId || !message.isDeleted || message.type === "info") throw new Forbidden();
+
+        if (message.type !== "default") {
+            const filePath = getFileMessagePath(message.type, message.content);
+            await fse.remove(filePath);
+        }
+
+        const newMessage = await updateUniqueMessage({ id: messageId }, { isDeleted: true, content: "", type: "default" });
+
+        applyToResponse(res, 200, newMessage);
     } catch (e) {
         applyToResponseCustom(res, e);
     }

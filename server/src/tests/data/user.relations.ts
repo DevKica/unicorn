@@ -119,10 +119,10 @@ export const createLikeData = {
     },
 };
 
-export const createMessageResponse = (type: MessageType, content = "") => {
+export const createMessageResponse = (type: MessageType, content = "", conversationId = "conversation1") => {
     const response: { [key: string]: string | boolean } = {
         userId: "1",
-        conversationId: "", // conversationId is set to valid value during testing
+        conversationId,
         type,
         isDeleted: false,
     };
@@ -165,7 +165,7 @@ export const createTextMessageData = {
     body: {
         valid: {
             content: textMessageContent,
-            conversationId: "", // conversationId is set to valid value during testing
+            conversationId: "",
         },
         invalid: {
             schema: {
@@ -190,7 +190,7 @@ export const createFileMessageData = {
         general: {
             invalid: {
                 tooLargeFile: {
-                    conversationId: "",
+                    conversationId: "conversation1",
                     type: "voice",
                 },
                 schema: {
@@ -201,19 +201,19 @@ export const createFileMessageData = {
         },
         photo: {
             valid: {
-                conversationId: "",
+                conversationId: "conversation1",
                 type: "photo",
             },
         },
         voice: {
             valid: {
-                conversationId: "",
+                conversationId: "conversation1",
                 type: "voice",
             },
         },
         video: {
             valid: {
-                conversationId: "",
+                conversationId: "conversation1",
                 type: "video",
             },
         },
@@ -246,7 +246,17 @@ export const renameConversationData = {
             },
         },
     },
-    response: SuccessResponse,
+    response: {
+        data: {
+            userId: "1",
+            conversationId: "conversation1",
+            content: `Conversation name set to "typescript enjoyers"`,
+            type: "info",
+            isDeleted: false,
+        },
+        status: 201,
+        omit: ["id", "createdAt"],
+    },
 };
 
 export const getConversationsResponse = [
@@ -275,6 +285,7 @@ export const getConversationsResponse = [
                 content: "Hi Lopez",
                 type: "default",
                 isDeleted: false,
+                createdAt: "2022-03-10T20:48:42.399Z",
             },
             {
                 id: "message2",
@@ -282,11 +293,44 @@ export const getConversationsResponse = [
                 content: "Hi Pawel",
                 type: "default",
                 isDeleted: false,
+                createdAt: "2022-03-10T20:48:42.399Z",
+            },
+            {
+                id: "",
+                userId: "1",
+                content: "photoFileName",
+                type: "photo",
+                isDeleted: false,
+                createdAt: "2022-03-10T20:48:42.399Z",
+            },
+            {
+                id: "",
+                userId: "1",
+                content: "voiceFileName",
+                type: "voice",
+                isDeleted: false,
+                createdAt: "2022-03-10T20:48:42.667Z",
+            },
+            {
+                id: "",
+                userId: "1",
+                content: "videoFileName",
+                type: "video",
+                isDeleted: false,
+                createdAt: "2022-03-10T20:48:43.588Z",
+            },
+            {
+                id: "message3",
+                userId: "1",
+                content: `Conversation name set to "typescript enjoyers"`,
+                type: "info",
+                isDeleted: false,
+                createdAt: "2022-03-10T20:48:42.399Z",
             },
         ],
     },
     {
-        id: "12345",
+        id: "",
         name: "Dani and Doda",
         updatedAt: "2022-03-10T21:23:09.006Z",
         createdAt: "2022-03-10T20:48:37.835Z",
@@ -310,30 +354,6 @@ export const getConversationsResponse = [
                 type: "default",
                 isDeleted: false,
                 createdAt: "2022-03-10T20:48:38.224Z",
-            },
-            {
-                id: "12345",
-                userId: "1",
-                content: "photoFileName",
-                type: "photo",
-                isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.399Z",
-            },
-            {
-                id: "12345",
-                userId: "1",
-                content: "voiceFileName",
-                type: "voice",
-                isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.667Z",
-            },
-            {
-                id: "12345",
-                userId: "1",
-                content: "videoFileName",
-                type: "video",
-                isDeleted: false,
-                createdAt: "2022-03-10T20:48:43.588Z",
             },
         ],
     },

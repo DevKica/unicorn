@@ -45,13 +45,12 @@ import { checkTheExistenceOfUserPhotos, expectFileFromMessageToExists, expectToE
 import { COOKIE_TYPE } from "../../config/cookies.config";
 import pureOmit from "../../utils/responses/omit";
 import { userPhotosResolutions } from "../../config/upload.config";
-
 const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
 describe("RELATIONS", () => {
     beforeAll(async () => {
         await seedRelationsData();
-        // authenticate user
+        // authenticate user( set valid tokens )
         await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
     });
     afterAll(async () => {
@@ -174,19 +173,6 @@ describe("RELATIONS", () => {
         describe("FILES", () => {
             const { body, response } = createFileMessageData;
 
-            beforeAll(() => {
-                body.general.invalid.tooLargeFile.conversationId = global.testConversationId;
-                body.general.invalid.schema.conversationId = global.testConversationId;
-                body.photo.valid.conversationId = global.testConversationId;
-                body.voice.valid.conversationId = global.testConversationId;
-                body.video.valid.conversationId = global.testConversationId;
-
-                Object.keys(response).forEach((key) => {
-                    // @ts-ignore
-                    response[key].data.conversationId = global.testConversationId;
-                });
-            });
-
             // files
             test(`User should NOT be able to send file to a conversation with too large size(?)`, async () => {
                 await testPOSTRequest("/messages/file", body.general.invalid.tooLargeFile, TooLargeFileInstance, invalidFileTooLarge);
@@ -229,7 +215,7 @@ describe("RELATIONS", () => {
                 expectFileFromMessageToExists("video", res.body.content);
             });
 
-            test("User should be able to view messages with photo", async () => {
+            test("User should be able to view photo messages", async () => {
                 const res = await global.request.get(`/api/${apiVersion}/messages/photo/${global.testMessagesContent[2]}`);
                 expect(res.headers["content-type"]).toEqual("image/jpeg");
             });
@@ -237,7 +223,7 @@ describe("RELATIONS", () => {
                 const res = await global.request.get(`/api/${apiVersion}/messages/voice/${global.testMessagesContent[1]}`);
                 expect(res.headers["content-type"]).toEqual("audio/mpeg");
             });
-            test("User should be able to view messages with video", async () => {
+            test("User should be able to view video messages", async () => {
                 const res = await global.request.get(`/api/${apiVersion}/messages/video/${global.testMessagesContent[0]}`);
                 expect(res.headers["content-type"]).toEqual("video/mp4");
             });

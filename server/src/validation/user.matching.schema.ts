@@ -25,3 +25,7 @@ export const renameConversationSchema = Joi.object({
     conversationId: Joi.string(),
     name: Joi.string().min(1).max(70),
 }).options({ presence: "required" });
+
+export const deleteMessageSchema = Joi.object({
+    messageId: Joi.string().required(),
+});
