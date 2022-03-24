@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllUserConversations, findUniqueConversation, updateConversation } from "../services/conversations.services";
+import { findAllUserConversations, updateConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NotFound } from "../utils/errors/main";
@@ -16,20 +16,20 @@ export async function getConversationsHandler(_req: Request, res: Response) {
     }
 }
 
-export async function getSingleConversationHandler(req: Request, res: Response) {
-    try {
-        const { userId } = res.locals.user;
-        const { conversationId } = req.params;
+// export async function getSingleConversationHandler(req: Request, res: Response) {
+//     try {
+//         const { userId } = res.locals.user;
+//         const { conversationId } = req.params;
 
-        const conversation = await findUniqueConversation({ id: conversationId as string }, userId);
+//         const conversation = await findUniqueConversation({ id: conversationId as string }, userId);
 
-        if (!conversation) throw new NotFound();
+//         if (!conversation) throw new NotFound();
 
-        applyToResponse(res, 200, conversation);
-    } catch (e) {
-        applyToResponseCustom(res, e);
-    }
-}
+//         applyToResponse(res, 200, conversation);
+//     } catch (e) {
+//         applyToResponseCustom(res, e);
+//     }
+// }
 
 export async function changeConversationNameHandler(req: Request, res: Response) {
     try {

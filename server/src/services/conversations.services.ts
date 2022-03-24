@@ -1,4 +1,4 @@
-import { ConversationCreateInput, ConversationUpdateInput, ConversationWhereUniqueInput } from "../@types/prisma/static.types";
+import { ConversationCreateInput, ConversationUpdateInput } from "../@types/prisma/static.types";
 import { ConversationModel } from "../prisma/models";
 
 export async function createConversation(data: ConversationCreateInput) {
@@ -41,6 +41,9 @@ export async function findAllUserConversations(userId: string) {
                     name: true,
                     surname: true,
                 },
+                orderBy: {
+                    birthday: "desc",
+                },
             },
             messages: {
                 select: {
@@ -63,41 +66,44 @@ export async function findAllUserConversations(userId: string) {
     return conversations;
 }
 
-export async function findUniqueConversation(where: ConversationWhereUniqueInput, userId: string) {
-    const conversation = await ConversationModel.findFirst({
-        where: {
-            ...where,
-            members: {
-                some: {
-                    id: userId,
-                },
-            },
-        },
-        include: {
-            members: {
-                select: {
-                    id: true,
-                    name: true,
-                    surname: true,
-                },
-            },
-            messages: {
-                select: {
-                    id: true,
-                    userId: true,
-                    content: true,
-                    type: true,
-                    isDeleted: true,
-                    createdAt: true,
-                },
-                orderBy: {
-                    createdAt: "asc",
-                },
-            },
-        },
-    });
-    return conversation;
-}
+// export async function findUniqueConversation(where: ConversationWhereUniqueInput, userId: string) {
+//     const conversation = await ConversationModel.findFirst({
+//         where: {
+//             ...where,
+//             members: {
+//                 some: {
+//                     id: userId,
+//                 },
+//             },
+//         },
+//         include: {
+//             members: {
+//                 select: {
+//                     id: true,
+//                     name: true,
+//                     surname: true,
+//                 },
+//                 orderBy: {
+//                     createdAt: "asc",
+//                 },
+//             },
+//             messages: {
+//                 select: {
+//                     id: true,
+//                     userId: true,
+//                     content: true,
+//                     type: true,
+//                     isDeleted: true,
+//                     createdAt: true,
+//                 },
+//                 orderBy: {
+//                     createdAt: "asc",
+//                 },
+//             },
+//         },
+//     });
+//     return conversation;
+// }
 
 export async function updateConversation({ conversationId, userId }: { conversationId: string; userId: string }, data: ConversationUpdateInput) {
     const conversation = await ConversationModel.updateMany({

@@ -230,7 +230,7 @@ describe("RELATIONS", () => {
                 expect(res.headers["content-type"]).toEqual("video/mp4");
             });
         });
-        describe("DELETE MESSAGE", () => {
+        describe("DELETE", () => {
             const { body, response } = deleteMessageData;
 
             test("User should NOT be able to delete message with invalid body", async () => {

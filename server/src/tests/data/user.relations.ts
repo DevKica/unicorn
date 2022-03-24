@@ -298,14 +298,14 @@ export const getConversationsResponse = [
         createdAt: "2022-03-10T20:48:35.395Z",
         members: [
             {
-                id: "7",
-                name: "Jennifer",
-                surname: "Lopez",
-            },
-            {
                 id: "1",
                 name: "Dani",
                 surname: "Crabgame",
+            },
+            {
+                id: "7",
+                name: "Jennifer",
+                surname: "Lopez",
             },
         ],
         messages: [
@@ -366,14 +366,14 @@ export const getConversationsResponse = [
         createdAt: "2022-03-10T20:48:37.835Z",
         members: [
             {
-                id: "5",
-                name: "Doda",
-                surname: "Dorota",
-            },
-            {
                 id: "1",
                 name: "Dani",
                 surname: "Crabgame",
+            },
+            {
+                id: "5",
+                name: "Doda",
+                surname: "Dorota",
             },
         ],
         messages: [
@@ -394,14 +394,14 @@ export const getConversationsResponse = [
         createdAt: "2022-03-10T20:48:35.395Z",
         members: [
             {
-                id: "7",
-                name: "Jennifer",
-                surname: "Lopez",
-            },
-            {
                 id: "1",
                 name: "Dani",
                 surname: "Crabgame",
+            },
+            {
+                id: "7",
+                name: "Jennifer",
+                surname: "Lopez",
             },
         ],
         messages: [],
