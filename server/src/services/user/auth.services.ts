@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { omit } from "lodash";
 import { UserWhereUniqueInput, UserType, UserSelectType } from "../../@types/prisma/static.types";
 import { userProfileProperties } from "../../prisma/validator";
 import { InvalidCredentials, NotFound } from "../../utils/errors/main";
+import pureOmit from "../../utils/responses/omit";
 import { comparePasswords } from "../../utils/user/auth/comparePasswords";
 import { findUniqueUser } from "./user.services";
 
@@ -19,6 +19,5 @@ export async function validateUserPassword(passwordToVerify: UserType["password"
     if (!user) throw new InvalidCredentials();
 
     await comparePasswords(user.password, passwordToVerify);
-
-    return omit(user, "password");
+    return pureOmit(user, ["password"]);
 }

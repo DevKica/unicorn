@@ -8,6 +8,7 @@ const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
 export function createAccessCookie(res: Response, data: userTokenFormatInput): void {
     const accessToken = signUserAccessTokenJWT(data);
+
     res.cookie(ACCESS_TOKEN, accessToken, {
         sameSite: "strict",
         secure: true,
@@ -18,7 +19,6 @@ export function createAccessCookie(res: Response, data: userTokenFormatInput): v
 
 export function createRefreshCookie(res: Response, data: userTokenFormatInput): void {
     const refreshToken = signUserRefreshTokenJWT(data);
-
     res.cookie(REFRESH_TOKEN, refreshToken, {
         sameSite: "strict",
         secure: true,
@@ -32,6 +32,8 @@ export function createAuthCookies(res: Response, data: userTokenFormatInput): vo
 }
 
 export function removeAuthCookies(res: Response): void {
-    res.cookie(ACCESS_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
-    res.cookie(REFRESH_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
+    res.clearCookie(ACCESS_TOKEN);
+    res.clearCookie(REFRESH_TOKEN);
+    // res.cookie(ACCESS_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
+    // res.cookie(REFRESH_TOKEN, "", { sameSite: "strict", secure: true, httpOnly: true, maxAge: MAX_AGE_TOKEN_COOKIE });
 }

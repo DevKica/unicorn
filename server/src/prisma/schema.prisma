@@ -172,6 +172,7 @@ model PasswordReset {
 model PremiumAccountToken {
   id String   @id @default(cuid())
   token String @unique
+  daysOfValidity Int
   accountType AccountType
   createdAt DateTime @default(now())
 }

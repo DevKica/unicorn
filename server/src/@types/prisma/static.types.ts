@@ -52,4 +52,4 @@ export type MessageUpdateInput = Prisma.MessageUpdateInput;
 
 // premiumAccount
 
-// export type PremiumAccountTokenType = Prisma.PremiumAccountTokenType;
+export type PremiumAccountTokenWhereUniqueInput = Prisma.PremiumAccountTokenWhereUniqueInput;

@@ -1,12 +1,12 @@
 import calcDistance from "../../utils/user/calcDistance";
 import { Prisma } from "@prisma/client";
-import { omit } from "lodash";
 import { UserFilterToMatch, matchedUser } from "../../@types/prisma/matchedUsers.types";
 import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
 import { findLike } from "../like.services";
 import { findUsersRelation } from "../usersRelation.services";
+import pureOmit from "../../utils/responses/omit";
 
 export async function createUser(data: UserCreateInput) {
     const user = await UserModel.create({
@@ -21,7 +21,7 @@ export async function findUniqueUser<S extends UserSelectType>(where: UserWhereU
     return user;
 }
 
-export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true, active: true }) {
+export async function updateUniqueUser(where: UserWhereUniqueInput, data: UserUpdateInput, select = { id: true, active: true, subExpiration: true, accountType: true }) {
     const user = await UserModel.update({ where, data, select });
     return user;
 }
@@ -87,11 +87,11 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
             if (!(first || second)) {
                 if (distance < filters.showMeDistance && (e.showMeGender === filters.gender || e.showMeGender === "All")) {
                     if (e.user.length === 0) {
-                        filteredUsers.push(omit(e, "latitude", "longitude", "showMeGender", "user"));
+                        filteredUsers.push(pureOmit(e, ["latitude", "longitude", "showMeGender", "user"]));
                     } else {
-                        //@ts-ignore
+                        // @ts-ignore
                         e["superlike"] = true;
-                        filteredUsers.push(omit(e, "latitude", "longitude", "showMeGender", "user"));
+                        filteredUsers.push(pureOmit(e, ["latitude", "longitude", "showMeGender", "user"]));
                     }
                 }
             }

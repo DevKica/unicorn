@@ -9,8 +9,8 @@ const { ACCESS_TOKEN, REFRESH_TOKEN } = COOKIE_TYPE;
 
 export const afterTest = (res: any, equalObject: equalObjectType) => {
     try {
-        global.testAccessToken = res.header["set-cookie"][0].split(";")[0].split("=")[1];
-        global.testRefreshToken = res.header["set-cookie"][1].split(";")[0].split("=")[1];
+        global.testAccessToken = res.header["set-cookie"][res.header["set-cookie"].length - 2].split(";")[0].split("=")[1];
+        global.testRefreshToken = res.header["set-cookie"][res.header["set-cookie"].length - 1].split(";")[0].split("=")[1];
     } catch (e: unknown) {}
 
     if (equalObject.status) {

@@ -19,8 +19,10 @@ export const prisma =
 
 // hash password or token
 prisma.$use(async (params, next) => {
-    if (params.model === "PremiumAccountToken" && params.action === "create") {
-        params.args.data.token = await argon2.hash(params.args.data.token);
+    if (params.model === "PremiumAccountToken") {
+        if (params.action === "create") {
+            params.args.data.token = await argon2.hash(params.args.data.token);
+        }
     }
     if (params.model === "User" && (params.action === "create" || params.action === "update")) {
         if (params.args.data.password) {

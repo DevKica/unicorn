@@ -6,6 +6,8 @@ import authMainRoutes from "./auth/main.routes";
 import likesMainRoutes from "./likes/main.routes";
 import messagesMainRoutes from "./messages/main.routes";
 import conversationsMainRoutes from "./conversations/main.routes";
+import { requireActiveUser, requireUser } from "../middleware/requireUser";
+import premiumAccountRoutes from "./premiumAccount.routes";
 
 const serverMainRoutes = Router();
 
@@ -27,12 +29,14 @@ serverMainRoutes.use("/auth", authMainRoutes);
 
 serverMainRoutes.use("/users", usersMainRoutes);
 
-serverMainRoutes.use("/sessions", sessionsMainRoutes);
-
-serverMainRoutes.use("/likes", likesMainRoutes);
-
 serverMainRoutes.use("/messages", messagesMainRoutes);
 
-serverMainRoutes.use("/conversations", conversationsMainRoutes);
+serverMainRoutes.use("/sessions", requireUser, sessionsMainRoutes);
+
+serverMainRoutes.use("/likes", requireActiveUser, likesMainRoutes);
+
+serverMainRoutes.use("/conversations", requireActiveUser, conversationsMainRoutes);
+
+serverMainRoutes.use("/premiumAccount", requireActiveUser, premiumAccountRoutes);
 
 export default serverMainRoutes;
