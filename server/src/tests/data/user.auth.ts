@@ -23,11 +23,12 @@ export const basicUserData = {
 const email = "devKica777@gmail.com";
 const newEmail = TEST_USER_EMAIL;
 const nonExistentEmail = "example@gmail.com";
-export const invalidEmailSchema = "@devKica@.com";
+export const invalidEmailSchema = "dev@Kica@gmail.com";
 
 const password = "Password1!";
 const newPassword = `new${password}`;
-const invalidPassword = "invalidPassword1!";
+const invalidPassword = "InvalidPassword1!";
+
 export const invalidPasswordSchema = "invalidPassword1";
 
 export const basicActiveUserData = { ...basicUserData, active: true };
@@ -63,17 +64,17 @@ export const basicActiveNewUserDataResponse = {
 };
 
 export const invalidSchemaCreateUserBody = {
-    name: "777",
+    name: "123",
     surname: "123",
     email: "devKica777@gmail.com",
     password: "Password1!",
     passwordRepetition: "Password1!",
-    birthday: "2003-02-13",
-    longitude: "170.123",
-    latitude: "50.50.12",
+    birthday: "2010-10-10",
+    longitude: "50.50",
+    latitude: "50.50.50",
     showMeGender: "All",
-    gender: "10",
-    sexualOrientation: ["empty", "emptyv2"],
+    gender: "123",
+    sexualOrientation: ["invalid1", "invalid2"],
 };
 
 export const validCreateUserBody = {
@@ -173,8 +174,8 @@ export const changeEmailData = {
 
 export const verifyEmailData = {
     token: {
-        valid: "", // valid token is set during testing
-        invalid: "invalidToken",
+        valid: "", // valid token is set while testing
+        invalid: "invalid",
     },
     response: SuccessResponse,
 };
@@ -199,7 +200,7 @@ export const passwordResetData = {
 export const setNewPasswordData = {
     token: {
         valid: "", // valid token is set during testing
-        invalid: "invalid123",
+        invalid: "invalid",
     },
     body: {
         valid: {

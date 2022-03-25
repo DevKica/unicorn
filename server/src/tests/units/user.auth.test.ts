@@ -34,7 +34,7 @@ import {
 } from "../data/user.auth";
 import { checkTheExistenceOfUserPhotos } from "../helpers/customExpectations";
 import { removeAuthTokens, removeGlobals, setTestUserId } from "../helpers/globalHelpers";
-import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareEmailToken";
+import { prepareEmailVericationToken, preparePasswordResetToken } from "../helpers/prepareJWTToken";
 import { testUserAuthActiveEndpoint, testUserAuthEndpoint } from "../helpers/specifiedEndpointsTests";
 import { testDELETERequest, testPATCHRequest, testPOSTRequest } from "../helpers/testEndpoint";
 

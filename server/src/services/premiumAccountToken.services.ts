@@ -5,3 +5,7 @@ export async function findUniquePremiumAccountToken(where: PremiumAccountTokenWh
     const premiumAccountTokenObject = await PremiumAccountTokenModel.findUnique({ where });
     return premiumAccountTokenObject;
 }
+
+export async function deleteUniquePremiumAccountToken(where: PremiumAccountTokenWhereUniqueInput) {
+    await PremiumAccountTokenModel.delete({ where });
+}
