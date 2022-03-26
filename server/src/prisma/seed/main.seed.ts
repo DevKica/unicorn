@@ -1,10 +1,10 @@
-import users from "./data/users";
+import users from "./data/main/users";
 import seedModel from "./seed.model";
-import likes from "./data/likes";
-import conversations from "./data/conversations";
-import messages from "./data/messages";
-import premiumAccountTokens from "./data/premiumAccountTokens";
-import usersRelations from "./data/usersRelations";
+import likes from "./data/main/likes";
+import conversations from "./data/main/conversations";
+import messages from "./data/main/messages";
+import premiumAccountTokens from "./data/main/premiumAccountTokens";
+import usersRelations from "./data/main/usersRelations";
 import { removeTables } from "../cleanup/cleanUpDev";
 
 async function mainSeed() {

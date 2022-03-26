@@ -1,14 +1,16 @@
 import mainSeed from "../../prisma/seed/main.seed";
+import likesLimitSeed from "../../prisma/seed/likesLimit.seed";
+import { removeGlobals } from "../helpers/globalHelpers";
+import { testGETRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { SuccessResponse } from "../../utils/responses/main";
-import { NotFoundInstance, UpgradeYourAccountInstance } from "../data/errors";
+import { NotFoundInstance, NumberOfLikesExceededInstance, UpgradeYourAccountInstance } from "../data/errors";
 import { loginCredentials, basicActiveUserDataResponse } from "../data/user.auth";
 import { blackUserDataResponse, goldUserDataResponse, silverUserDataResponse } from "../data/user.premiumAccounts";
-import { removeGlobals } from "../helpers/globalHelpers";
-import { testPOSTRequest } from "../helpers/testEndpoint";
 
 describe("PREMIUM ACCOUNTS", () => {
     beforeAll(async () => {
         await mainSeed();
+        await likesLimitSeed();
         // authenticate user( set valid tokens )
         await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
     });
@@ -16,6 +18,12 @@ describe("PREMIUM ACCOUNTS", () => {
         removeGlobals();
     });
     describe("SILVER", () => {
+        test("User with DEFAULT account type should NOT be able to match users after exceeding the number of likes limit", async () => {
+            await testGETRequest("/users", NumberOfLikesExceededInstance);
+        });
+        test("User with DEFAULT account type should NOT be able to like another user after exceeding the number of likes limit", async () => {
+            await testPOSTRequest("/likes", { judgedUserId: "user0", typeOfLike: "default" }, NumberOfLikesExceededInstance);
+        });
         test("User with DEFAULT account type should NOT be able to access SILVER USER protected routes ", async () => {
             await testPOSTRequest("/auth/silver", {}, UpgradeYourAccountInstance);
         });

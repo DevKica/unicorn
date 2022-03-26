@@ -6,17 +6,17 @@ import { applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { NumberOfLikesExceeded } from "../utils/errors/main";
 import { userLikesLimit } from "../validation/helpers/constants";
 
+const gtPreviousDay = {
+    createdAt: {
+        gt: dayjs().subtract(12, "h").toISOString(),
+    },
+};
+
 export async function userLikesLimitter(_req: Request, res: Response, next: NextFunction) {
     try {
         const { userId, accountType } = res.locals.user;
 
         if (accountType !== "default") return next();
-
-        const gtPreviousDay = {
-            createdAt: {
-                gt: dayjs().subtract(12, "h").toISOString(),
-            },
-        };
 
         const likes = await findManyLikes({
             userId,

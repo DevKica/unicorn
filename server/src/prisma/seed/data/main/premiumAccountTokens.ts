@@ -1,5 +1,11 @@
 export default [
     {
+        id: "token0",
+        token: "tokenZero",
+        daysOfValidity: 0,
+        accountType: "silver",
+    },
+    {
         id: "token1",
         token: "silverToken",
         daysOfValidity: 30,

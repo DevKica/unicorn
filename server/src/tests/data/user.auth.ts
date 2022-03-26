@@ -1,5 +1,5 @@
 import { TEST_USER_EMAIL } from "../../config/env.config";
-import { mainUser } from "../../prisma/seed/data/users";
+import { mainUser } from "../../prisma/seed/data/main/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import pureOmit from "../../utils/responses/omit";
 
