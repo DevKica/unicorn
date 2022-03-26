@@ -134,8 +134,11 @@ describe("RELATIONS", () => {
         test(`User should NOT be able to reject already rejected user`, async () => {
             await testPOSTRequest("/likes", body.valid.reject, ForbiddenInstance);
         });
-        test(`User should be able to like another user`, async () => {
+        test(`User should be able to like a user who is not interested in him`, async () => {
             await testPOSTRequest("/likes", body.valid.basic, response.basic);
+        });
+        test(`User should be able to like another user`, async () => {
+            await testPOSTRequest("/likes", body.valid.newLike, response.basic);
         });
         test(`User should NOT be able to like already liked user`, async () => {
             await testPOSTRequest("/likes", body.valid.basic, ForbiddenInstance);
@@ -147,9 +150,9 @@ describe("RELATIONS", () => {
         test(`User should NOT be able to like already matched user`, async () => {
             await testPOSTRequest("/likes", body.valid.newPair, ForbiddenInstance);
         });
-        // test(`User should be able get properly filtered users to match after some operations`, async () => {
-        //     await testGETRequest("/users", getUsersToMatchResponse.afterOperations);
-        // });
+        test(`User should be able get properly filtered users to match after some operations`, async () => {
+            await testGETRequest("/users", getUsersToMatchResponse.afterOperations);
+        });
     });
     describe("MESSAGES", () => {
         describe("TEXT", () => {

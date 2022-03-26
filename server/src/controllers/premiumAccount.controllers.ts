@@ -6,6 +6,7 @@ import { deleteUniquePremiumAccountToken, findUniquePremiumAccountToken } from "
 import { deleteAllSessions, signNewSession } from "../services/session/session.services";
 import { updateUniqueUser } from "../services/user/user.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
+import dayjs from "dayjs";
 
 export async function activatePremiumAccountHandler(req: Request, res: Response) {
     try {
@@ -16,8 +17,7 @@ export async function activatePremiumAccountHandler(req: Request, res: Response)
 
         if (!premiumAccountToken || !(await argon2.verify(premiumAccountToken.token, token))) throw new NotFound();
 
-        const subExpiration = new Date();
-        subExpiration.setDate(subExpiration.getDate() + premiumAccountToken.daysOfValidity);
+        const subExpiration = dayjs().add(premiumAccountToken.daysOfValidity, "day").toISOString();
 
         const updatedUser = await updateUniqueUser({ id: userId }, { accountType: premiumAccountToken.accountType, subExpiration }, userProfileProperties);
 

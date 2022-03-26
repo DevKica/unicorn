@@ -68,7 +68,7 @@ const female_above24_showMale_showDistance50_inRange = {
     },
 };
 
-const generateUser = (object: { quantity: number; data: any }, start: number) => {
+export const generateUsers = (object: { quantity: number; data: any }, start: number) => {
     const result = [];
     for (let i = 0; i < object.quantity; i++) {
         const tmp = `user${start}`;
@@ -91,15 +91,15 @@ const generateUser = (object: { quantity: number; data: any }, start: number) =>
     return result;
 };
 
-export const generated_female_under24_showMale_showDistance50_inRange = generateUser(female_under24_showMale_showDistance50_inRange, 2);
+export const generated_female_under24_showMale_showDistance50_inRange = generateUsers(female_under24_showMale_showDistance50_inRange, 2);
 // showDistance
-export const generated_female_under24_showMale_showDistance10_inRange = generateUser(female_under24_showMale_showDistance10_inRange, 17);
+export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 17);
 // not in range
-export const generated_female_under24_showMale_showDistance50_notInRange = generateUser(female_under24_showMale_showDistance50_notInRange, 23);
+export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 23);
 // show female
-export const generated_female_under24_showFemale_showDistance50_inRange = generateUser(female_under24_showFemale_showDistance50_inRange, 28);
+export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 28);
 // above 24
-export const generated_female_above24_showMale_showDistance50_inRange = generateUser(female_above24_showMale_showDistance50_inRange, 33);
+export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 33);
 
 const users = [
     // not active

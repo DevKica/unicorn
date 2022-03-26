@@ -7,6 +7,7 @@ import { userProfileProperties, userSelectMatchProperties } from "../../prisma/v
 import { findLike } from "../like.services";
 import { findUsersRelation } from "../usersRelation.services";
 import pureOmit from "../../utils/responses/omit";
+import dayjs from "dayjs";
 
 export async function createUser(data: UserCreateInput) {
     const user = await UserModel.create({
@@ -31,10 +32,8 @@ export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<voi
 }
 
 export async function getUsersToMatch(filters: UserFilterToMatch): Promise<matchedUser[]> {
-    const lt = new Date();
-    lt.setFullYear(lt.getFullYear() - filters.showMeAgeLowerLimit);
-    const gt = new Date();
-    gt.setFullYear(gt.getFullYear() - filters.showMeAgeUpperLimit);
+    const lt = dayjs().subtract(filters.showMeAgeLowerLimit, "y").toISOString();
+    const gt = dayjs().subtract(filters.showMeAgeUpperLimit, "y").toISOString();
 
     const whereObject = {
         active: true,

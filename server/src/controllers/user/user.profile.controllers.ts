@@ -9,6 +9,7 @@ import { NotFound } from "../../utils/errors/main";
 import { removeUserPhotos, uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { LikeModel, UsersRelationModel } from "../../prisma/models";
 import console from "console";
+import dayjs from "dayjs";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -86,26 +87,35 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
         };
         const users = await getUsersToMatch(filter);
 
-        const asd = await LikeModel.findMany({
+        const gtPreviousDay = {
+            createdAt: {
+                gt: dayjs().subtract(12, "h").toISOString(),
+            },
+        };
+
+        const likes = await LikeModel.findMany({
             where: {
                 userId: "user1",
+                ...gtPreviousDay,
             },
         });
-        const addd = await UsersRelationModel.findMany({
+
+        const relations = await UsersRelationModel.findMany({
             where: {
                 OR: [
                     {
                         firstUserId: "user1",
+                        relationType: { in: ["accepted", "rejected"] },
                     },
                     {
                         secondUserId: "user1",
+                        relationType: { in: ["accepted", "rejected"] },
                     },
                 ],
+                ...gtPreviousDay,
             },
         });
-        asd;
-        addd;
-
+        console.log(likes.length, relations.length);
         // console.log(users);
 
         applyToResponse(res, 200, users);

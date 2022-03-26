@@ -1,6 +1,6 @@
-import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { MessageType } from "@prisma/client";
 import { SuccessResponse } from "../../utils/responses/main";
+import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { basicActiveUserData, userOmitProperties } from "./user.auth";
 import { generated_female_under24_showMale_showDistance50_inRange } from "./../../prisma/seed/data/users";
 
@@ -64,12 +64,12 @@ export const getUserPhotoData = {
 
 export const getUsersToMatchResponse = {
     beforeOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(5)),
         status: 200,
         omit: [],
     },
     afterOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(9)),
         status: 200,
         omit: [],
     },
@@ -78,6 +78,10 @@ export const getUsersToMatchResponse = {
 export const createLikeData = {
     body: {
         valid: {
+            newLike: {
+                judgedUserId: "user10",
+                typeOfLike: "default",
+            },
             basic: {
                 judgedUserId: "user9",
                 typeOfLike: "default",
@@ -296,8 +300,8 @@ export const getConversationsResponse = [
         id: "conversation1",
         // before rename - name: "user1 and user2"
         name: "typescript enjoyers",
-        updatedAt: "2022-01-10T00:00:00.000Z",
-        createdAt: "2022-01-10T00:00:00.000Z",
+        updatedAt: "",
+        createdAt: "",
         members: [
             {
                 id: "user1",
@@ -318,7 +322,7 @@ export const getConversationsResponse = [
                 content: "",
                 type: "default",
                 isDeleted: true,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
             {
                 id: "message2",
@@ -326,7 +330,7 @@ export const getConversationsResponse = [
                 content: "Hi Pawel",
                 type: "default",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
             {
                 id: "",
@@ -334,7 +338,7 @@ export const getConversationsResponse = [
                 content: "photoFileName",
                 type: "photo",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
             {
                 id: "",
@@ -342,7 +346,7 @@ export const getConversationsResponse = [
                 content: "voiceFileName",
                 type: "voice",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
             {
                 id: "",
@@ -350,7 +354,7 @@ export const getConversationsResponse = [
                 content: "videoFileName",
                 type: "video",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
             {
                 id: "",
@@ -358,15 +362,15 @@ export const getConversationsResponse = [
                 content: `Conversation name set to "typescript enjoyers"`,
                 type: "info",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
         ],
     },
     {
         id: "",
         name: "Dani and user8name",
-        updatedAt: "2002-01-10T00:00:00.000Z",
-        createdAt: "2002-01-10T00:00:00.000Z",
+        updatedAt: "",
+        createdAt: "",
         members: [
             {
                 id: "user1",
@@ -386,15 +390,15 @@ export const getConversationsResponse = [
                 content: textMessageContent,
                 type: "default",
                 isDeleted: false,
-                createdAt: "2002-01-10T00:00:00.000Z",
+                createdAt: "",
             },
         ],
     },
     {
         id: "conversation2",
         name: "user1 and user3",
-        updatedAt: "2002-01-10T00:00:00.000Z",
-        createdAt: "2002-01-10T00:00:00.000Z",
+        updatedAt: "",
+        createdAt: "",
         members: [
             {
                 id: "user1",

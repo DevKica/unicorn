@@ -1,4 +1,4 @@
-export const superlikeUsersIds = ["user10", "user11"];
+export const superlikeUsersIds = ["user11", "user12"];
 
 const likes = [
     // default like
@@ -23,13 +23,13 @@ const likes = [
     // 2 superlikes
     {
         id: "like4",
-        userId: "user10",
+        userId: "user11",
         judgedUserId: "user1",
         typeOfLike: "super",
     },
     {
         id: "like5",
-        userId: "user11",
+        userId: "user12",
         judgedUserId: "user1",
         typeOfLike: "super",
     },

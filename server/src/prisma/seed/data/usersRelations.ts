@@ -25,14 +25,14 @@ export default [
     },
     {
         id: "usersRelation5",
-        firstUserId: "user1",
-        secondUserId: "user5",
+        firstUserId: "user5",
+        secondUserId: "user1",
         relationType: "rejected",
     },
     {
         id: "usersRelation6",
-        firstUserId: "user1",
-        secondUserId: "user6",
+        firstUserId: "user6",
+        secondUserId: "user1",
         relationType: "removed",
     },
 ];

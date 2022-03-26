@@ -1,7 +1,6 @@
-// Only 18+ users can create an account
-const current = new Date();
-const ageAllowed = 18;
-const dateFullYearRestriction = current.getFullYear() - ageAllowed;
-current.setFullYear(dateFullYearRestriction);
+import dayjs from "dayjs";
 
-export const dateRestriction = current;
+// Only 18+ users can create an account
+const ageAllowed = 18;
+
+export const dateRestriction = dayjs().subtract(ageAllowed, "y").toISOString();
