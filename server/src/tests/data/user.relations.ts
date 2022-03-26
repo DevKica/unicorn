@@ -261,6 +261,18 @@ export const deleteMessageData = {
     },
 };
 
+export const deleteConversationData = {
+    params: {
+        valid: "conversation4/user4",
+        invalid: {
+            sameSecondUserId: "conversation4/user1",
+            notInConversationMembers: "conversation3/user3",
+            secondUserNotInConversationMembers: "conversation4/user3",
+        },
+    },
+    response: SuccessResponse,
+};
+
 export const renameConversationData = {
     body: {
         valid: {

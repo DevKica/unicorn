@@ -24,13 +24,13 @@ export default [
         relationType: "accepted",
     },
     {
-        id: "usersRelation4",
+        id: "usersRelation5",
         firstUserId: "user5",
         secondUserId: "user1",
         relationType: "rejected",
     },
     {
-        id: "usersRelation5",
+        id: "usersRelation6",
         firstUserId: "user6",
         secondUserId: "user1",
         relationType: "removed",

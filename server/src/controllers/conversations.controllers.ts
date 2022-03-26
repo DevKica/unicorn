@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { deleteUserConversation, findAllUserConversations, findUserConversation, updateConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
-import { createUsersRelations, deleteManyUsersRelation, updateUsersRelation } from "../services/usersRelation.services";
+import { updateUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { Forbidden, NotFound } from "../utils/errors/main";
 

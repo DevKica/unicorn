@@ -32,6 +32,7 @@ import {
     messageOmitProperties,
     updateUserProfileData,
     deleteMessageData,
+    deleteConversationData,
 } from "../data/user.relations";
 import {
     invalidFileTooLarge,
@@ -257,23 +258,45 @@ describe("RELATIONS", () => {
     describe("CONVERSATIONS", () => {
         let infoMessageId = "";
 
-        const { body, response } = renameConversationData;
+        describe("DELETE", () => {
+            const { params, response } = deleteConversationData;
 
-        test("User should NOT be able to rename a conversation that he is not a member of", async () => {
-            await testPATCHRequest("/conversations/name", body.invalid.notInConversationMembers, NotFoundInstance);
+            test("User should NOT be able to delete conversation that he is not member of", async () => {
+                await testDELETERequest(`/conversations/${params.invalid.notInConversationMembers}`, {}, NotFoundInstance);
+            });
+            test("User should NOT be able to delete conversation that secondUser is not member of", async () => {
+                await testDELETERequest(`/conversations/${params.invalid.secondUserNotInConversationMembers}`, {}, NotFoundInstance);
+            });
+            test("User should NOT be able to delete conversation with secondUserId equal to his id", async () => {
+                await testDELETERequest(`/conversations/${params.invalid.sameSecondUserId}`, {}, ForbiddenInstance);
+            });
+            test("User should be able to delete conversation with valid secondUserId and conversationId", async () => {
+                await testDELETERequest(`/conversations/${params.valid}`, {}, response);
+            });
+            test(`User should NOT be able to send text message to deleted conversation`, async () => {
+                await testPOSTRequest("/messages/text", { content: "hello", conversationId: "conversation4" }, NotFoundInstance);
+            });
         });
-        test("User should NOT be able to rename a conversation with invalid body", async () => {
-            await testPATCHRequest("/conversations/name", body.invalid.schema, InvalidRenameConversationInstance);
-        });
-        test("User should NOT be able to rename a conversation with invalid converastionId", async () => {
-            await testPATCHRequest("/conversations/name", body.invalid.conversationIdNotFound, NotFoundInstance);
-        });
-        test("User should be able to rename a conversation that he is a member of", async () => {
-            const res = await testPATCHRequest("/conversations/name", body.valid, response);
-            infoMessageId = res.body.id;
-        });
-        test("User should NOT be able to delete info message", async () => {
-            await testDELETERequest("/messages", { messageId: infoMessageId }, ForbiddenInstance);
+
+        describe("RENAME", () => {
+            const { body, response } = renameConversationData;
+
+            test("User should NOT be able to rename a conversation that he is not a member of", async () => {
+                await testPATCHRequest("/conversations/name", body.invalid.notInConversationMembers, NotFoundInstance);
+            });
+            test("User should NOT be able to rename a conversation with invalid body", async () => {
+                await testPATCHRequest("/conversations/name", body.invalid.schema, InvalidRenameConversationInstance);
+            });
+            test("User should NOT be able to rename a conversation with invalid converastionId", async () => {
+                await testPATCHRequest("/conversations/name", body.invalid.conversationIdNotFound, NotFoundInstance);
+            });
+            test("User should be able to rename a conversation that he is a member of", async () => {
+                const res = await testPATCHRequest("/conversations/name", body.valid, response);
+                infoMessageId = res.body.id;
+            });
+            test("User should NOT be able to delete info message", async () => {
+                await testDELETERequest("/messages", { messageId: infoMessageId }, ForbiddenInstance);
+            });
         });
 
         test("User should be able to get properly filtered conversations", async () => {
