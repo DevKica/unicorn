@@ -1,23 +1,23 @@
 export default [
     {
         id: "conversation1",
-        name: "Pawel and Jennifer",
+        name: "user1 and user2",
         members: {
-            connect: [{ id: "1" }, { id: "7" }],
+            connect: [{ id: "user1" }, { id: "user2" }],
         },
     },
     {
         id: "conversation2",
-        name: "Jennifer fanclub",
+        name: "user1 and user3",
         members: {
-            connect: [{ id: "1" }, { id: "7" }],
+            connect: [{ id: "user1" }, { id: "user3" }],
         },
     },
     {
         id: "conversation3",
-        name: "Natalia and Selena",
+        name: "user2 and user3",
         members: {
-            connect: [{ id: "7" }, { id: "9" }, { id: "10" }],
+            connect: [{ id: "user2" }, { id: "user3" }],
         },
     },
 ];

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUserConversations, getUserData, loginUser, logOut } from "./api/mainInstance";
+import { getUserConversations, getUserData, getUsersToMatchHandler, loginUser, logOut } from "./api/mainInstance";
 import { Routes, Route } from "react-router-dom";
 import ConversationsPage from "./ConversationsPage";
 import { updateConversationsStore, updateUserStore } from "./redux/actions";
@@ -30,6 +30,10 @@ const App = () => {
       if (res.status === 200) {
         // get conversations
         await getConversations();
+
+        const res = await getUsersToMatchHandler();
+        console.log(res.data);
+
         // set user
         setUser(res.data);
         // set userId in store

@@ -1,8 +1,8 @@
-import { MessageType } from "@prisma/client";
-import { femalesUnder24showMale, femalesUnder24ShowAll } from "../../prisma/seed/data/users";
-import { SuccessResponse } from "../../utils/responses/main";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
+import { MessageType } from "@prisma/client";
+import { SuccessResponse } from "../../utils/responses/main";
 import { basicActiveUserData, userOmitProperties } from "./user.auth";
+import { generated_female_under24_showMale_showDistance50_inRange } from "./../../prisma/seed/data/users";
 
 const updateGeneralUserData = {
     name: "Dani",
@@ -38,11 +38,11 @@ export const updateUserProfileData = {
         },
         invalid: {
             general: {
-                name: "1Dani!",
-                surname: "!Crabgame1",
+                name: "Dani1",
+                surname: "Crabgame1",
             },
             matching: {
-                showMeGender: "Invalid value",
+                showMeGender: "invalid",
             },
         },
     },
@@ -54,9 +54,9 @@ export const updateUserProfileData = {
 
 export const getUserPhotoData = {
     photoName: {
-        valid: "pawelKica1",
+        valid: "user1-first",
         invalid: {
-            size: "largeeeeee/pawelKica1",
+            size: "largeeeeee/user1-first",
             name: "large/invalidName",
         },
     },
@@ -64,12 +64,12 @@ export const getUserPhotoData = {
 
 export const getUsersToMatchResponse = {
     beforeOperations: {
-        data: formatMatchedUsers([...femalesUnder24showMale, ...femalesUnder24ShowAll]),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange),
         status: 200,
         omit: [],
     },
     afterOperations: {
-        data: formatMatchedUsers([femalesUnder24showMale[0]]),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange),
         status: 200,
         omit: [],
     },
@@ -79,28 +79,28 @@ export const createLikeData = {
     body: {
         valid: {
             basic: {
-                judgedUserId: "6",
+                judgedUserId: "user9",
                 typeOfLike: "default",
             },
             newPair: {
-                judgedUserId: "5",
+                judgedUserId: "user8",
                 typeOfLike: "default",
             },
             reject: {
-                judgedUserId: "4",
+                judgedUserId: "user7",
                 typeOfLike: "notInterested",
             },
         },
         invalid: {
             schema: {
-                typeOfLike: "superr",
+                typeOfLike: "invalidTypeOfLike",
             },
             inactiveUser: {
-                judgedUserId: "-1",
+                judgedUserId: "user0",
                 typeOfLike: "default",
             },
             nonPremium: {
-                judgedUserId: "3",
+                judgedUserId: "user15",
                 typeOfLike: "super",
             },
         },
@@ -109,7 +109,7 @@ export const createLikeData = {
         basic: SuccessResponse,
         newPair: {
             data: {
-                name: "Dani and Doda",
+                name: "Dani and user8name",
                 messages: [],
             },
             status: 201,
@@ -121,7 +121,7 @@ export const createLikeData = {
 
 export const createMessageResponse = (type: MessageType, content = "", conversationId = "conversation1") => {
     const response: { [key: string]: string | boolean } = {
-        userId: "1",
+        userId: "user1",
         conversationId,
         type,
         isDeleted: false,
@@ -170,14 +170,14 @@ export const createTextMessageData = {
         invalid: {
             schema: {
                 content: "",
-                conversationId: ["1", "3232"],
+                conversationId: ["invalid", "arrayIsNotAllowed"],
             },
-            notFoundConversation: {
-                content: "hello",
-                conversationId: "12345",
+            conversationIdNotFound: {
+                content: "Hello",
+                conversationId: "conversation0",
             },
             notInConversationMembers: {
-                content: "hello",
+                content: "Hello",
                 conversationId: "conversation3",
             },
         },
@@ -190,11 +190,13 @@ export const createFileMessageData = {
         general: {
             invalid: {
                 tooLargeFile: {
+                    // valid, too large file in request
                     conversationId: "conversation1",
                     type: "voice",
                 },
                 schema: {
-                    conversationId: "123",
+                    conversationId: "valid",
+                    // invalid type
                     type: "info",
                 },
             },
@@ -232,10 +234,10 @@ export const deleteMessageData = {
         },
         invalid: {
             schema: {
-                messageId: [1, 5, 2],
+                messageId: ["invalid", "arrayIsNot", "allowed"],
             },
-            id: {
-                messageId: "invalidId",
+            messageIdNotFound: {
+                messageId: "message0",
             },
             someones: {
                 messageId: "message2",
@@ -244,7 +246,7 @@ export const deleteMessageData = {
     },
     response: {
         data: {
-            userId: "1",
+            userId: "user1",
             conversationId: "conversation1",
             content: "",
             type: "default",
@@ -266,8 +268,8 @@ export const renameConversationData = {
                 conversationId: "conversation1",
                 name: "over 70 characters over 70 characters over 70 characters over 70 charactersover 70 charactersover 70 charactersover 70 characters",
             },
-            conversationId: {
-                conversationId: "invalid123",
+            conversationIdNotFound: {
+                conversationId: "conversation0",
                 name: "typescript enjoyers",
             },
             notInConversationMembers: {
@@ -278,7 +280,7 @@ export const renameConversationData = {
     },
     response: {
         data: {
-            userId: "1",
+            userId: "user1",
             conversationId: "conversation1",
             content: `Conversation name set to "typescript enjoyers"`,
             type: "info",
@@ -292,116 +294,117 @@ export const renameConversationData = {
 export const getConversationsResponse = [
     {
         id: "conversation1",
-        // before rename - name: "Pawel and Jennifer"
+        // before rename - name: "user1 and user2"
         name: "typescript enjoyers",
-        updatedAt: "2022-03-10T21:23:09.006Z",
-        createdAt: "2022-03-10T20:48:35.395Z",
+        updatedAt: "2022-01-10T00:00:00.000Z",
+        createdAt: "2022-01-10T00:00:00.000Z",
         members: [
             {
-                id: "1",
+                id: "user1",
                 name: "Dani",
                 surname: "Crabgame",
             },
             {
-                id: "7",
-                name: "Jennifer",
-                surname: "Lopez",
+                id: "user2",
+                name: "user2name",
+                surname: "user2surname",
             },
         ],
+
         messages: [
             {
                 id: "message1",
-                userId: "1",
+                userId: "user1",
                 content: "",
                 type: "default",
                 isDeleted: true,
-                createdAt: "2022-03-10T20:48:42.399Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
             {
                 id: "message2",
-                userId: "7",
+                userId: "user2",
                 content: "Hi Pawel",
                 type: "default",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.399Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
             {
                 id: "",
-                userId: "1",
+                userId: "user1",
                 content: "photoFileName",
                 type: "photo",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.399Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
             {
                 id: "",
-                userId: "1",
+                userId: "user1",
                 content: "voiceFileName",
                 type: "voice",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.667Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
             {
                 id: "",
-                userId: "1",
+                userId: "user1",
                 content: "videoFileName",
                 type: "video",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:43.588Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
             {
-                id: "message3",
-                userId: "1",
+                id: "",
+                userId: "user1",
                 content: `Conversation name set to "typescript enjoyers"`,
                 type: "info",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:42.399Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
         ],
     },
     {
         id: "",
-        name: "Dani and Doda",
-        updatedAt: "2022-03-10T21:23:09.006Z",
-        createdAt: "2022-03-10T20:48:37.835Z",
+        name: "Dani and user8name",
+        updatedAt: "2002-01-10T00:00:00.000Z",
+        createdAt: "2002-01-10T00:00:00.000Z",
         members: [
             {
-                id: "1",
+                id: "user1",
                 name: "Dani",
                 surname: "Crabgame",
             },
             {
-                id: "5",
-                name: "Doda",
-                surname: "Dorota",
+                id: "user8",
+                name: "user8name",
+                surname: "user8surname",
             },
         ],
         messages: [
             {
-                id: "12345",
-                userId: "1",
+                id: "",
+                userId: "user1",
                 content: textMessageContent,
                 type: "default",
                 isDeleted: false,
-                createdAt: "2022-03-10T20:48:38.224Z",
+                createdAt: "2002-01-10T00:00:00.000Z",
             },
         ],
     },
     {
         id: "conversation2",
-        name: "Jennifer fanclub",
-        updatedAt: "2022-03-10T21:23:09.006Z",
-        createdAt: "2022-03-10T20:48:35.395Z",
+        name: "user1 and user3",
+        updatedAt: "2002-01-10T00:00:00.000Z",
+        createdAt: "2002-01-10T00:00:00.000Z",
         members: [
             {
-                id: "1",
+                id: "user1",
                 name: "Dani",
                 surname: "Crabgame",
             },
             {
-                id: "7",
-                name: "Jennifer",
-                surname: "Lopez",
+                id: "user3",
+                name: "user3name",
+                surname: "user3surname",
             },
         ],
         messages: [],

@@ -1,4 +1,4 @@
-import { UsersRelation } from "@prisma/client";
+import { UsersRelationStatus } from "@prisma/client";
 import { Request, Response } from "express";
 import { createConversation } from "../services/conversations.services";
 import { createLike, deleteLike, findLike } from "../services/like.services";
@@ -16,64 +16,32 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         // throw Forbidden if the user doesn't have enough permissions to give super likes
         if (typeOfLike === "super" && accountType === "default") throw new UpgradeYourAccount();
 
-        // check if the liked user exists and have verified email
+        // check if the judged user exists and have verified email
         const judgedUser = await checkIfActiveUserExists({ id: judgedUserId }, { name: true });
 
-        // check if users aren't in relation already
-        const first = await findUsersRelation({ firstUserId: userId, secondUserId: judgedUserId });
-        const second = await findUsersRelation({ firstUserId: judgedUserId, secondUserId: userId });
+        // check that users are not already in a relation
+        const usersRelation = await findUsersRelation({
+            OR: [
+                { firstUserId: userId, secondUserId: judgedUserId },
+                { firstUserId: judgedUserId, secondUserId: userId },
+            ],
+        });
 
-        if (first || second) throw new Forbidden();
+        if (usersRelation) throw new Forbidden();
 
-        // get user local object
+        // local user
         const user = await findUniqueUser({ id: userId }, { name: true });
 
-        // check if the user has already made such a request
         const alreadyLiked = await findLike({ userId, judgedUserId });
 
-        // if the user doesn't exists (hopefully it never does) or has already made this request
+        // if the user does not exists (hopefully it never does) or has already made this request
         if (!user || alreadyLiked) throw new Forbidden();
 
-        // check if the judged user likes the user
+        // check if the judged user has already liked the user
         const likeObject = await findLike({ userId: judgedUserId, judgedUserId: userId });
 
-        // if yes
-        if (likeObject) {
-            // delete currently stored likeObject
-            await deleteLike({ id: likeObject.id });
-
-            // relationType depends on typeOfLike
-            let relationType: UsersRelation["relationType"];
-
-            // positive
-            if (likeObject.typeOfLike !== "notInterested" && typeOfLike !== "notInterested") {
-                relationType = "accepted";
-                // create conversation between users
-                const conversation = await createConversation({
-                    name: `${user.name} and ${judgedUser.name}`,
-                    members: {
-                        connect: [{ id: userId }, { id: judgedUserId }],
-                    },
-                });
-                applyToResponse(res, 201, conversation);
-            } else {
-                // rejected
-                relationType = "rejected";
-                applySuccessToResponse(res);
-            }
-
-            // create users relation
-            await createUsersRelations({
-                relationType,
-                firstUser: {
-                    connect: { id: userId },
-                },
-                secondUser: {
-                    connect: { id: judgedUserId },
-                },
-            });
-            // if no, create new like and return success
-        } else {
+        // if not, create a new like and return success
+        if (!likeObject) {
             await createLike({
                 user: {
                     connect: { id: userId },
@@ -83,8 +51,42 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                 },
                 typeOfLike,
             });
+            return applySuccessToResponse(res);
+        }
+
+        // delete currently stored likeObject
+        await deleteLike({ id: likeObject.id });
+
+        // relationType depends on typeOfLike
+        let relationType: UsersRelationStatus;
+
+        // if both users rated each other positively
+        if (likeObject.typeOfLike !== "notInterested" && typeOfLike !== "notInterested") {
+            relationType = "accepted";
+            // create conversation between users
+            const conversation = await createConversation({
+                name: `${user.name} and ${judgedUser.name}`,
+                members: {
+                    connect: [{ id: userId }, { id: judgedUserId }],
+                },
+            });
+            applyToResponse(res, 201, conversation);
+        } else {
+            // if one of the users has not rated the other positively
+            relationType = "rejected";
             applySuccessToResponse(res);
         }
+
+        // create relation between users
+        await createUsersRelations({
+            relationType,
+            firstUser: {
+                connect: { id: userId },
+            },
+            secondUser: {
+                connect: { id: judgedUserId },
+            },
+        });
     } catch (e) {
         applyToResponseCustom(res, e);
     }

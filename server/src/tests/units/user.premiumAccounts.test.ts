@@ -3,6 +3,7 @@ import { SuccessResponse } from "../../utils/responses/main";
 import { NotFoundInstance, UpgradeYourAccountInstance } from "../data/errors";
 import { loginCredentials, basicActiveUserDataResponse } from "../data/user.auth";
 import { blackUserDataResponse, goldUserDataResponse, silverUserDataResponse } from "../data/user.premiumAccounts";
+import { removeGlobals } from "../helpers/globalHelpers";
 import { testPOSTRequest } from "../helpers/testEndpoint";
 
 describe("PREMIUM ACCOUNTS", () => {
@@ -10,6 +11,9 @@ describe("PREMIUM ACCOUNTS", () => {
         await mainSeed();
         // authenticate user( set valid tokens )
         await testPOSTRequest("/users/login", loginCredentials, basicActiveUserDataResponse);
+    });
+    afterAll(async () => {
+        removeGlobals();
     });
     describe("SILVER", () => {
         test("User with DEFAULT account type should NOT be able to access SILVER USER protected routes ", async () => {

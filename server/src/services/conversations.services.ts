@@ -42,7 +42,7 @@ export async function findAllUserConversations(userId: string) {
                     surname: true,
                 },
                 orderBy: {
-                    birthday: "desc",
+                    createdAt: "asc",
                 },
             },
             messages: {

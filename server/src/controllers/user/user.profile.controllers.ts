@@ -7,6 +7,8 @@ import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../service
 import { applyToResponseCustom, applyToResponse } from "../../utils/errors/applyToResponse";
 import { NotFound } from "../../utils/errors/main";
 import { removeUserPhotos, uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
+import { LikeModel, UsersRelationModel } from "../../prisma/models";
+import console from "console";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -83,6 +85,28 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
             longitude: user.longitude,
         };
         const users = await getUsersToMatch(filter);
+
+        const asd = await LikeModel.findMany({
+            where: {
+                userId: "user1",
+            },
+        });
+        const addd = await UsersRelationModel.findMany({
+            where: {
+                OR: [
+                    {
+                        firstUserId: "user1",
+                    },
+                    {
+                        secondUserId: "user1",
+                    },
+                ],
+            },
+        });
+        asd;
+        addd;
+
+        // console.log(users);
 
         applyToResponse(res, 200, users);
     } catch (e) {

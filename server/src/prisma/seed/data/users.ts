@@ -1,258 +1,135 @@
-export const femalesUnder24showMale = [
-    {
-        id: "3",
-        name: "Madison",
-        surname: "Beer",
-        email: "madison@beer.com",
-        password: "MadisonBeer1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2002-03-03T00:00:00.000Z"),
-        city: "New York",
-        description: "I am a part time singer, I was born in Jericho, currently I am looking for someone to go out for a drink",
-        gender: "Female",
-        showMeGender: "Male",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["madisonBeer1"],
-    },
-    {
-        id: "4",
-        name: "MissFortune",
-        surname: "Ionia",
-        email: "miss@fortune.com",
-        password: "MissFortune1!",
-        active: true,
-        accountType: "gold",
-        birthday: new Date("2001-03-03T00:00:00.000Z"),
-        city: "Aram",
-        description: "For demacia",
-        gender: "Female",
-        showMeGender: "Male",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["missFortune1"],
-    },
-];
+export const mainUser = {
+    id: "user1",
+    name: "Pawel",
+    surname: "Kica",
+    email: "devkica777@gmail.com",
+    password: "Password1!",
+    active: true,
+    accountType: "default",
+    birthday: new Date("2002-01-10"),
+    city: "",
+    description: "",
+    gender: "Male",
+    showMeGender: "All",
+    sexualOrientation: ["Heterosexual", "Lesbian"],
+    showMeDistance: 50,
+    showMeAgeLowerLimit: 18,
+    showMeAgeUpperLimit: 24,
+    latitude: 55.55,
+    longitude: 99.99,
+    photos: ["user1-first", "user1-second"],
+};
 
-export const femalesUnder24ShowAll = [
-    {
-        id: "5",
-        name: "Doda",
-        surname: "Dorota",
-        email: "doda@dorota.com",
-        password: "DodaDorota1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2000-03-03T00:00:00.000Z"),
-        city: "Krakow",
-        description: "Fake love",
-        gender: "Female",
-        showMeGender: "All",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["dodaDorota1"],
-    },
-    {
-        id: "6",
-        name: "Harley",
-        surname: "Quinn",
-        email: "harley@quinn.com",
-        password: "HarleyQuinn1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2000-02-02T00:00:00.000Z"),
-        city: "Krakow",
-        description: "Joker is overparty",
-        gender: "Female",
-        showMeGender: "All",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["harleyQuinn1"],
-    },
-];
+const femaleUserToSeedData = {
+    birthday: mainUser.birthday,
+    gender: "Female",
+    showMeGender: "Male",
+    showMeDistance: 50,
+    showMeAgeLowerLimit: 18,
+    showMeAgeUpperLimit: 30,
+    latitude: mainUser.latitude - 0.22,
+    longitude: mainUser.longitude,
+};
 
-export const femalesAbove24ShowMale = [
-    {
-        id: "7",
-        name: "Jennifer",
-        surname: "Lopez",
-        email: "jennifer@lopez.com",
-        password: "JenniferLopez1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("1969-01-01T00:00:00.000Z"),
-        city: "New york",
-        description: "on my way marry me",
-        gender: "Female",
-        showMeGender: "Male",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["jenniferLopez1"],
-    },
-];
+const female_under24_showMale_showDistance50_inRange = {
+    quantity: 15,
+    data: femaleUserToSeedData,
+};
 
-export const femalesUnder24ShowFemale = [
-    {
-        id: "8",
-        name: "Borys",
-        surname: "Przybylski",
-        email: "borys@przybylski.com",
-        password: "BorysPrzybylski1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2000-01-01T00:00:00.000Z"),
-        city: "Bydgoszcz",
-        description: "Skrrrt 2115",
-        gender: "Female",
+const female_under24_showFemale_showDistance50_inRange = {
+    quantity: 5,
+    data: {
+        ...femaleUserToSeedData,
         showMeGender: "Female",
-        sexualOrientation: ["Lesbian"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["borysPrzybylski1"],
     },
-];
+};
+const female_under24_showMale_showDistance10_inRange = {
+    quantity: 5,
+    data: {
+        ...femaleUserToSeedData,
+        showMeDistance: 10,
+    },
+};
 
-export const femalesUnder24ShowMaleNotInRange = [
-    {
-        id: "9",
-        name: "Natalia",
-        surname: "Szroeder",
-        email: "natalia@szroeder.com",
-        password: "NataliaSzroeder1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2000-01-01T00:00:00.000Z"),
-        city: "Egzotyka",
-        description: "4001020 to drogi zestaw",
-        gender: "Female",
-        showMeGender: "Male",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 52.05,
-        longitude: 100.01,
-        photos: ["nataliaSzroeder1"],
+const female_under24_showMale_showDistance50_notInRange = {
+    quantity: 5,
+    data: {
+        ...femaleUserToSeedData,
+        latitude: mainUser.latitude + 10,
+        longitude: mainUser.longitude + 10,
     },
-    {
-        id: "10",
-        name: "Selena",
-        surname: "Gomez",
-        email: "selena@gomez.com",
-        password: "SelenaGomez1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2000-01-01T00:00:00.000Z"),
-        city: "Idk",
-        description: "do you know alex russo?",
-        gender: "Female",
-        showMeGender: "Male",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 40,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 51.05,
-        longitude: 100.01,
-        photos: ["selenaGomez1"],
+};
+
+const female_above24_showMale_showDistance50_inRange = {
+    quantity: 5,
+    data: {
+        ...femaleUserToSeedData,
+        birthday: new Date("1990-01-10"),
     },
-];
+};
+
+const generateUser = (object: { quantity: number; data: any }, start: number) => {
+    const result = [];
+    for (let i = 0; i < object.quantity; i++) {
+        const tmp = `user${start}`;
+        result.push({
+            id: tmp,
+            name: `${tmp}name`,
+            surname: `${tmp}surname`,
+            email: `${tmp}@gmail.com`,
+            password: `AQ1!${tmp}`,
+            active: true,
+            accountType: "default",
+            city: tmp,
+            description: tmp,
+            photos: [tmp],
+            sexualOrientation: ["Heterosexual"],
+            ...object.data,
+        });
+        start += 1;
+    }
+    return result;
+};
+
+export const generated_female_under24_showMale_showDistance50_inRange = generateUser(female_under24_showMale_showDistance50_inRange, 2);
+// showDistance
+export const generated_female_under24_showMale_showDistance10_inRange = generateUser(female_under24_showMale_showDistance10_inRange, 17);
+// not in range
+export const generated_female_under24_showMale_showDistance50_notInRange = generateUser(female_under24_showMale_showDistance50_notInRange, 23);
+// show female
+export const generated_female_under24_showFemale_showDistance50_inRange = generateUser(female_under24_showFemale_showDistance50_inRange, 28);
+// above 24
+export const generated_female_above24_showMale_showDistance50_inRange = generateUser(female_above24_showMale_showDistance50_inRange, 33);
 
 const users = [
     // not active
     {
-        id: "-1",
-        name: "Kacper",
-        surname: "Ksiazek",
-        email: "kacper@ksiazek.com",
-        password: "KacperKsiazek1!",
+        id: "user0",
+        name: "user0",
+        surname: "user0",
+        email: "user0@gmail.com",
+        password: "AQ1!user0",
         active: false,
         accountType: "default",
-        birthday: new Date("2002-01-01T00:00:00.000Z"),
-        city: "Gorzen",
-        description: "I'm the greatest fighter of this fucking institution of all time",
-        gender: "The warrior of gorzen",
-        showMeGender: "Female",
+        birthday: new Date("2002-01-10"),
+        city: "user0",
+        description: "user0",
+        photos: ["user0"],
         sexualOrientation: ["Heterosexual"],
-        showMeDistance: 2115,
-        showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["kacperKsiazek1", "kacperKsiazek2"],
-    },
-    // me
-    {
-        id: "1",
-        name: "Pawel",
-        surname: "Kica",
-        email: "devkica777@gmail.com",
-        password: "Password1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("2002-01-01T00:00:00.000Z"),
-        city: "",
-        description: "",
-        gender: "Male",
-        showMeGender: "All",
-        sexualOrientation: ["Heterosexual", "Lesbian"],
+        gender: "user0",
+        showMeGender: "Female",
         showMeDistance: 50,
         showMeAgeLowerLimit: 18,
-        showMeAgeUpperLimit: 24,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["pawelKica1", "pawelKica2"],
-    },
-    // active
-    {
-        id: "2",
-        name: "Elon",
-        surname: "Musk",
-        email: "elon@musk.com",
-        password: "ElonMusk1!",
-        active: true,
-        accountType: "default",
-        birthday: new Date("1992-01-01T00:00:00.000Z"),
-        city: "California",
-        description: "Space-x enjoyer",
-        gender: "Male",
-        showMeGender: "Female",
-        sexualOrientation: ["Heterosexual"],
-        showMeDistance: 777,
-        showMeAgeLowerLimit: 18,
         showMeAgeUpperLimit: 30,
-        latitude: 50.05,
-        longitude: 100.01,
-        photos: ["elonMusk1"],
+        latitude: 55.55,
+        longitude: 99.99,
     },
-    ...femalesUnder24showMale,
-    ...femalesAbove24ShowMale,
-    ...femalesUnder24ShowAll,
-    ...femalesUnder24ShowFemale,
-    ...femalesUnder24ShowMaleNotInRange,
+    mainUser,
+    ...generated_female_under24_showMale_showDistance50_inRange,
+    ...generated_female_under24_showMale_showDistance10_inRange,
+    ...generated_female_under24_showMale_showDistance50_notInRange,
+    ...generated_female_under24_showFemale_showDistance50_inRange,
+    ...generated_female_above24_showMale_showDistance50_inRange,
 ];
 
 export default users;

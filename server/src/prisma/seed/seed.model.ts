@@ -1,13 +1,13 @@
 import path from "path";
 import sharp from "sharp";
+import fse from "fs-extra";
 import { prisma } from "../db";
 import { logInfo } from "../../utils/logger";
 import { ModelName } from "../../@types/prisma/seed.types";
 import { userPhotosResolutions, usersPhotosPath } from "../../config/upload.config";
-import fse from "fs-extra";
 
 async function seedModel(name: ModelName, dataset: any) {
-    await (prisma[name] as any).deleteMany();
+    // await (prisma[name] as any).deleteMany();
     logInfo(`Store ${name} data`);
 
     if (name === "user") {

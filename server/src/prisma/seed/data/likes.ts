@@ -1,37 +1,37 @@
-export const superlikeUsersIds = ["4", "5"];
+export const superlikeUsersIds = ["user10", "user11"];
 
 const likes = [
-    // getUsersToMatchHandler
+    // default like
     {
         id: "like1",
-        userId: "3",
-        judgedUserId: "1",
+        userId: "user7",
+        judgedUserId: "user1",
         typeOfLike: "default",
-        createdAt: new Date("2022-03-01T00:00:00.000Z"),
     },
-    // notInterested
     {
         id: "like2",
-        userId: "4",
-        judgedUserId: "1",
-        typeOfLike: "super",
-        createdAt: new Date("2022-03-01T00:00:00.000Z"),
+        userId: "user8",
+        judgedUserId: "user1",
+        typeOfLike: "default",
     },
-    // newPair
     {
         id: "like3",
-        userId: "5",
-        judgedUserId: "1",
-        typeOfLike: "super",
-        createdAt: new Date("2022-03-03T00:00:00.000Z"),
+        userId: "user9",
+        judgedUserId: "user1",
+        typeOfLike: "notInterested",
     },
-    // random like
+    // 2 superlikes
     {
         id: "like4",
-        userId: "2",
-        judgedUserId: "5",
-        typeOfLike: "default",
-        createdAt: new Date("2022-03-02T00:00:00.000Z"),
+        userId: "user10",
+        judgedUserId: "user1",
+        typeOfLike: "super",
+    },
+    {
+        id: "like5",
+        userId: "user11",
+        judgedUserId: "user1",
+        typeOfLike: "super",
     },
 ];
 

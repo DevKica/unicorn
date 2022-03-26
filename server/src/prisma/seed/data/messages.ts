@@ -1,7 +1,7 @@
 export default [
     {
         id: "message1",
-        content: "Hi Lopez",
+        content: "Hi user2",
         type: "default",
         isDeleted: false,
         conversation: {
@@ -11,13 +11,13 @@ export default [
         },
         user: {
             connect: {
-                id: "1",
+                id: "user1",
             },
         },
     },
     {
         id: "message2",
-        content: "Hi Pawel",
+        content: "Hi user1",
         type: "default",
         isDeleted: false,
         conversation: {
@@ -27,7 +27,7 @@ export default [
         },
         user: {
             connect: {
-                id: "7",
+                id: "user2",
             },
         },
     },

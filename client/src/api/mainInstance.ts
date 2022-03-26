@@ -26,3 +26,5 @@ export const getUserConversations = async () => await mainAppInstance.get("/conv
 
 export const sendMessage = async (data: { content: string; conversationId: string }) =>
   await mainAppInstance.post("/messages/text", data);
+
+export const getUsersToMatchHandler = async () => await mainAppInstance.get("/users");

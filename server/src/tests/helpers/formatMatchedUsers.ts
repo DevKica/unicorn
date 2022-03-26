@@ -1,5 +1,5 @@
-import { matchedUser, matchedUserJson } from "../../@types/prisma/matchedUsers.types";
 import { superlikeUsersIds } from "../../prisma/seed/data/likes";
+import { matchedUser, matchedUserJson } from "../../@types/prisma/matchedUsers.types";
 
 interface matchUserRecord {
     [key: string]: matchedUserJson;

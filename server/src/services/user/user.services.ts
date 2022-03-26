@@ -49,9 +49,8 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
             },
         },
     };
-    if (filters.showMeGender === "All") {
-        delete whereObject.gender;
-    }
+
+    if (filters.showMeGender === "All") delete whereObject.gender;
 
     const users = await UserModel.findMany({
         where: whereObject,
@@ -67,9 +66,6 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
                 },
             },
         },
-        orderBy: {
-            birthday: "desc",
-        },
     });
 
     const filteredUsers: matchedUser[] = [];
@@ -77,22 +73,23 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
     for (const e of users) {
         // check if the user has already made such a request
         const alreadyLiked = await findLike({ userId: filters.id, judgedUserId: e.id });
+
         if (!alreadyLiked) {
             // check if users aren't in relation already
-            const first = await findUsersRelation({ firstUserId: filters.id, secondUserId: e.id });
-            const second = await findUsersRelation({ firstUserId: e.id, secondUserId: filters.id });
+            const usersRelation = await findUsersRelation({
+                OR: [
+                    { firstUserId: filters.id, secondUserId: e.id },
+                    { firstUserId: e.id, secondUserId: filters.id },
+                ],
+            });
 
             const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
 
-            if (!(first || second)) {
-                if (distance < filters.showMeDistance && (e.showMeGender === filters.gender || e.showMeGender === "All")) {
-                    if (e.user.length === 0) {
-                        filteredUsers.push(pureOmit(e, ["latitude", "longitude", "showMeGender", "user"]));
-                    } else {
-                        // @ts-ignore
-                        e["superlike"] = true;
-                        filteredUsers.push(pureOmit(e, ["latitude", "longitude", "showMeGender", "user"]));
-                    }
+            if (!usersRelation) {
+                if (distance < filters.showMeDistance && distance < e.showMeDistance && (e.showMeGender === filters.gender || e.showMeGender === "All")) {
+                    //@ts-ignore
+                    if (e.user.length !== 0) e["superlike"] = true;
+                    filteredUsers.push(pureOmit(e, ["latitude", "longitude", "showMeGender", "user", "showMeDistance"]));
                 }
             }
         }

@@ -72,7 +72,7 @@ describe("SOCKETS", () => {
                     socket.join(e.id);
                 });
 
-                if (userId === "1") {
+                if (userId === "user1") {
                     serverSocketOne = socket;
                 } else {
                     serverSocketTwo = socket;

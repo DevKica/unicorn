@@ -43,7 +43,7 @@ export const joiShowMeGender = {
 };
 
 const joiSinglePassword = {
-    password: Joi.string().trim().required().min(2).max(128).pattern(regexPassword),
+    password: Joi.string().trim().required().min(8).max(128).pattern(regexPassword),
 };
 
 const joiPasswordWithRepetition = {
