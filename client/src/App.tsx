@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { getUserConversations, getUserData, getUsersToMatchHandler, loginUser, logOut } from "./api/mainInstance";
+import {
+  deleteConversation,
+  getUserConversations,
+  getUserData,
+  getUsersToMatchHandler,
+  loginUser,
+  logOut,
+} from "./api/mainInstance";
 import { Routes, Route } from "react-router-dom";
 import ConversationsPage from "./ConversationsPage";
 import { updateConversationsStore, updateUserStore } from "./redux/actions";
@@ -27,15 +34,18 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const res = await getUserData();
+
       if (res.status === 200) {
         // get conversations
         await getConversations();
 
-        const res = await getUsersToMatchHandler();
-        console.log(res.data);
+        //flag
+        const usersToMatch = await getUsersToMatchHandler();
+        console.log(usersToMatch.data);
 
         // set user
         setUser(res.data);
+
         // set userId in store
         updateUserStore(res.data.id);
       }
@@ -46,6 +56,7 @@ const App = () => {
   return (
     <div>
       <div>Unicorn</div>
+
       {loaded ? (
         <>
           {user ? (

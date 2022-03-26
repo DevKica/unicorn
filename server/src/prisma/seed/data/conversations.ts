@@ -20,4 +20,11 @@ export default [
             connect: [{ id: "user2" }, { id: "user3" }],
         },
     },
+    {
+        id: "conversation4",
+        name: "user1 and user4",
+        members: {
+            connect: [{ id: "user1" }, { id: "user4" }],
+        },
+    },
 ];

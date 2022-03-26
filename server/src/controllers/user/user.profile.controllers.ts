@@ -5,7 +5,7 @@ import { usersPhotosPath } from "../../config/upload.config";
 import { userProfileProperties } from "../../prisma/validator";
 import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../services/user/user.services";
 import { applyToResponseCustom, applyToResponse } from "../../utils/errors/applyToResponse";
-import { NotFound } from "../../utils/errors/main";
+import { Forbidden, NotFound } from "../../utils/errors/main";
 import { removeUserPhotos, uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
 import { LikeModel, UsersRelationModel } from "../../prisma/models";
 import console from "console";
@@ -67,9 +67,13 @@ export async function updateUniqueUserHandler(req: Request, res: Response): Prom
     }
 }
 
-export async function getUsersToMatchHandler(_req: Request, res: Response): Promise<void> {
+export async function getUsersToMatchHandler(req: Request, res: Response): Promise<void> {
     try {
         const { userId } = res.locals.user;
+
+        const limit = parseInt(req.params.limit) || 5;
+
+        if (limit > 10) throw new Forbidden();
 
         const user = await findUniqueUser({ id: userId }, userProfileProperties);
 
@@ -85,7 +89,8 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
             latitude: user.latitude,
             longitude: user.longitude,
         };
-        const users = await getUsersToMatch(filter);
+
+        const users = await getUsersToMatch(filter, limit);
 
         const gtPreviousDay = {
             createdAt: {
@@ -99,24 +104,19 @@ export async function getUsersToMatchHandler(_req: Request, res: Response): Prom
                 ...gtPreviousDay,
             },
         });
-
-        const relations = await UsersRelationModel.findMany({
+        const relations2 = await UsersRelationModel.findMany({
             where: {
-                OR: [
-                    {
-                        firstUserId: "user1",
-                        relationType: { in: ["accepted", "rejected"] },
-                    },
-                    {
-                        secondUserId: "user1",
-                        relationType: { in: ["accepted", "rejected"] },
-                    },
-                ],
+                firstUserId: "user1",
+                relationType: { in: ["accepted", "rejected"] },
                 ...gtPreviousDay,
             },
         });
-        console.log(likes.length, relations.length);
-        // console.log(users);
+
+        console.log("likes");
+        console.log(likes.length);
+        console.log("relations");
+        console.log(relations2.length);
+        console.log("end");
 
         applyToResponse(res, 200, users);
     } catch (e) {

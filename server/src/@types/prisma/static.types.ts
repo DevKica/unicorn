@@ -35,6 +35,7 @@ export type LikeWhereInput = Prisma.LikeWhereInput;
 export type UsersRelationObjectType = UsersRelation;
 export type UsersRelationCreateInput = Prisma.UsersRelationCreateInput;
 export type UsersRelationWhereInput = Prisma.UsersRelationWhereInput;
+export type UsersRelationUpdateInput = Prisma.UsersRelationUpdateInput;
 
 // Conversation
 export type ConversationType = Conversation;

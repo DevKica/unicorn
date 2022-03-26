@@ -11,7 +11,7 @@ export async function createTextMessageHandler(req: Request, res: Response): Pro
         const { userId } = res.locals.user;
         const { content, conversationId } = req.body;
 
-        const conversation = await findUserConversation(conversationId, userId);
+        const conversation = await findUserConversation({ conversationId, userId });
 
         if (!conversation) throw new NotFound();
 
@@ -37,7 +37,7 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
         const { userId } = res.locals.user;
         const { type, conversationId } = req.body;
 
-        const conversation = await findUserConversation(conversationId, userId);
+        const conversation = await findUserConversation({ conversationId, userId });
 
         if (!conversation) throw new NotFound();
 

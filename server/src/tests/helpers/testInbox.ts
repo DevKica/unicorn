@@ -26,7 +26,7 @@ const testGmailInbox = async () => {
                             msg.on("body", (stream) => {
                                 simpleParser(stream, async (_err, parsed) => {
                                     const { from, subject, textAsHtml } = parsed;
-                                    // console.log(textAsHtml);
+
                                     if (subject === "Email verification" && from?.value[0].address === SUPPORT_EMAIL_USERNAME) {
                                         logInfo("Email verification successfully deleted");
                                     }
@@ -42,9 +42,6 @@ const testGmailInbox = async () => {
                             msg.once("attributes", (attrs: any) => {
                                 const { uid } = attrs;
                                 imap.addFlags(uid, "Deleted");
-                                // imap.addFlags(uid, ["\\move"], () => {
-                                // Mark the email as read after reading it
-                                // });
                             });
                         });
                         f.once("error", (ex: any) => {

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const mainUser = {
     id: "user1",
     name: "Pawel",
@@ -21,7 +23,6 @@ export const mainUser = {
 };
 
 const femaleUserToSeedData = {
-    birthday: mainUser.birthday,
     gender: "Female",
     showMeGender: "Male",
     showMeDistance: 50,
@@ -32,7 +33,7 @@ const femaleUserToSeedData = {
 };
 
 const female_under24_showMale_showDistance50_inRange = {
-    quantity: 15,
+    quantity: 20,
     data: femaleUserToSeedData,
 };
 
@@ -84,6 +85,7 @@ export const generateUsers = (object: { quantity: number; data: any }, start: nu
             description: tmp,
             photos: [tmp],
             sexualOrientation: ["Heterosexual"],
+            birthday: dayjs(new Date(mainUser.birthday)).add(start, "m").toISOString(),
             ...object.data,
         });
         start += 1;
@@ -93,13 +95,13 @@ export const generateUsers = (object: { quantity: number; data: any }, start: nu
 
 export const generated_female_under24_showMale_showDistance50_inRange = generateUsers(female_under24_showMale_showDistance50_inRange, 2);
 // showDistance
-export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 17);
+export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 23);
 // not in range
-export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 23);
+export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 28);
 // show female
-export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 28);
+export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 33);
 // above 24
-export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 33);
+export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 38);
 
 const users = [
     // not active

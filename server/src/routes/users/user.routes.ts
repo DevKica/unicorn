@@ -57,7 +57,7 @@ requireUserRoutes.delete("/", schemaValidation(singlePasswordSchema), deleteUser
 
 // get users to match
 
-requireActiveUserRoutes.get("/", getUsersToMatchHandler);
+requireActiveUserRoutes.get("/:limit?", getUsersToMatchHandler);
 
 // MERGE ROUTES
 

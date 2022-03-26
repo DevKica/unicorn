@@ -28,3 +28,5 @@ export const sendMessage = async (data: { content: string; conversationId: strin
   await mainAppInstance.post("/messages/text", data);
 
 export const getUsersToMatchHandler = async () => await mainAppInstance.get("/users");
+
+export const deleteConversation = async () => await mainAppInstance.delete("/conversations/conversation1/user2");

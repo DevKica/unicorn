@@ -64,12 +64,12 @@ export const getUserPhotoData = {
 
 export const getUsersToMatchResponse = {
     beforeOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(5)),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(5, 10)),
         status: 200,
         omit: [],
     },
     afterOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(9)),
+        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(9, 14)),
         status: 200,
         omit: [],
     },

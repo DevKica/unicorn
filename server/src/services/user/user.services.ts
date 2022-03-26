@@ -31,7 +31,7 @@ export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<voi
     await UserModel.delete({ where });
 }
 
-export async function getUsersToMatch(filters: UserFilterToMatch): Promise<matchedUser[]> {
+export async function getUsersToMatch(filters: UserFilterToMatch, limit: number): Promise<matchedUser[]> {
     const lt = dayjs().subtract(filters.showMeAgeLowerLimit, "y").toISOString();
     const gt = dayjs().subtract(filters.showMeAgeUpperLimit, "y").toISOString();
 
@@ -65,6 +65,9 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
                 },
             },
         },
+        orderBy: {
+            birthday: "asc",
+        },
     });
 
     const filteredUsers: matchedUser[] = [];
@@ -94,5 +97,5 @@ export async function getUsersToMatch(filters: UserFilterToMatch): Promise<match
         }
     }
 
-    return filteredUsers;
+    return filteredUsers.slice(0, limit);
 }

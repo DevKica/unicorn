@@ -10,8 +10,8 @@ datasource db {
 model User {
   // basic
   id                  String              @id @default(cuid())
-  name                String  @db.VarChar(32)
-  surname             String  @db.VarChar(32)
+  name                String              @db.VarChar(32)
+  surname             String              @db.VarChar(32)
   password            String
   email               String              @unique
   active              Boolean             @default(false)
@@ -108,6 +108,7 @@ model UsersRelation {
   firstUserId  String
   secondUserId String
   relationType UsersRelationStatus
+  updatedAt    DateTime            @updatedAt
   createdAt    DateTime            @default(now())
   // relations
   firstUser    User                @relation("firstUser", fields: [firstUserId], references: [id], onDelete: Cascade)
@@ -169,9 +170,9 @@ model PasswordReset {
 }
 
 model PremiumAccountToken {
-  id String   @id @default(cuid())
-  token String @unique
+  id             String      @id @default(cuid())
+  token          String      @unique
   daysOfValidity Int
-  accountType AccountType
-  createdAt DateTime @default(now())
+  accountType    AccountType
+  createdAt      DateTime    @default(now())
 }

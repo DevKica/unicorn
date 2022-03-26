@@ -25,6 +25,9 @@ describe("PREMIUM ACCOUNTS", () => {
         test("User with DEFAULT account type should NOT be able to access BLACK USER protected routes ", async () => {
             await testPOSTRequest("/auth/black", {}, UpgradeYourAccountInstance);
         });
+        test("User should NOT be able to upgrade his account with invalid token and valid id", async () => {
+            await testPOSTRequest(`/premiumAccount/activate/silverToken/invalidToken`, {}, NotFoundInstance);
+        });
         test("User should be able to upgrade his account with valid token and id", async () => {
             await testPOSTRequest(`/premiumAccount/activate/silverToken/token1`, {}, silverUserDataResponse);
         });
@@ -39,9 +42,6 @@ describe("PREMIUM ACCOUNTS", () => {
         });
     });
     describe("GOLD", () => {
-        test("User with SILVER account type should NOT be able to access GOLD USER protected routes ", async () => {
-            await testPOSTRequest("/auth/gold", {}, UpgradeYourAccountInstance);
-        });
         test("User should be able to upgrade his account with valid token and id", async () => {
             await testPOSTRequest(`/premiumAccount/activate/goldToken/token2`, {}, goldUserDataResponse);
         });
@@ -56,9 +56,6 @@ describe("PREMIUM ACCOUNTS", () => {
         });
     });
     describe("BLACK", () => {
-        test("User with GOLD account type should NOT be able to access BLACK USER protected routes", async () => {
-            await testPOSTRequest("/auth/black", {}, UpgradeYourAccountInstance);
-        });
         test("User should be able to upgrade his account with valid token and id", async () => {
             await testPOSTRequest(`/premiumAccount/activate/blackToken/token3`, {}, blackUserDataResponse);
         });
