@@ -7,9 +7,6 @@ import { findUniqueUser, getUsersToMatch, updateUniqueUser } from "../../service
 import { applyToResponseCustom, applyToResponse } from "../../utils/errors/applyToResponse";
 import { Forbidden, NotFound } from "../../utils/errors/main";
 import { removeUserPhotos, uploadUserPhotosFromReq } from "../../utils/user/upload/uploadToDir";
-import { LikeModel, UsersRelationModel } from "../../prisma/models";
-import console from "console";
-import dayjs from "dayjs";
 
 export async function getProfilePhotoHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -91,32 +88,6 @@ export async function getUsersToMatchHandler(req: Request, res: Response): Promi
         };
 
         const users = await getUsersToMatch(filter, limit);
-
-        const gtPreviousDay = {
-            createdAt: {
-                gt: dayjs().subtract(12, "h").toISOString(),
-            },
-        };
-
-        const likes = await LikeModel.findMany({
-            where: {
-                userId: "user1",
-                ...gtPreviousDay,
-            },
-        });
-        const relations2 = await UsersRelationModel.findMany({
-            where: {
-                firstUserId: "user1",
-                relationType: { in: ["accepted", "rejected"] },
-                ...gtPreviousDay,
-            },
-        });
-
-        console.log("likes");
-        console.log(likes.length);
-        console.log("relations");
-        console.log(relations2.length);
-        console.log("end");
 
         applyToResponse(res, 200, users);
     } catch (e) {

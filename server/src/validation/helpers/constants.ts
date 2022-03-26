@@ -4,3 +4,5 @@ import dayjs from "dayjs";
 const ageAllowed = 18;
 
 export const dateRestriction = dayjs().subtract(ageAllowed, "y").toISOString();
+
+export const userLikesLimit = 10;

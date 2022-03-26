@@ -10,6 +10,11 @@ export async function findLike(where: LikeWhereInput) {
     return like;
 }
 
+export async function findManyLikes(where: LikeWhereInput) {
+    const like = await LikeModel.findMany({ where });
+    return like;
+}
+
 export async function deleteLike(where: LikeWhereUniqueInput): Promise<void> {
     await LikeModel.delete({ where });
 }

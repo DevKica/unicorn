@@ -10,6 +10,11 @@ export async function findUsersRelation(where: UsersRelationWhereInput) {
     return usersRelation;
 }
 
+export async function findManyUsersRelations(where: UsersRelationWhereInput) {
+    const usersRelations = await UsersRelationModel.findMany({ where });
+    return usersRelations;
+}
+
 export async function updateUsersRelation(where: UsersRelationWhereInput, data: UsersRelationUpdateInput) {
     await UsersRelationModel.updateMany({ where, data });
 }

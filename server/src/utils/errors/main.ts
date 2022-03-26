@@ -171,3 +171,12 @@ export class TooManyPhotos extends Error {
         Object.setPrototypeOf(this, TooManyPhotos.prototype);
     }
 }
+
+export class NumberOfLikesExceeded extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "Number of likes exceeded";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, NumberOfLikesExceeded.prototype);
+    }
+}
