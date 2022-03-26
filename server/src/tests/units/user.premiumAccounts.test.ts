@@ -36,6 +36,17 @@ describe("PREMIUM ACCOUNTS", () => {
         test("User should NOT be able to upgrade his account with invalid token and valid id", async () => {
             await testPOSTRequest(`/premiumAccount/activate/silverToken/invalidToken`, {}, NotFoundInstance);
         });
+        //
+        test("User should be able to upgrade his account with valid token ( days of validity = 0 ) and id", async () => {
+            await testPOSTRequest(`/premiumAccount/activate/tokenZero/token0`, {}, blackUserDataResponse);
+        });
+        test("User with EXPIRED SILVER account type should NOT be able to access SILVER USER protected routes ", async () => {
+            await testPOSTRequest("/auth/silver", {}, UpgradeYourAccountInstance);
+        });
+        test("User should have the ACCOUNT TYPE set to DEFAULT after making the request with EXPIRED account type", async () => {
+            await testGETRequest("/users/profile/", basicActiveUserDataResponse);
+        });
+        //
         test("User should be able to upgrade his account with valid token and id", async () => {
             await testPOSTRequest(`/premiumAccount/activate/silverToken/token1`, {}, silverUserDataResponse);
         });

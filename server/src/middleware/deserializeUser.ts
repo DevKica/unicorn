@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyUserTokenJWT } from "../config/jwt.config";
 import { findSingleSession } from "../services/session/session.services";
+import { updateUniqueUser } from "../services/user/user.services";
 import { createAccessCookie, createAuthCookies, removeAuthCookies } from "../utils/user/auth/cookiesHelper";
 
 const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -13,8 +14,13 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
         if (!session || !session.valid) return next();
         if (decodedAccess.accountType !== "default") {
             if (new Date(decodedAccess.subExpiration) < new Date()) {
+                // update user
+                await updateUniqueUser({ id: decodedAccess.userId }, { accountType: "default", subExpiration: new Date() });
+
+                // generate new cookies
                 const userTokenData = { userId: decodedAccess.userId, sessionId: decodedAccess.sessionId, active: decodedAccess.active, accountType: "Default", subExpiration: new Date() };
                 createAuthCookies(res, userTokenData);
+
                 res.locals.user = userTokenData;
                 return next();
             }

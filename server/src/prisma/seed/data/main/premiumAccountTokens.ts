@@ -3,7 +3,7 @@ export default [
         id: "token0",
         token: "tokenZero",
         daysOfValidity: 0,
-        accountType: "silver",
+        accountType: "black",
     },
     {
         id: "token1",
