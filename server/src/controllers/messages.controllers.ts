@@ -1,19 +1,23 @@
-import fse from "fs-extra";
 import { Request, Response } from "express";
-import { findUserConversation } from "../services/conversations.services";
 import { createMessage, findUniqueMessage, updateUniqueMessage } from "../services/messages.services";
 import { applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { getFileMessagePath, uploadFileMessage } from "../utils/user/upload/uploadToDir";
-import { NotFound, Forbidden } from "../utils/errors/main";
+import { getFileMessagePath, removeFileMessage, uploadFileMessage } from "../utils/user/upload/uploadToDir";
+import { checkIfConversationExists } from "../services/conversations.services";
+import { Forbidden } from "../utils/errors/main";
 
 export async function createTextMessageHandler(req: Request, res: Response): Promise<void> {
     try {
         const { userId } = res.locals.user;
         const { content, conversationId } = req.body;
 
-        const conversation = await findUserConversation({ conversationId, userId });
-
-        if (!conversation) throw new NotFound();
+        await checkIfConversationExists({
+            id: conversationId,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        });
 
         const message = await createMessage({
             content,
@@ -37,9 +41,14 @@ export async function createFileMessageHandler(req: Request, res: Response): Pro
         const { userId } = res.locals.user;
         const { type, conversationId } = req.body;
 
-        const conversation = await findUserConversation({ conversationId, userId });
-
-        if (!conversation) throw new NotFound();
+        await checkIfConversationExists({
+            id: conversationId,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        });
 
         const fileName = await uploadFileMessage(req, type);
 
@@ -81,10 +90,7 @@ export async function deleteMessageHandler(req: Request, res: Response): Promise
 
         if (!message || message.userId !== userId || message.isDeleted || message.type === "info") throw new Forbidden();
 
-        if (message.type !== "default") {
-            const filePath = getFileMessagePath(message.type, message.content);
-            await fse.remove(filePath);
-        }
+        if (message.type !== "default") removeFileMessage(message.type, message.content);
 
         const newMessage = await updateUniqueMessage({ id: messageId }, { isDeleted: true, content: "", type: "default" });
 

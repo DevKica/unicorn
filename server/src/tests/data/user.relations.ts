@@ -262,15 +262,29 @@ export const deleteMessageData = {
 };
 
 export const deleteConversationData = {
-    params: {
-        valid: "conversation4/user4",
-        invalid: {
-            sameSecondUserId: "conversation4/user1",
-            notInConversationMembers: "conversation3/user3",
-            secondUserNotInConversationMembers: "conversation4/user3",
+    body: {
+        fileMessage: {
+            conversationId: "conversation4",
+            type: "photo",
         },
     },
-    response: SuccessResponse,
+    params: {
+        valid: "conversation4",
+        invalid: {
+            //flag
+            // sameSecondUserId: "conversation4",
+            // secondUserNotInConversationMembers: "conversation4",
+            notInConversationMembers: "conversation3",
+        },
+    },
+    response: {
+        delete: SuccessResponse,
+        fileMessage: {
+            data: createMessageResponse("photo", "", "conversation4"),
+            status: 201,
+            omit: messageOmitProperties,
+        },
+    },
 };
 
 export const renameConversationData = {

@@ -39,16 +39,16 @@ export function checkTheExistenceOfUserPhotos(photos: string[], result: boolean)
     });
 }
 
-export function expectFileFromMessageToExists(type: MessageType, name: string) {
+export function expectFileFromMessageToExists(type: MessageType, name: string, result = true) {
     switch (type) {
         case "photo":
-            expect(checkIfFileExists(path.join(photoMessagesPath, `${name}.jpg`))).toBeTruthy();
+            expect(checkIfFileExists(path.join(photoMessagesPath, `${name}.jpg`))).toEqual(result);
             break;
         case "voice":
-            expect(checkIfFileExists(path.join(voiceMessagesPath, `${name}.mp3`))).toBeTruthy();
+            expect(checkIfFileExists(path.join(voiceMessagesPath, `${name}.mp3`))).toEqual(result);
             break;
         case "video":
-            expect(checkIfFileExists(path.join(videoMessagesPath, `${name}.mp4`))).toBeTruthy();
+            expect(checkIfFileExists(path.join(videoMessagesPath, `${name}.mp4`))).toEqual(result);
             break;
     }
 }

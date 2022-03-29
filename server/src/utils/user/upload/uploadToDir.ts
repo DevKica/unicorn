@@ -105,6 +105,11 @@ export async function removeUserPhotos(userId: string) {
     }
 }
 
+export async function removeFileMessage(type: string, content: string) {
+    const path = getFileMessagePath(type, content);
+    await fse.remove(path);
+}
+
 export function getFileMessagePath(type: string, content: string): string {
     let filePath = "";
     switch (type) {

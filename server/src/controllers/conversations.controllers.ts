@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { deleteUserConversation, findAllUserConversations, findUserConversation, updateConversation } from "../services/conversations.services";
+import { findAllUserConversations, updateConversation, checkIfConversationExists, deleteUserConversation } from "../services/conversations.services";
 import { createMessage } from "../services/messages.services";
 import { updateUsersRelation } from "../services/usersRelation.services";
+// import { updateUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { Forbidden, NotFound } from "../utils/errors/main";
+import { NotFound } from "../utils/errors/main";
+import { removeFileMessage } from "../utils/user/upload/uploadToDir";
 
 export async function getConversationsHandler(_req: Request, res: Response): Promise<void> {
     try {
@@ -46,22 +48,29 @@ export async function renameConversationHandler(req: Request, res: Response): Pr
 export async function deleteConversationHandler(req: Request, res: Response): Promise<void> {
     try {
         const { userId } = res.locals.user;
-        const { conversationId, secondUserId } = req.params;
+        const { conversationId } = req.params;
 
-        if (userId === secondUserId) throw new Forbidden();
+        await checkIfConversationExists({
+            id: conversationId,
+            members: {
+                some: {
+                    id: userId,
+                },
+            },
+        });
 
-        if (!(await findUserConversation({ conversationId, userId: secondUserId }))) throw new NotFound();
+        const conversation = await deleteUserConversation({ id: conversationId });
 
-        const result = await deleteUserConversation({ userId: userId, conversationId });
-
-        if (!result.count) throw new NotFound();
+        conversation.messages.forEach((e: { type: string; content: string }) => {
+            removeFileMessage(e.type, e.content);
+        });
 
         await updateUsersRelation(
             {
                 relationType: "accepted",
                 OR: [
-                    { firstUserId: userId, secondUserId: secondUserId },
-                    { firstUserId: secondUserId, secondUserId: userId },
+                    { firstUserId: userId, secondUserId: conversation.members[0].id },
+                    { firstUserId: conversation.members[0].id, secondUserId: userId },
                 ],
             },
             {

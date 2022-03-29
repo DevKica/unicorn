@@ -9,6 +9,6 @@ conversationsMainRoutes.get("/", getConversationsHandler);
 
 conversationsMainRoutes.patch("/name", schemaValidation(renameConversationSchema), renameConversationHandler);
 
-conversationsMainRoutes.delete("/:conversationId/:secondUserId", deleteConversationHandler);
+conversationsMainRoutes.delete("/:conversationId", deleteConversationHandler);
 
 export default conversationsMainRoutes;

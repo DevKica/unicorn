@@ -31,4 +31,20 @@ export default [
             },
         },
     },
+    {
+        id: "message3",
+        content: "Hi user4",
+        type: "default",
+        isDeleted: false,
+        conversation: {
+            connect: {
+                id: "conversation4",
+            },
+        },
+        user: {
+            connect: {
+                id: "user1",
+            },
+        },
+    },
 ];

@@ -259,22 +259,27 @@ describe("RELATIONS", () => {
         let infoMessageId = "";
 
         describe("DELETE", () => {
-            const { params, response } = deleteConversationData;
+            const { body, params, response } = deleteConversationData;
 
             test("User should NOT be able to delete conversation that he is not member of", async () => {
                 await testDELETERequest(`/conversations/${params.invalid.notInConversationMembers}`, {}, NotFoundInstance);
             });
-            test("User should NOT be able to delete conversation that secondUser is not member of", async () => {
-                await testDELETERequest(`/conversations/${params.invalid.secondUserNotInConversationMembers}`, {}, NotFoundInstance);
-            });
-            test("User should NOT be able to delete conversation with secondUserId equal to his id", async () => {
-                await testDELETERequest(`/conversations/${params.invalid.sameSecondUserId}`, {}, ForbiddenInstance);
-            });
-            test("User should be able to delete conversation with valid secondUserId and conversationId", async () => {
-                await testDELETERequest(`/conversations/${params.valid}`, {}, response);
+            // test("User should NOT be able to delete conversation that secondUser is not member of", async () => {
+            //     await testDELETERequest(`/conversations/${params.invalid.secondUserNotInConversationMembers}`, {}, NotFoundInstance);
+            // });
+            // test("User should NOT be able to delete conversation with secondUserId equal to his id", async () => {
+            //     await testDELETERequest(`/conversations/${params.invalid.sameSecondUserId}`, {}, ForbiddenInstance);
+            // });
+            test("User should be able to delete conversation that he is member of ( valid conversationId )", async () => {
+                await testPOSTRequest("/messages/file", body.fileMessage, response.fileMessage, validPhotoFile);
+                await testDELETERequest(`/conversations/${params.valid}`, {}, response.delete);
             });
             test(`User should NOT be able to send text message to deleted conversation`, async () => {
                 await testPOSTRequest("/messages/text", { content: "hello", conversationId: "conversation4" }, NotFoundInstance);
+            });
+            test(`User should NOT be able view file messages in deleted conversation`, async () => {
+                await testGETRequest(`/messages/photo/${global.testMessagesContent[0]}`, NotFoundInstance);
+                expectFileFromMessageToExists("photo", global.testMessagesContent[0], false);
             });
         });
 

@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
-import { ConversationCreateInput, ConversationUpdateInput } from "../@types/prisma/static.types";
+import { ConversationCreateInput, ConversationUpdateInput, ConversationWhereInput, ConversationWhereUniqueInput } from "../@types/prisma/static.types";
 import { ConversationModel } from "../prisma/models";
+import { NotFound } from "../utils/errors/main";
 
 export async function createConversation(data: ConversationCreateInput) {
     const conversation = await ConversationModel.create({
@@ -10,6 +10,11 @@ export async function createConversation(data: ConversationCreateInput) {
         },
     });
     return conversation;
+}
+
+export async function checkIfConversationExists(where: ConversationWhereInput) {
+    const conversation = await ConversationModel.findFirst({ where });
+    if (!conversation) throw new NotFound();
 }
 
 export async function findUserConversation({ conversationId, userId }: { conversationId: string; userId: string }) {
@@ -82,13 +87,26 @@ export async function updateConversation({ conversationId, userId }: { conversat
     return conversation;
 }
 
-export async function deleteUserConversation({ conversationId, userId }: { conversationId: string; userId: string }): Promise<Prisma.BatchPayload> {
-    const result = await ConversationModel.deleteMany({
-        where: {
-            id: conversationId,
+export async function deleteUserConversation(where: ConversationWhereUniqueInput) {
+    const result = await ConversationModel.delete({
+        where,
+        include: {
             members: {
-                some: {
-                    id: userId,
+                select: {
+                    id: true,
+                },
+            },
+            messages: {
+                where: {
+                    NOT: {
+                        type: {
+                            equals: "default",
+                        },
+                    },
+                },
+                select: {
+                    type: true,
+                    content: true,
                 },
             },
         },
