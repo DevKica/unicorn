@@ -29,12 +29,6 @@ const usersRelationsLimit = [
         secondUserId: "user19",
         relationType: "rejected",
     },
-    {
-        id: "usersRelation12",
-        firstUserId: "user1",
-        secondUserId: "user20",
-        relationType: "rejected",
-    },
 ];
 
 export default usersRelationsLimit;

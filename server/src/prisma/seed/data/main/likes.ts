@@ -1,7 +1,7 @@
 export const superlikeUsersIds = ["user11", "user12"];
 
 const likes = [
-    // default like
+    // default likes
     {
         id: "like1",
         userId: "user7",

@@ -152,7 +152,7 @@ describe("SOCKETS", () => {
             io.emit(EVENTS.SERVER.NEW_MESSAGE_RECEIVED);
         });
 
-        test("Client ONE whose serverSocket sent the new message should NOT receive it, others should NOT", (done) => {
+        test("Client ONE whose serverSocket sent the new message should receive it, others should NOT", (done) => {
             clientSocketTwo.on(EVENTS.SERVER.NEW_MESSAGE_RECEIVED, () => {
                 expect(false).toEqual(true);
                 done();

@@ -3,6 +3,6 @@ import { activatePremiumAccountHandler } from "../controllers/premiumAccount.con
 
 const premiumAccountRoutes = Router();
 
-premiumAccountRoutes.post("/activate/:token/:id", activatePremiumAccountHandler);
+premiumAccountRoutes.post("/activate/:id/:token", activatePremiumAccountHandler);
 
 export default premiumAccountRoutes;

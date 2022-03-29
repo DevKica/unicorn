@@ -4,6 +4,27 @@ const silverUserData = { ...basicActiveUserData, accountType: "silver" };
 const goldUserData = { ...basicActiveUserData, accountType: "gold" };
 const blackUserData = { ...basicActiveUserData, accountType: "black" };
 
+export const premiumLikeData = {
+    default: { judgedUserId: "user10", typeOfLike: "default" },
+    super: { judgedUserId: "user9", typeOfLike: "super" },
+};
+
+export const silverTokenData = {
+    validId: "token1",
+    validToken: "silverToken",
+    invalidId: "token2",
+    invalidToken: "goldToken",
+    validExpired: "token0/tokenZero",
+};
+export const goldTokenData = {
+    validId: "token2",
+    validToken: "goldToken",
+};
+export const blackTokenData = {
+    validId: "token3",
+    validToken: "blackToken",
+};
+
 export const silverUserDataResponse = {
     data: silverUserData,
     status: 200,
