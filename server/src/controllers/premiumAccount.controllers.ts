@@ -17,7 +17,7 @@ export async function activatePremiumAccountHandler(req: Request, res: Response)
 
         if (!premiumAccountToken || !(await argon2.verify(premiumAccountToken.token, token))) throw new NotFound();
 
-        const subExpiration = dayjs().add(premiumAccountToken.daysOfValidity, "day").toISOString();
+        const subExpiration = dayjs().add(premiumAccountToken.daysOfValidity, "day").toDate();
 
         const updatedUser = await updateUniqueUser({ id: userId }, { accountType: premiumAccountToken.accountType, subExpiration }, userProfileProperties);
 

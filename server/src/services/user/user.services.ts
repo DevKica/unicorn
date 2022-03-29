@@ -32,8 +32,8 @@ export async function deleteUniqueUser(where: UserWhereUniqueInput): Promise<voi
 }
 
 export async function getUsersToMatch(filters: UserFilterToMatch, limit: number): Promise<matchedUser[]> {
-    const lt = dayjs().subtract(filters.showMeAgeLowerLimit, "y").toISOString();
-    const gt = dayjs().subtract(filters.showMeAgeUpperLimit, "y").toISOString();
+    const lt = dayjs().subtract(filters.showMeAgeLowerLimit, "y").toDate();
+    const gt = dayjs().subtract(filters.showMeAgeUpperLimit, "y").toDate();
 
     const whereObject = {
         active: true,

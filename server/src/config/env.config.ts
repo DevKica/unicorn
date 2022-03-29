@@ -1,5 +1,4 @@
 import "dotenv/config";
-import process from "process";
 
 export const PORT = process.env.PORT;
 export const ORIGIN = process.env.ORIGIN;

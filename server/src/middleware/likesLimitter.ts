@@ -8,7 +8,7 @@ import { userLikesLimit } from "../validation/helpers/constants";
 
 const gtPreviousDay = {
     createdAt: {
-        gt: dayjs().subtract(12, "h").toISOString(),
+        gt: dayjs().subtract(12, "h").toDate(),
     },
 };
 
@@ -22,6 +22,7 @@ export async function userLikesLimitter(_req: Request, res: Response, next: Next
             userId,
             ...gtPreviousDay,
         });
+
         const relations = await findManyUsersRelations({
             firstUserId: userId,
             relationType: { in: ["accepted", "rejected"] },

@@ -32,6 +32,7 @@ model User {
   showMeDistance      Int                 @default(50)
   latitude            Float
   longitude           Float
+  superlikesLastDates DateTime[]
   // others
   createdAt           DateTime            @default(now())
   // relations

@@ -271,9 +271,6 @@ export const deleteConversationData = {
     params: {
         valid: "conversation4",
         invalid: {
-            //flag
-            // sameSecondUserId: "conversation4",
-            // secondUserNotInConversationMembers: "conversation4",
             notInConversationMembers: "conversation3",
         },
     },

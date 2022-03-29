@@ -68,12 +68,14 @@ describe("PREMIUM ACCOUNTS", () => {
             await testPOSTRequest("/auth/black", {}, UpgradeYourAccountInstance);
         });
 
-        test("User with SILVER OR HIGHER account type should be able to SUPERLIKE another user after exceeding the number of likes limit", async () => {
-            await testPOSTRequest("/likes", premiumLikeData.super, SuccessResponse);
+        test("User with SILVER OR HIGHER account type should be able to SUPERLIKE another user after exceeding the number of likes limi", async () => {
+            for (const judgedUserId of premiumLikeData.superLikesToLimit) {
+                await testPOSTRequest("/likes", { typeOfLike: "super", judgedUserId }, SuccessResponse);
+            }
         });
-        //  test("User should be able to get properly filtered users to match", async () => {
-        //  await testGETRequest("/users", getUsersToMatchResponse.beforeOperations);
-        // });
+        test("User with SILVER OR HIGHER account type should NOT be able to SUPERLIKE another user after exceeding the number of SUPERLIKES per week limit", async () => {
+            await testPOSTRequest("/likes", premiumLikeData.superLikesExceeded, UpgradeYourAccountInstance);
+        });
     });
     describe("GOLD", () => {
         const { validId, validToken } = goldTokenData;

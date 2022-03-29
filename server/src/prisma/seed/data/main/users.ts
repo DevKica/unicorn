@@ -33,7 +33,7 @@ const femaleUserToSeedData = {
 };
 
 const female_under24_showMale_showDistance50_inRange = {
-    quantity: 20,
+    quantity: 25,
     data: femaleUserToSeedData,
 };
 
@@ -85,7 +85,7 @@ export const generateUsers = (object: { quantity: number; data: any }, start: nu
             description: tmp,
             photos: [tmp],
             sexualOrientation: ["Heterosexual"],
-            birthday: dayjs(new Date(mainUser.birthday)).add(start, "m").toISOString(),
+            birthday: dayjs(new Date(mainUser.birthday)).add(start, "m").toDate(),
             ...object.data,
         });
         start += 1;
@@ -95,13 +95,13 @@ export const generateUsers = (object: { quantity: number; data: any }, start: nu
 
 export const generated_female_under24_showMale_showDistance50_inRange = generateUsers(female_under24_showMale_showDistance50_inRange, 2);
 // showDistance
-export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 23);
+export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 28);
 // not in range
-export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 28);
+export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 33);
 // show female
-export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 33);
+export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 38);
 // above 24
-export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 38);
+export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 43);
 
 const users = [
     // not active

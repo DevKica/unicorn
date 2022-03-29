@@ -6,7 +6,7 @@ import { getUsersToMatchHandler } from "../../controllers/user/user.profile.cont
 import { requireActiveUser, requireUser } from "../../middleware/requireUser";
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passwordWithRepetitionSchema, singlePasswordSchema } from "../../validation/user.auth.schema";
-import { userLikesLimitter } from "../../middleware/userLikesLimitter";
+import { userLikesLimitter } from "../../middleware/likesLimitter";
 
 // public
 const publicUserRoutes = Router();

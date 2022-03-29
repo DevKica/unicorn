@@ -6,7 +6,8 @@ const blackUserData = { ...basicActiveUserData, accountType: "black" };
 
 export const premiumLikeData = {
     default: { judgedUserId: "user10", typeOfLike: "default" },
-    super: { judgedUserId: "user9", typeOfLike: "super" },
+    superLikesToLimit: ["user20", "user21", "user22", "user23", "user24", "user25"],
+    superLikesExceeded: { judgedUserId: "user26", typeOfLike: "super" },
 };
 
 export const silverTokenData = {

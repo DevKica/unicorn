@@ -9,7 +9,7 @@ const likesLimit = [
         id: "like7",
         userId: "user1",
         judgedUserId: "user14",
-        typeOfLike: "super",
+        typeOfLike: "default",
     },
 ];
 

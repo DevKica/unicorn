@@ -1,12 +1,14 @@
 import { UsersRelationStatus } from "@prisma/client";
+import dayjs from "dayjs";
 import { Request, Response } from "express";
 import { createConversation } from "../services/conversations.services";
 import { createLike, deleteLike, findLike } from "../services/like.services";
 import { checkIfActiveUserExists } from "../services/user/auth.services";
-import { findUniqueUser } from "../services/user/user.services";
+import { findUniqueUser, updateUniqueUser } from "../services/user/user.services";
 import { createUsersRelations, findUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { Forbidden, UpgradeYourAccount } from "../utils/errors/main";
+import { superLikesLimit } from "./../validation/helpers/constants";
 
 export async function createLikeHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -30,12 +32,32 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         if (usersRelation) throw new Forbidden();
 
         // local user
-        const user = await findUniqueUser({ id: userId }, { name: true });
+        const user = await findUniqueUser({ id: userId }, { name: true, superlikesLastDates: true });
 
         const alreadyLiked = await findLike({ userId, judgedUserId });
 
         // if the user does not exists (hopefully it never does) or has already made this request
         if (!user || alreadyLiked) throw new Forbidden();
+
+        if (typeOfLike === "super") {
+            const last7daysSuperLikes = user.superlikesLastDates.filter((e) => e < dayjs().subtract(7, "d").toDate());
+
+            if (last7daysSuperLikes.length > superLikesLimit) throw new UpgradeYourAccount();
+
+            //flag
+            if (process.env.NODE_ENV === "test") {
+                last7daysSuperLikes.push(dayjs().subtract(7, "d").toDate());
+            } else {
+                last7daysSuperLikes.push(dayjs().toDate());
+            }
+
+            await updateUniqueUser(
+                { id: userId },
+                {
+                    superlikesLastDates: last7daysSuperLikes,
+                }
+            );
+        }
 
         // check if the judged user has already liked the user
         const likeObject = await findLike({ userId: judgedUserId, judgedUserId: userId });
@@ -51,6 +73,7 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                 },
                 typeOfLike,
             });
+
             return applySuccessToResponse(res);
         }
 
