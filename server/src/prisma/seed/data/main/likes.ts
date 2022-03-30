@@ -10,7 +10,7 @@ const likes = [
     },
     {
         id: "like2",
-        userId: "user8",
+        userId: "user7",
         judgedUserId: "user1",
         typeOfLike: "default",
     },

@@ -1,13 +1,13 @@
-import { UsersRelationStatus } from "@prisma/client";
 import dayjs from "dayjs";
+import { UsersRelationStatus } from "@prisma/client";
 import { Request, Response } from "express";
 import { createConversation } from "../services/conversations.services";
-import { createLike, deleteLike, findLike } from "../services/like.services";
+import { createLike, deleteLike, findSingleLike } from "../services/like.services";
 import { checkIfActiveUserExists } from "../services/user/auth.services";
 import { findUniqueUser, updateUniqueUser } from "../services/user/user.services";
-import { createUsersRelations, findUsersRelation } from "../services/usersRelation.services";
+import { createUsersRelations, deleteUniqueUsersRelation, findUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
-import { Forbidden, UpgradeYourAccount } from "../utils/errors/main";
+import { UpgradeYourAccount, Forbidden, ServerError, CannotRewindNewPair, RewindOnlyLastLikedUser } from "../utils/errors/main";
 import { superLikesLimit } from "./../validation/helpers/constants";
 
 export async function createLikeHandler(req: Request, res: Response): Promise<void> {
@@ -34,7 +34,7 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         // local user
         const user = await findUniqueUser({ id: userId }, { name: true, superlikesLastDates: true });
 
-        const alreadyLiked = await findLike({ userId, judgedUserId });
+        const alreadyLiked = await findSingleLike({ userId, judgedUserId });
 
         // if the user does not exists (hopefully it never does) or has already made this request
         if (!user || alreadyLiked) throw new Forbidden();
@@ -55,12 +55,15 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
                 { id: userId },
                 {
                     superlikesLastDates: last7daysSuperLikes,
+                    lastLikedUserId: `super-${judgedUserId}`,
                 }
             );
+        } else {
+            await updateUniqueUser({ id: userId }, { lastLikedUserId: `-${judgedUserId}` });
         }
 
         // check if the judged user has already liked the user
-        const likeObject = await findLike({ userId: judgedUserId, judgedUserId: userId });
+        const likeObject = await findSingleLike({ userId: judgedUserId, judgedUserId: userId });
 
         // if not, create a new like and return success
         if (!likeObject) {
@@ -111,6 +114,60 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
             },
         });
     } catch (e) {
+        applyToResponseCustom(res, e);
+    }
+}
+
+export async function rewindLikeHandler(_req: Request, res: Response): Promise<void> {
+    try {
+        const { userId } = res.locals.user;
+
+        const user = await findUniqueUser({ id: userId }, { lastLikedUserId: true, superlikesLastDates: true });
+
+        if (!user) throw new ServerError();
+
+        const lastLike = await findSingleLike({
+            userId,
+            judgedUserId: user.lastLikedUserId,
+        });
+
+        const lastRelation = await findUsersRelation({
+            OR: [
+                {
+                    firstUserId: userId,
+                    secondUserId: user.lastLikedUserId,
+                },
+                {
+                    firstUserId: user.lastLikedUserId,
+                    secondUserId: userId,
+                },
+            ],
+        });
+
+        if (!lastRelation && !lastLike) throw new RewindOnlyLastLikedUser();
+
+        if (lastRelation) {
+            if (lastRelation.relationType !== "accepted") throw new CannotRewindNewPair();
+            await deleteUniqueUsersRelation({ id: lastRelation.id });
+        }
+
+        if (lastLike) {
+            await deleteLike({ id: lastLike.id });
+        }
+        const isSuper = user.lastLikedUserId.split("-");
+
+        if (isSuper[0] === "super") {
+            user.superlikesLastDates.pop();
+            await updateUniqueUser({ id: userId }, { superlikesLastDates: user.superlikesLastDates.pop() });
+        }
+
+        await updateUniqueUser({ id: userId }, { lastLikedUserId: "" });
+
+        // flag
+        // return lastLikedUser
+        applySuccessToResponse(res);
+    } catch (e) {
+        console.log(e);
         applyToResponseCustom(res, e);
     }
 }

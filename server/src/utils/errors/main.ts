@@ -180,3 +180,21 @@ export class NumberOfLikesExceeded extends Error {
         Object.setPrototypeOf(this, NumberOfLikesExceeded.prototype);
     }
 }
+
+export class RewindOnlyLastLikedUser extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "You can only rewind last liked user";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, RewindOnlyLastLikedUser.prototype);
+    }
+}
+
+export class CannotRewindNewPair extends Error {
+    public readonly code: number = 403;
+    public readonly msg: string = "Cannot rewind newPair, delete it instead";
+    constructor() {
+        super();
+        Object.setPrototypeOf(this, CannotRewindNewPair.prototype);
+    }
+}

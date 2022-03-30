@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import {
-  deleteConversation,
   getUserConversations,
   getUserData,
   getUsersToMatchHandler,
   loginUser,
   logOut,
+  rewindLastLike,
 } from "./api/mainInstance";
 import { Routes, Route } from "react-router-dom";
 import ConversationsPage from "./ConversationsPage";
@@ -42,6 +42,9 @@ const App = () => {
         //flag
         const usersToMatch = await getUsersToMatchHandler();
         console.log(usersToMatch.data);
+
+        const lastLike = await rewindLastLike("user7");
+        console.log(lastLike);
 
         // set user
         setUser(res.data);

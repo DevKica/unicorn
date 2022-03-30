@@ -5,8 +5,13 @@ export async function createLike(data: LikeCreateInput): Promise<void> {
     await LikeModel.create({ data });
 }
 
-export async function findLike(where: LikeWhereInput) {
-    const like = await LikeModel.findFirst({ where });
+export async function findSingleLike(where: LikeWhereInput) {
+    const like = await LikeModel.findFirst({
+        where,
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
     return like;
 }
 

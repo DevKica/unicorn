@@ -4,10 +4,10 @@ import { UserFilterToMatch, matchedUser } from "../../@types/prisma/matchedUsers
 import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput } from "../../@types/prisma/static.types";
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
-import { findLike } from "../like.services";
 import { findUsersRelation } from "../usersRelation.services";
 import pureOmit from "../../utils/responses/omit";
 import dayjs from "dayjs";
+import { findSingleLike } from "../like.services";
 
 export async function createUser(data: UserCreateInput) {
     const user = await UserModel.create({
@@ -74,7 +74,7 @@ export async function getUsersToMatch(filters: UserFilterToMatch, limit: number)
 
     for (const e of users) {
         // check if the user has already made such a request
-        const alreadyLiked = await findLike({ userId: filters.id, judgedUserId: e.id });
+        const alreadyLiked = await findSingleLike({ userId: filters.id, judgedUserId: e.id });
 
         if (!alreadyLiked) {
             // check if users aren't in relation already
@@ -85,9 +85,9 @@ export async function getUsersToMatch(filters: UserFilterToMatch, limit: number)
                 ],
             });
 
-            const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
-
             if (!usersRelation) {
+                const distance = calcDistance(filters.latitude, filters.longitude, e.latitude, e.longitude);
+
                 if (distance < filters.showMeDistance && distance < e.showMeDistance && (e.showMeGender === filters.gender || e.showMeGender === "All")) {
                     //@ts-ignore
                     if (e.user.length !== 0) e["superlike"] = true;
