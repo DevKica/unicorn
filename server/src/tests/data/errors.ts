@@ -2,6 +2,7 @@
 
 import { validate } from "../../middleware/schemaValidation";
 import {
+    CannotRewindNewPair,
     EmailAlreadyExists,
     EmailNotVerified,
     FileRequired,
@@ -13,6 +14,7 @@ import {
     NotFound,
     NumberOfLikesExceeded,
     PhotoRequired,
+    RewindOnlyLastLikedUser,
     ServerError,
     TooLargeFile,
     Unauthorized,
@@ -25,7 +27,6 @@ import { changePasswordSchema, createUserSchema, emailSchema, logInSchema, passw
 import { createFileMessageData, createLikeData, createTextMessageData, deleteMessageData, renameConversationData, updateUserProfileData } from "./user.relations";
 import { generalInfoSchema, matchingInfoSchema } from "../../validation/user.profile.schema";
 import { createFileMessageSchema, createLikeSchema, createTextMessageSchema, deleteMessageSchema, renameConversationSchema } from "../../validation/user.matching.schema";
-import ts from "typescript";
 
 export const ServerErrorInstance = new ServerError();
 export const EmailAlreadyExistsInstance = new EmailAlreadyExists();
@@ -43,6 +44,8 @@ export const VoiceClipTooShortInstance = new VoiceClipTooShort();
 export const VoiceClipTooLongInstance = new VoiceClipTooLong();
 export const TooLargeFileInstance = new TooLargeFile();
 export const NumberOfLikesExceededInstance = new NumberOfLikesExceeded();
+export const CannotRewindNewPairInstance = new CannotRewindNewPair();
+export const RewindOnlyLastLikedUserInstance = new RewindOnlyLastLikedUser();
 
 export const InvalidCreateUserBodyInstance = new InvalidRequestedBody(validate(createUserSchema, createUserData.body.invalid.schema).error);
 export const InvalidLoginBodyInstance = new InvalidRequestedBody(validate(logInSchema, userLoginData.body.invalid.schema).error);

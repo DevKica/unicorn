@@ -126,6 +126,14 @@ export async function rewindLikeHandler(_req: Request, res: Response): Promise<v
 
         if (!user) throw new ServerError();
 
+        const isSuper = user.lastLikedUserId.split("-");
+
+        if (isSuper[0] === "super") {
+            user.lastLikedUserId = user.lastLikedUserId.slice(6);
+        } else {
+            user.lastLikedUserId = user.lastLikedUserId.slice(1);
+        }
+
         const lastLike = await findSingleLike({
             userId,
             judgedUserId: user.lastLikedUserId,
@@ -142,19 +150,23 @@ export async function rewindLikeHandler(_req: Request, res: Response): Promise<v
                     secondUserId: userId,
                 },
             ],
+            NOT: {
+                relationType: {
+                    equals: "removed",
+                },
+            },
         });
 
         if (!lastRelation && !lastLike) throw new RewindOnlyLastLikedUser();
 
         if (lastRelation) {
-            if (lastRelation.relationType !== "accepted") throw new CannotRewindNewPair();
+            if (lastRelation.relationType === "accepted") throw new CannotRewindNewPair();
             await deleteUniqueUsersRelation({ id: lastRelation.id });
         }
 
         if (lastLike) {
             await deleteLike({ id: lastLike.id });
         }
-        const isSuper = user.lastLikedUserId.split("-");
 
         if (isSuper[0] === "super") {
             user.superlikesLastDates.pop();

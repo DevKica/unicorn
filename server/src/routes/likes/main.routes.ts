@@ -3,6 +3,7 @@ import { createLikeHandler, rewindLikeHandler } from "../../controllers/likes.co
 import { schemaValidation } from "../../middleware/schemaValidation";
 import { userLikesLimitter } from "../../middleware/likesLimitter";
 import { createLikeSchema } from "../../validation/user.matching.schema";
+import { requireSilverAccountType } from "../../middleware/requirePremiumAccount";
 
 const likesMainRoutes = Router();
 
@@ -10,6 +11,6 @@ const likesMainRoutes = Router();
 likesMainRoutes.post("/", [schemaValidation(createLikeSchema), userLikesLimitter], createLikeHandler);
 
 // rewind like
-likesMainRoutes.delete("/:judgedUserId", rewindLikeHandler);
+likesMainRoutes.delete("/", requireSilverAccountType, rewindLikeHandler);
 
 export default likesMainRoutes;

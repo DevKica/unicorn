@@ -1,11 +1,12 @@
 import mainSeed from "../../prisma/seed/main.seed";
 import likesLimitSeed from "../../prisma/seed/likesLimit.seed";
 import { removeGlobals } from "../helpers/globalHelpers";
-import { testGETRequest, testPOSTRequest } from "../helpers/testEndpoint";
+import { testDELETERequest, testGETRequest, testPOSTRequest } from "../helpers/testEndpoint";
 import { SuccessResponse } from "../../utils/responses/main";
-import { NotFoundInstance, NumberOfLikesExceededInstance, UpgradeYourAccountInstance } from "../data/errors";
+import { CannotRewindNewPairInstance, NotFoundInstance, NumberOfLikesExceededInstance, RewindOnlyLastLikedUserInstance, UpgradeYourAccountInstance } from "../data/errors";
 import { loginCredentials, basicActiveUserDataResponse } from "../data/user.auth";
 import { blackTokenData, blackUserDataResponse, goldTokenData, goldUserDataResponse, premiumLikeData, silverTokenData, silverUserDataResponse } from "../data/user.premiumAccounts";
+import { createLikeData } from "../data/user.relations";
 
 describe("PREMIUM ACCOUNTS", () => {
     beforeAll(async () => {
@@ -17,18 +18,27 @@ describe("PREMIUM ACCOUNTS", () => {
     afterAll(async () => {
         removeGlobals();
     });
+    describe("PREMIUM FEATURES", () => {
+        describe("LIKES LIMIT", () => {
+            test("User with DEFAULT account type should be able to like another user before exceeding the number of likes limit", async () => {
+                await testPOSTRequest("/likes", premiumLikeData.default, SuccessResponse);
+            });
+            test("User with DEFAULT account type should NOT be able to match users after exceeding the number of likes limit", async () => {
+                await testGETRequest("/users", NumberOfLikesExceededInstance);
+            });
+            test("User with DEFAULT account type should NOT be able to like another user after exceeding the number of likes limit", async () => {
+                await testPOSTRequest("/likes", premiumLikeData.default, NumberOfLikesExceededInstance);
+            });
+        });
+        describe("REWIND LAST LIKE", () => {
+            test("User with DEFAULT account type should NOT be able to rewind last like", async () => {
+                await testDELETERequest("/likes", {}, UpgradeYourAccountInstance);
+            });
+        });
+    });
     describe("SILVER", () => {
         const { validId, validToken, invalidToken, invalidId, validExpired } = silverTokenData;
 
-        test("User with DEFAULT account type should be able to like another user before exceeding the number of likes limit", async () => {
-            await testPOSTRequest("/likes", premiumLikeData.default, SuccessResponse);
-        });
-        test("User with DEFAULT account type should NOT be able to match users after exceeding the number of likes limit", async () => {
-            await testGETRequest("/users", NumberOfLikesExceededInstance);
-        });
-        test("User with DEFAULT account type should NOT be able to like another user after exceeding the number of likes limit", async () => {
-            await testPOSTRequest("/likes", premiumLikeData.default, NumberOfLikesExceededInstance);
-        });
         test("User with DEFAULT account type should NOT be able to access SILVER USER protected routes ", async () => {
             await testPOSTRequest("/auth/silver", {}, UpgradeYourAccountInstance);
         });
@@ -68,13 +78,41 @@ describe("PREMIUM ACCOUNTS", () => {
             await testPOSTRequest("/auth/black", {}, UpgradeYourAccountInstance);
         });
 
-        test("User with SILVER OR HIGHER account type should be able to SUPERLIKE another user after exceeding the number of likes limi", async () => {
-            for (const judgedUserId of premiumLikeData.superLikesToLimit) {
-                await testPOSTRequest("/likes", { typeOfLike: "super", judgedUserId }, SuccessResponse);
-            }
-        });
-        test("User with SILVER OR HIGHER account type should NOT be able to SUPERLIKE another user after exceeding the number of SUPERLIKES per week limit", async () => {
-            await testPOSTRequest("/likes", premiumLikeData.superLikesExceeded, UpgradeYourAccountInstance);
+        describe("SILVER OR HIGHER FEATURES", () => {
+            describe("UNLIMITED LIKES", () => {
+                test("User should be able to SUPERLIKE or LIKE after exceeding the number of likes limit", async () => {
+                    for (const judgedUserId of premiumLikeData.superLikesToLimit) {
+                        await testPOSTRequest("/likes", { typeOfLike: "super", judgedUserId }, SuccessResponse);
+                    }
+                });
+                //flag
+                // another user meh
+                test("User type should NOT be able to SUPERLIKE after exceeding the number of SUPERLIKES per week limit", async () => {
+                    await testPOSTRequest("/likes", premiumLikeData.superLikesExceeded, UpgradeYourAccountInstance);
+                });
+            });
+            describe("REWIND LAST LIKE", () => {
+                const { body, response } = createLikeData;
+
+                beforeAll(() => {
+                    response.newPair.data.name = "Pawel and user8name";
+                });
+
+                test("User should be able to rewind the last like", async () => {
+                    await testDELETERequest("/likes", {}, SuccessResponse);
+                });
+                test("User should NOT be able to rewind not the last like", async () => {
+                    await testDELETERequest("/likes", {}, RewindOnlyLastLikedUserInstance);
+                });
+                test("User should be able to SUPERLIKE again after rewinding the last like ( superlikes limit - 1)", async () => {
+                    await testPOSTRequest("/likes", { typeOfLike: "super", judgedUserId: premiumLikeData.superLikesToLimit.slice(-1).pop() }, SuccessResponse);
+                });
+                test("User should be NOT able to rewind the last like that created the new pair", async () => {
+                    await testPOSTRequest("/likes", body.valid.newPair, response.newPair);
+
+                    await testDELETERequest("/likes", {}, CannotRewindNewPairInstance);
+                });
+            });
         });
     });
     describe("GOLD", () => {
