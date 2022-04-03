@@ -17,11 +17,11 @@ declare global {
             EMAIL_SECRET_TOKEN: string;
             EMAIL_TOKEN_TTL: string;
             SUPPORT_EMAIL_USER: string;
-            SUPPORT_EMAIL_PASSWORD: string;
+            SERVER_SUPPORT_PASSWORD: string;
             EMAIL_SMTP_HOST: string;
 
-            TEST_USER_EMAIL: string;
-            TEST_USER_PASSWORD: string;
+            TEST_EMAIL_ADDRESS: string;
+            TEST_EMAIL_PASSWORD: string;
         }
     }
 }

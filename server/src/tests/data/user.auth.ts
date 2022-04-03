@@ -1,4 +1,4 @@
-import { TEST_USER_EMAIL } from "../../config/env.config";
+import { TEST_EMAIL_ADDRESS } from "../../config/env.config";
 import { mainUser } from "../../prisma/seed/data/main/users";
 import { SuccessResponse } from "../../utils/responses/main";
 import pureOmit from "../../utils/responses/omit";
@@ -13,7 +13,7 @@ export const basicUserData = {
 
 export const invalidEmailSchema = `invalid@${mainUser.email}`;
 
-const newEmail = TEST_USER_EMAIL;
+const newEmail = TEST_EMAIL_ADDRESS;
 const nonExistentEmail = "example@gmail.com";
 
 const newPassword = `new${mainUser.password}`;

@@ -8,7 +8,7 @@ import { findUniqueUser, updateUniqueUser } from "../services/user/user.services
 import { createUsersRelations, deleteUniqueUsersRelation, findUsersRelation } from "../services/usersRelation.services";
 import { applySuccessToResponse, applyToResponse, applyToResponseCustom } from "../utils/errors/applyToResponse";
 import { UpgradeYourAccount, Forbidden, ServerError, CannotRewindNewPair, RewindOnlyLastLikedUser } from "../utils/errors/main";
-import { superLikesLimit } from "./../validation/helpers/constants";
+import { superLikesLimitQuantity, superLikesLimitTimeRange } from "./../validation/helpers/constants";
 
 export async function createLikeHandler(req: Request, res: Response): Promise<void> {
     try {
@@ -40,13 +40,13 @@ export async function createLikeHandler(req: Request, res: Response): Promise<vo
         if (!user || alreadyLiked) throw new Forbidden();
 
         if (typeOfLike === "super") {
-            const last7daysSuperLikes = user.superlikesLastDates.filter((e) => e < dayjs().subtract(7, "d").toDate());
+            const last7daysSuperLikes = user.superlikesLastDates.filter((e) => e < dayjs().subtract(superLikesLimitTimeRange, "d").toDate());
 
-            if (last7daysSuperLikes.length > superLikesLimit) throw new UpgradeYourAccount();
+            if (last7daysSuperLikes.length > superLikesLimitQuantity) throw new UpgradeYourAccount();
 
             //flag
             if (process.env.NODE_ENV === "test") {
-                last7daysSuperLikes.push(dayjs().subtract(7, "d").toDate());
+                last7daysSuperLikes.push(dayjs().subtract(superLikesLimitTimeRange, "d").toDate());
             } else {
                 last7daysSuperLikes.push(dayjs().toDate());
             }
@@ -179,7 +179,6 @@ export async function rewindLikeHandler(_req: Request, res: Response): Promise<v
         // return lastLikedUser
         applySuccessToResponse(res);
     } catch (e) {
-        console.log(e);
         applyToResponseCustom(res, e);
     }
 }

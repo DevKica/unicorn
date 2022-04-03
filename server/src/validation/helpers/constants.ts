@@ -7,4 +7,6 @@ export const dateRestriction = dayjs().subtract(ageAllowed, "y").toDate();
 
 export const userLikesLimit = 10;
 
-export const superLikesLimit = 5;
+export const superLikesLimitTimeRange = 7; // days
+
+export const superLikesLimitQuantity = 5;

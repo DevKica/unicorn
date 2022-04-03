@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { mainMessagesPath, uploadMainPath } from "../../config/upload.config";
 import { logError, logInfo } from "../../utils/logger";
-import testGmailInbox from "../../tests/helpers/testInbox";
+import testGmailInbox from "../../tests/helpers/inboxTest";
 import { removeTables } from "./cleanUpDev";
 
 export async function deleteCurrentImages() {

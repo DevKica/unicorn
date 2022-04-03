@@ -21,8 +21,9 @@ export const userPhotosResolutions = {
 
 const localDirname = __dirname;
 
-export const uploadMainPath = path.join(localDirname, "..", "..", "public");
-export const mainMessagesPath = path.join(localDirname, "..", "..", "public", "messages");
+export const uploadMainPath = process.env.NODE_ENV === "test" ? path.join(localDirname, "..", "..", "public", "test") : path.join(localDirname, "..", "..", "public", "dev");
+
+export const mainMessagesPath = path.join(uploadMainPath, "messages");
 
 export const usersPhotosPath = path.join(uploadMainPath, "usersPhotos");
 
