@@ -79,7 +79,7 @@ describe("AUTHENTICATION", () => {
             await testUserAuthEndpoint(false);
         });
     });
-    describe("LOGGING IN", () => {
+    describe("LOGIN", () => {
         const { body, response } = userLoginData;
 
         test("User should NOT be able to pass schema validation with invalid body", async () => {
@@ -99,7 +99,7 @@ describe("AUTHENTICATION", () => {
         });
     });
     describe("USER ONLY PROTECTED ROUTES", () => {
-        describe("Change password", () => {
+        describe("Password change", () => {
             const { body, response } = changePasswordData;
 
             test(`User should NOT be able to pass change password schema validation with invalid body`, async () => {
@@ -121,7 +121,7 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/login", newPasswordLoginCredentials, basicUserDataResponse);
             });
         });
-        describe("Change email", () => {
+        describe("Email change", () => {
             const { body, response } = changeEmailData;
 
             test(`User should NOT be able to change email on email that already exists in database`, async () => {
@@ -134,7 +134,7 @@ describe("AUTHENTICATION", () => {
                 await testPATCHRequest("/users/email", body.valid, response);
             });
         });
-        describe("Verify email", () => {
+        describe("Email verification", () => {
             const { token, response } = verifyEmailData;
 
             beforeAll(async () => {
@@ -163,7 +163,7 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/resend-verification-email", {}, NotFoundInstance);
             });
         });
-        describe("Reset password", () => {
+        describe("Password reset", () => {
             const { body, response } = passwordResetData;
 
             test(`User should NOT be able to send reset password request to email that does not exists`, async () => {
@@ -199,7 +199,7 @@ describe("AUTHENTICATION", () => {
                 await testPOSTRequest("/users/login", newEmailLoginCredentials, basicActiveNewUserDataResponse);
             });
         });
-        describe("Log out", () => {
+        describe("Logout", () => {
             test(`User should be able to log out`, async () => {
                 await testDELETERequest("/sessions", {}, SuccessResponse);
             });

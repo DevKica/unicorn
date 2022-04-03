@@ -10,6 +10,7 @@
 - [⛲ Features](#features)
 - [🧪 Tests](#tests)
 - [🌾 Seeders](#seeders)
+- [💻 Developmnent](#development)
 - [🍃 Environment variables](#environment-variables)
 - [📜 Scripts](#scripts)
 - [🤠 Credits](#credits)
@@ -38,17 +39,76 @@ coming soon
 
 ## Tests
 
-coming soon
+At this point there are **150 tests in total**
+
+Run it with the following command (reference to the [script](#scripts))
 
 ```yarn
 yarn test
 ```
 
+Be sure to set up your [environment variables](#environment-variables) and database first
+
+🗝️ Auth
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.auth.test.ts">Source code</a>
+
+- ⚗️ Tested features
+  - Creating an account
+  - Login
+  - Password change
+  - Email change
+  - Email verification
+  - Password reset
+  - Logout
+  - Deleting an account
+
+🌋 WebSockets
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.sockets.test.ts">Source code</a>
+- ⚗️ Tested features
+  - Socket.io authentication && authorization
+  - Sending and receiving messages
+
+🤼 Relations
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.relations.test.ts">Source code</a>
+- ⚗️ Tested features
+  - Profile
+    - Update
+    - View users' photos
+  - Matching
+    - Proper filtering
+    - Likes
+    - Superlikes
+    - Not interested
+    - New pair
+  - Messages
+    - Text
+    - Photos
+    - Voice messages
+    - Videos
+    - Deleting
+    - Access to files
+  - Conversations
+    - Deleting
+    - Renaming
+    - Proper filtering
+
+💰 Premium Accounts
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.premiumAccounts.test.ts">Source code</a>
+- ⚗️ Tested features
+
 ## Seeders
 
 coming soon
 
-## Environment-variables
+## Development
+
+coming soon
+
+## Environment variables
 
 #### 📟 Server:
 
@@ -97,62 +157,80 @@ TEST_EMAIL_PASSWORD - password for test email
 
 ## Scripts
 
-#### ⚒️ Development
+#### [💻 Developmnent](#development)
 
-```json
-"dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts"
-```
+- Start the server
 
-```json
-"cleanupdev": "NODE_ENV=development ts-node src/prisma/cleanup/cleanUpDev.ts",
-```
+  ```json
+  "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts"
+  ```
+
+- Clean up development files and data
+
+  ```json
+  "cleanupdev": "NODE_ENV=development ts-node src/prisma/cleanup/cleanUpDev.ts",
+  ```
 
 #### 🛢️ Prisma
 
-```json
-"gen": "prisma generate",
-```
+- Generate prisma client
 
-```json
-"push": "prisma db push",
-```
+  ```json
+  "gen": "prisma generate",
+  ```
 
-```json
-"studio": "prisma studio",
-```
+- Synchronize your prisma schema with your database schema (can result in data loss)
+  ```json
+  "push": "prisma db push",
+  ```
+- Run prisma studio
 
-```json
-"migrate": "prisma migrate dev",
-```
+  ```json
+  "studio": "prisma studio",
+  ```
 
-```json
-"format": "prisma format",
-```
+- Create and apply migrations
+  ```json
+  "migrate": "prisma migrate dev",
+  ```
+- Format .prisma files
+  ```json
+  "format": "prisma format",
+  ```
 
-#### 🧪 Tests
+#### [🧪 Tests](#tests)
 
-```json
-"inboxtest": "ts-node src/tests/helpers/inboxTest.ts",
-```
+- Run inboxTest
 
-```json
-"test": "NODE_ENV=test jest --detectOpenHandles --runInBand && NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
-```
+  ```json
+  "inboxtest": "ts-node src/tests/helpers/inboxTest.ts",
+  ```
 
-```json
-"cleanup": "NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
-```
+- Run all tests
 
-#### 🌾 Seeders
+  ```json
+  "test": "NODE_ENV=test jest --detectOpenHandles --runInBand && NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
+  ```
 
-```json
-"seeddev": "NODE_ENV=development ts-node src/prisma/seed/main.seed.ts",
-```
+- Clean up files and test data ( includes inboxTest )
+  ```json
+  "cleanup": "NODE_ENV=test FORCE_LOG=true ts-node src/prisma/cleanup/cleanUpAfterTests.ts",
+  ```
 
-```json
-"seedtest": "NODE_ENV=test FORCE_LOG=true ts-node src/prisma/seed/main.seed.ts"
-```
+#### [🌾 Seeders](#seeders)
+
+- Seed the development database
+
+  ```json
+  "seeddev": "NODE_ENV=development ts-node src/prisma/seed/main.seed.ts",
+  ```
+
+- Seed the test database
+
+  ```json
+  "seedtest": "NODE_ENV=test FORCE_LOG=true ts-node src/prisma/seed/main.seed.ts"
+  ```
 
 ## Credits
 
-One man army - [DevKica](https://github.com/DevKica)
+One man army - [🎖️ DevKica](https://github.com/DevKica)
