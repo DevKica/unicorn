@@ -128,7 +128,27 @@ Currenly in my project you can find two **seed** files that I use mainly them fo
 
 ## Development
 
-coming soon
+The client side is currently being developed just to test and learn about websockets. However, it works very well and will certainly be developed further.
+
+### [ 🌋 See websockets in action !!! ](https://youtu.be/wjArvnhrmd4)
+
+---
+
+🖱️ At the beginning, start the client
+
+```yarn
+yarn start
+```
+
+And you can log into 3 different accounts
+
+![loginunicorn](https://user-images.githubusercontent.com/89777457/161689246-7bc05b1f-7c5c-425e-a206-8467eb6ef9ad.png)
+
+After logging in, you will see the conversation page
+
+![conversationsunicorn](https://user-images.githubusercontent.com/89777457/161690930-856fec1a-ce7b-4407-8478-5c388cda9ad6.png)
+
+---
 
 ## Environment variables
 
