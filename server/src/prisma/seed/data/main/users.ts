@@ -22,7 +22,7 @@ export const mainUser = {
     photos: ["user1-first", "user1-second"],
 };
 
-const femaleUserToSeedData = {
+const womanToSeedData = {
     gender: "Female",
     showMeGender: "Male",
     showMeDistance: 50,
@@ -32,39 +32,39 @@ const femaleUserToSeedData = {
     longitude: mainUser.longitude,
 };
 
-const female_under24_showMale_showDistance50_inRange = {
+const womenunder24_showMale_showDistance50_inRange = {
     quantity: 25,
-    data: femaleUserToSeedData,
+    data: womanToSeedData,
 };
 
-const female_under24_showFemale_showDistance50_inRange = {
+const womenunder24_showFemale_showDistance50_inRange = {
     quantity: 5,
     data: {
-        ...femaleUserToSeedData,
+        ...womanToSeedData,
         showMeGender: "Female",
     },
 };
-const female_under24_showMale_showDistance10_inRange = {
+const womenunder24_showMale_showDistance10_inRange = {
     quantity: 5,
     data: {
-        ...femaleUserToSeedData,
+        ...womanToSeedData,
         showMeDistance: 10,
     },
 };
 
-const female_under24_showMale_showDistance50_notInRange = {
+const womenunder24_showMale_showDistance50_notInRange = {
     quantity: 5,
     data: {
-        ...femaleUserToSeedData,
+        ...womanToSeedData,
         latitude: mainUser.latitude + 10,
         longitude: mainUser.longitude + 10,
     },
 };
 
-const female_above24_showMale_showDistance50_inRange = {
+const womenabove24_showMale_showDistance50_inRange = {
     quantity: 5,
     data: {
-        ...femaleUserToSeedData,
+        ...womanToSeedData,
         birthday: new Date("1990-01-10"),
     },
 };
@@ -93,15 +93,15 @@ export const generateUsers = (object: { quantity: number; data: any }, start: nu
     return result;
 };
 
-export const generated_female_under24_showMale_showDistance50_inRange = generateUsers(female_under24_showMale_showDistance50_inRange, 2);
+export const generatedwomen_under24_showMale_showDistance50_inRange = generateUsers(womenunder24_showMale_showDistance50_inRange, 2);
 // showDistance
-export const generated_female_under24_showMale_showDistance10_inRange = generateUsers(female_under24_showMale_showDistance10_inRange, 28);
+export const generatedwomen_under24_showMale_showDistance10_inRange = generateUsers(womenunder24_showMale_showDistance10_inRange, 28);
 // not in range
-export const generated_female_under24_showMale_showDistance50_notInRange = generateUsers(female_under24_showMale_showDistance50_notInRange, 33);
+export const generatedwomen_under24_showMale_showDistance50_notInRange = generateUsers(womenunder24_showMale_showDistance50_notInRange, 33);
 // show female
-export const generated_female_under24_showFemale_showDistance50_inRange = generateUsers(female_under24_showFemale_showDistance50_inRange, 38);
+export const generatedwomen_under24_showFemale_showDistance50_inRange = generateUsers(womenunder24_showFemale_showDistance50_inRange, 38);
 // above 24
-export const generated_female_above24_showMale_showDistance50_inRange = generateUsers(female_above24_showMale_showDistance50_inRange, 43);
+export const generatedwomen_above24_showMale_showDistance50_inRange = generateUsers(womenabove24_showMale_showDistance50_inRange, 43);
 
 const users = [
     // not active
@@ -127,11 +127,11 @@ const users = [
         longitude: 99.99,
     },
     mainUser,
-    ...generated_female_under24_showMale_showDistance50_inRange,
-    ...generated_female_under24_showMale_showDistance10_inRange,
-    ...generated_female_under24_showMale_showDistance50_notInRange,
-    ...generated_female_under24_showFemale_showDistance50_inRange,
-    ...generated_female_above24_showMale_showDistance50_inRange,
+    ...generatedwomen_under24_showMale_showDistance50_inRange,
+    ...generatedwomen_under24_showMale_showDistance10_inRange,
+    ...generatedwomen_under24_showMale_showDistance50_notInRange,
+    ...generatedwomen_under24_showFemale_showDistance50_inRange,
+    ...generatedwomen_above24_showMale_showDistance50_inRange,
 ];
 
 export default users;

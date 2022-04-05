@@ -2,7 +2,7 @@ import { MessageType } from "@prisma/client";
 import { SuccessResponse } from "../../utils/responses/main";
 import formatMatchedUsers from "../helpers/formatMatchedUsers";
 import { basicActiveUserData, userOmitProperties } from "./user.auth";
-import { generated_female_under24_showMale_showDistance50_inRange } from "../../prisma/seed/data/main/users";
+import { generatedwomen_under24_showMale_showDistance50_inRange } from "../../prisma/seed/data/main/users";
 
 const updateGeneralUserData = {
     name: "Dani",
@@ -64,12 +64,12 @@ export const getUserPhotoData = {
 
 export const getUsersToMatchResponse = {
     beforeOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(5, 10)),
+        data: formatMatchedUsers(generatedwomen_under24_showMale_showDistance50_inRange.slice(5, 10)),
         status: 200,
         omit: [],
     },
     afterOperations: {
-        data: formatMatchedUsers(generated_female_under24_showMale_showDistance50_inRange.slice(9, 14)),
+        data: formatMatchedUsers(generatedwomen_under24_showMale_showDistance50_inRange.slice(9, 14)),
         status: 200,
         omit: [],
     },

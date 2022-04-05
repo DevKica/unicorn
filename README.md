@@ -52,7 +52,6 @@ Be sure to set up your [environment variables](#environment-variables) and datab
 🗝️ Auth
 
 - 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.auth.test.ts">Source code</a>
-
 - ⚗️ Tested features
   - Creating an account
   - Login
@@ -99,10 +98,33 @@ Be sure to set up your [environment variables](#environment-variables) and datab
 
 - 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/tests/units/user.premiumAccounts.test.ts">Source code</a>
 - ⚗️ Tested features
+  - Likes limit
+  - Rewind last like
+  - Superlikes / limitter
+  - Silver, gold and black account protected routes
 
 ## Seeders
 
-coming soon
+Currenly in my project you can find two **seed** files that I use mainly them for testing
+
+🌾 **Main seed**
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/prisma/seed/main.seed.ts">Source code</a>
+- 🌻 Data
+  - 48 users
+  - 5 likes
+  - 4 conversations
+  - 3 messages
+  - 6 users relations
+  - 4 premium account tokens
+
+🌾 **Like limit seed**
+
+- 🖥️ <a href="https://github.com/DevKica/unicorn/blob/main/server/src/prisma/seed/likesLimit.seed.ts">Source code</a>
+- 🌿 The purpose of this seed is to reach the like limit (set in <a href="https://github.com/DevKica/unicorn/blob/main/server/src/validation/helpers/constants.ts">constants</a>) in order to test the premium account features
+- 🌻 Data to seed
+  - 2 likes
+  - 5 users relations
 
 ## Development
 
@@ -157,9 +179,22 @@ TEST_EMAIL_PASSWORD - password for test email
 
 ## Scripts
 
+---
+
+### 📠 Client
+
+- Start the client
+  ```json
+    "start": "react-scripts start",
+  ```
+
+---
+
+### 📠 Server
+
 #### [💻 Developmnent](#development)
 
-- Start the server
+- Start the development server
 
   ```json
   "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts"
