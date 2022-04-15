@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import pureOmit from "../../utils/responses/omit";
 import calcDistance from "../../utils/user/calcDistance";
 import { Prisma } from "@prisma/client";
 import { UserFilterToMatch, matchedUser } from "../../@types/prisma/matchedUsers.types";
@@ -5,8 +7,6 @@ import { UserCreateInput, UserSelectType, UserWhereUniqueInput, UserUpdateInput 
 import { UserModel } from "../../prisma/models";
 import { userProfileProperties, userSelectMatchProperties } from "../../prisma/validator";
 import { findUsersRelation } from "../usersRelation.services";
-import pureOmit from "../../utils/responses/omit";
-import dayjs from "dayjs";
 import { findSingleLike } from "../like.services";
 
 export async function createUser(data: UserCreateInput) {

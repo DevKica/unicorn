@@ -76,22 +76,10 @@ export async function getUsersToMatchHandler(req: Request, res: Response): Promi
 
         if (!user) throw Error;
 
-        const filter = {
-            id: user.id,
-            gender: user.gender,
-            showMeAgeLowerLimit: user.showMeAgeLowerLimit,
-            showMeAgeUpperLimit: user.showMeAgeUpperLimit,
-            showMeGender: user.showMeGender,
-            showMeDistance: user.showMeDistance,
-            latitude: user.latitude,
-            longitude: user.longitude,
-        };
-
-        const users = await getUsersToMatch(filter, limit);
+        const users = await getUsersToMatch(user, limit);
 
         applyToResponse(res, 200, users);
     } catch (e) {
-        console.log(e);
         applyToResponseCustom(res, e);
     }
 }
